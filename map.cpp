@@ -4,9 +4,9 @@
 #include <fstream>
 using namespace std;
 
-bool Read_map(string, Map*&);
+bool Read_map(string, Map*&, Ant&);
 static int x, y;
-bool chooseMap(Map * & head_map, Ant& ant)
+bool chooseMap(Map*& head_map, Ant& ant)
 {
 	cout << "选择关卡请按1，随机生成关卡请按2" << endl;
 	int choice;
@@ -20,7 +20,7 @@ bool chooseMap(Map * & head_map, Ant& ant)
 		system("cls");
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
-		if (!Read_map(filename,head_map))// 读取关卡地图
+		if (!Read_map(filename, head_map, ant))// 读取关卡地图
 		{
 			return false;
 		}
@@ -33,7 +33,7 @@ bool chooseMap(Map * & head_map, Ant& ant)
 	}
 }
 
-bool Read_map(string filename, Map* & head_map)
+bool Read_map(string filename, Map*& head_map, Ant& ant)
 {
 	fstream fil(filename);
 
@@ -52,9 +52,27 @@ bool Read_map(string filename, Map* & head_map)
 		}
 		// 读取地图 (1,1)为左上角 读取顺序和分配内存顺序不一样
 		for (int j = 1; j <= head_map->Height; j++) {
-            for (int i = 1; i <= head_map->Width; i++) {
+			for (int i = 1; i <= head_map->Width; i++) {
 				fil >> head_map->m_map[i][j];
 			}
+		}
+		fil >> ant.Ant_x >> ant.Ant_y;
+		//方向 1上1 v下2 <左3 >右4
+		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];
+		switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+		{
+		case 1:
+			ant.direction = UP;
+			break;
+		case 2:
+			ant.direction = DOWN;
+			break;
+		case 3:
+			ant.direction = LEFT;
+			break;
+		case 4:
+			ant.direction = RIGHT;
+			break;
 		}
 		//cout << "w=" << w << "h=" << h << endl;
 		fil.close();
