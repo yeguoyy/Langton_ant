@@ -1,5 +1,4 @@
-#include "ant.h"
-#include "map.h"
+#include "game.h"
 #include <iostream>
 using namespace std;
 
@@ -12,7 +11,7 @@ int main()
 	Map *head_map=new Map;
 	Map *tail_map;
 	//链表的头尾结点
-	if (!chooseMap(head_map))
+	if (!chooseMap(head_map,ant))
 	{
 		return 0;
 	}

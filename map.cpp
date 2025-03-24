@@ -1,4 +1,4 @@
-#include "map.h"
+#include "game.h"// 同时包含两个头文件
 #include <iostream>
 #include <string>
 #include <fstream>
@@ -6,7 +6,7 @@ using namespace std;
 
 bool Read_map(string, Map*&);
 static int x, y;
-bool chooseMap(Map * & head_map)
+bool chooseMap(Map * & head_map, Ant& ant)
 {
 	cout << "选择关卡请按1，随机生成关卡请按2" << endl;
 	int choice;

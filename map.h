@@ -16,7 +16,7 @@ public:
     ~Map();
 };
 
-bool chooseMap(Map*&);
+//bool chooseMap(Map*&);
 //void creatMap(Map&);
 
 #endif
