@@ -1,4 +1,5 @@
 #include "ant.h"
+#include <iostream>
 
 
 Ant::Ant() {

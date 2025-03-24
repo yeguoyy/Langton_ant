@@ -1,5 +1,5 @@
-#pragma once
-#include <iostream>
+#ifndef ANT_H
+#define ANT_H
 #include "map.h"
 
 enum Direction { DOWN, LEFT, UP, RIGHT };
@@ -14,3 +14,4 @@ public:
 };
 
 void Sports_process(int step,Map*&,Ant&);
+#endif 

@@ -1,4 +1,6 @@
-#pragma once
+#ifndef MAP_H
+#define MAP_H
+//#include "ant.h"
 
 class Map
 {
@@ -17,3 +19,4 @@ public:
 bool chooseMap(Map*&);
 //void creatMap(Map&);
 
+#endif
