@@ -8,13 +8,13 @@ bool Read_map(string, Map*&, Ant&);
 static int x, y;
 bool chooseMap(Map*& head_map, Ant& ant)
 {
-	cout << "选择关卡请按1，随机生成关卡请按2" << endl;
+	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
 	int choice;
 	cin >> choice;
 	string filename;
 	switch (choice) {
 	case 1:
-		cout << "请输入关卡编号" << endl;
+		cout << "请输入关卡编号（1、2）" << endl;
 		int num;
 		cin >> num;
 		system("cls");

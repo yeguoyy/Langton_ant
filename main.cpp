@@ -2,10 +2,11 @@
 #include <iostream>
 using namespace std;
 
-//规则说明 撞墙√ 随机生成地图 回放功能(延时播放)  起始位 交互
+//规则说明√ 撞墙√ 随机生成地图 回放功能(延时播放)  起始位√ 交互
 
 int main()
 {
+	introduction();
 	Ant ant;
 	//该用指针用来读取每一个地图的地址
 	Map *head_map=new Map;
