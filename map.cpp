@@ -27,11 +27,13 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		}
 		break;
 	case 2:
-		 creatMap(head_map);
+		creatMap(head_map,ant);
 		break;
 	}
+	system("cls");
+    return true;
 }
-void creatMap(Map*& head_map)
+void creatMap(Map*& head_map, Ant& ant)
 {
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
 	cin >> x >> y;
@@ -39,8 +41,43 @@ void creatMap(Map*& head_map)
 	head_map->Height = y;
 	// 动态分配二维内存
 	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
-	for (int i = 1; i <= head_map->Width; i++) {
+	for (int i = 1; i <= head_map->Width; i++)
+	{
 		head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
+	}
+	//最外层是白色更规整 每10格多一层白色
+	int edge=((head_map->Width < head_map->Height)? head_map->Width: head_map->Height)/10+1;
+	for (int i = 1; i <= head_map->Width; i++)
+	{
+		for (int j = 1; j <= head_map->Height; j++)
+		{
+			if (i <= edge || i >= head_map->Width-(edge-1) || j <= edge || j >= head_map->Height-(edge-1))
+			{
+				head_map->m_map[i][j] = 0;
+			}
+			else//test
+			{
+                head_map->m_map[i][j] = 8;
+			}
+		}
+	}
+	ant.Ant_x = (int)(head_map->Width / 2)+1;
+    ant.Ant_y = (int)(head_map->Height / 2)+1;
+	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
+	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+	{
+	case 1:
+		ant.direction = UP;
+		break;
+	case 2:
+		ant.direction = DOWN;
+		break;
+	case 3:
+		ant.direction = LEFT;
+		break;
+	case 4:
+		ant.direction = RIGHT;
+		break;
 	}
 }
 
@@ -60,7 +97,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant)
 		head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 		for (int i = 1; i <= head_map->Width; i++) {
 			head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
-		} 
+		}
 		// 读取地图 (1,1)为左上角 读取顺序和分配内存顺序不一样
 		for (int j = 1; j <= head_map->Height; j++) {
 			for (int i = 1; i <= head_map->Width; i++) {

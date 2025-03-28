@@ -16,6 +16,6 @@ public:
     ~Map();
 };
 
-void creatMap(Map*&);
+
 
 #endif
