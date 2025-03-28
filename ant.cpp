@@ -111,6 +111,7 @@ void Ant::move(Map*& map)
 void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 {
 	int step = 0;
+	std::cout << "\033[?25l";//Òþ²Ø¹â±ê
 	while (true)
 	{
 		step++;
@@ -119,7 +120,7 @@ void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 			break;
 		}
 		system("pause");
-		system("cls");
+		std::cout << "\033[0;0H";//¸²¸ÇÇåÆÁ
 		ant.move(head_map);
 		head_map = head_map->nextMap;
 		head_map->showMap();

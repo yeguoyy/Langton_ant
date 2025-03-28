@@ -6,6 +6,7 @@ using namespace std;
 
 bool Read_map(string, Map*&, Ant&);
 static int x, y;
+
 bool chooseMap(Map*& head_map, Ant& ant)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
@@ -26,10 +27,20 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		}
 		break;
 	case 2:
-		cout << "请输入想要生成的题目的长度和宽度" << endl;
-		cin >> x >> y;
-		// creatMap(head_map);
+		 creatMap(head_map);
 		break;
+	}
+}
+void creatMap(Map*& head_map)
+{
+	cout << "请输入想要生成的题目的长度和宽度" << endl;
+	cin >> x >> y;
+	head_map->Width = x;
+	head_map->Height = y;
+	// 动态分配二维内存
+	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
+	for (int i = 1; i <= head_map->Width; i++) {
+		head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
 	}
 }
 
@@ -49,13 +60,14 @@ bool Read_map(string filename, Map*& head_map, Ant& ant)
 		head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 		for (int i = 1; i <= head_map->Width; i++) {
 			head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
-		}
+		} 
 		// 读取地图 (1,1)为左上角 读取顺序和分配内存顺序不一样
 		for (int j = 1; j <= head_map->Height; j++) {
 			for (int i = 1; i <= head_map->Width; i++) {
 				fil >> head_map->m_map[i][j];
 			}
 		}
+		//传入起始位置
 		fil >> ant.Ant_x >> ant.Ant_y;
 		//方向 1上1 v下2 <左3 >右4
 		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];

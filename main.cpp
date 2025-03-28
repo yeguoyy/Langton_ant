@@ -2,7 +2,7 @@
 #include <iostream>
 using namespace std;
 
-//规则说明√ 撞墙√ 随机生成地图 回放功能(延时播放)  起始位√ 交互
+//规则说明√ 撞墙√ 随机生成地图 回放功能(延时播放)  起始位√ 交互 地图保存功能
 
 int main()
 {
@@ -18,7 +18,7 @@ int main()
 	}
 	tail_map = head_map;
 	head_map->showMap();
-	int goal_step = 100;
+	int goal_step = 1000;
 	Sports_process(goal_step, head_map, ant); //模拟运动
 
 	
