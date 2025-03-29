@@ -18,7 +18,6 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		cout << "请输入关卡编号（1、2）" << endl;
 		int num;
 		cin >> num;
-		system("cls");
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
 		if (!Read_map(filename, head_map, ant))// 读取关卡地图
@@ -55,9 +54,10 @@ void creatMap(Map*& head_map, Ant& ant)
 			{
 				head_map->m_map[i][j] = 0;
 			}
-			else//test
+			else//test 在此加入随机生成逻辑 分块？
 			{
                 head_map->m_map[i][j] = 8;
+
 			}
 		}
 	}

@@ -18,13 +18,7 @@ void Ant::move(Map*& map)
 	{
 		NewMap->m_map[i] = new int[NewMap->Height + 1];
 	}//分配内存
-	for (int i = 1; i <= NewMap->Width; i++) 
-	{
-		for (int j = 1; j <= NewMap->Height; j++) {
-			NewMap->m_map[i][j] = map->m_map[i][j];
-		}
-		
-	}//复制原图
+	NewMap->m_map= map->m_map;//复制原图
 	NewMap->m_map[Ant_x][Ant_y] = map->Ant_color;//将蚂蚁脚下的方块赋给新图
 	int new_x=Ant_x;
 	int new_y=Ant_y;
