@@ -1,5 +1,7 @@
 #include "game.h"// 同时包含两个头文件
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 #include <string>
 #include <fstream>
 using namespace std;
@@ -11,13 +13,36 @@ bool chooseMap(Map*& head_map, Ant& ant)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
 	int choice;
-	cin >> choice;
+	while (true)
+	{
+		if (cin >> choice&& (choice == 1||choice == 2))
+		{
+			break;
+		}
+		else
+		{
+			cout << "输入错误,请重新输入" << endl;
+		}
+	}
 	string filename;
 	switch (choice) {
 	case 1:
 		cout << "请输入关卡编号（1、2）" << endl;
 		int num;
-		cin >> num;
+		//待解决：误输入符号
+		while (true)
+		{
+			cin >> num;
+			if (num == 1 || num == 2)
+			{
+				break;
+			}
+			else
+			{
+				cout << "输入错误,请重新输入" << endl;
+                cin.clear();
+			}
+		}
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
 		if (!Read_map(filename, head_map, ant))// 读取关卡地图
@@ -26,18 +51,21 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		}
 		break;
 	case 2:
-		creatMap(head_map,ant);
+		creatMap(head_map, ant);
 		break;
 	}
 	system("cls");
-    return true;
+	return true;
 }
 void creatMap(Map*& head_map, Ant& ant)
 {
+	srand(time(0));
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
 	cin >> x >> y;
 	head_map->Width = x;
 	head_map->Height = y;
+	ant.Ant_x = (int)(head_map->Width / 2) + 1;
+	ant.Ant_y = (int)(head_map->Height / 2) + 1;
 	// 动态分配二维内存
 	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 	for (int i = 1; i <= head_map->Width; i++)
@@ -45,24 +73,38 @@ void creatMap(Map*& head_map, Ant& ant)
 		head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
 	}
 	//最外层是白色更规整 每10格多一层白色
-	int edge=((head_map->Width < head_map->Height)? head_map->Width: head_map->Height)/10+1;
+	int edge = ((head_map->Width < head_map->Height) ? head_map->Width : head_map->Height) / 10 + 1;
 	for (int i = 1; i <= head_map->Width; i++)
 	{
 		for (int j = 1; j <= head_map->Height; j++)
 		{
-			if (i <= edge || i >= head_map->Width-(edge-1) || j <= edge || j >= head_map->Height-(edge-1))
+			if (i <= edge || i >= head_map->Width - (edge - 1) || j <= edge || j >= head_map->Height - (edge - 1))
 			{
 				head_map->m_map[i][j] = 0;
 			}
 			else//test 在此加入随机生成逻辑 分块？
 			{
-                head_map->m_map[i][j] = 8;
-
+				/*if (rand() % 2 == 0)
+				{
+                    head_map->m_map[i][j] = 8;
+				}
+				else
+				{
+					head_map->m_map[i][j] = 0;
+				}*/
+				/*初级逻辑，越靠近中间越容易是黑色*/
+				int RandNum = rand() % (ant.Ant_x - edge) * (ant.Ant_y - edge);
+				if (RandNum > (abs(i - ant.Ant_x) + edge) * (abs(j - ant.Ant_y) + edge))
+				{
+					head_map->m_map[i][j] = 8;
+				}
+				else
+				{
+					head_map->m_map[i][j] = 0;
+				}
 			}
 		}
 	}
-	ant.Ant_x = (int)(head_map->Width / 2)+1;
-    ant.Ant_y = (int)(head_map->Height / 2)+1;
 	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
 	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
 	{
