@@ -15,13 +15,16 @@ bool chooseMap(Map*& head_map, Ant& ant)
 	int choice;
 	while (true)
 	{
-		if (cin >> choice&& (choice == 1||choice == 2))
+		cin >> choice;
+		if (cin.fail() || (choice != 1 && choice != 2))
 		{
-			break;
+			cout << "输入错误,请重新输入" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
 		else
 		{
-			cout << "输入错误,请重新输入" << endl;
+			break;
 		}
 	}
 	string filename;
@@ -33,14 +36,15 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		while (true)
 		{
 			cin >> num;
-			if (num == 1 || num == 2)
+			if (cin.fail() || (num != 1 && num != 2))
 			{
-				break;
+				cout << "输入错误,请重新输入" << endl;
+				cin.clear();
+				cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			}
 			else
 			{
-				cout << "输入错误,请重新输入" << endl;
-                cin.clear();
+				break;
 			}
 		}
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
@@ -61,7 +65,27 @@ void creatMap(Map*& head_map, Ant& ant)
 {
 	srand(time(0));
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
-	cin >> x >> y;
+
+	while (true)
+	{
+		cin >> x >> y;
+		if (cin.fail() || (x <= 0 || y <= 0))
+		{
+			cout << "输入错误,请重新输入" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		else if (x > 30 || y > 30)
+		{
+			cout << "输入过大,请重新输入" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		else
+		{
+			break;
+		}
+	}
 	head_map->Width = x;
 	head_map->Height = y;
 	ant.Ant_x = (int)(head_map->Width / 2) + 1;
