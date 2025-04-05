@@ -11,7 +11,7 @@ int main()
 	Ant ant;
 	//该用指针用来读取每一个地图的地址
 	Map *head_map=new Map;
-	Map *tail_map;
+	Map *tail_map=new Map;
 	//链表的头尾结点
 	if (!chooseMap(head_map,ant))
 	{
@@ -19,13 +19,16 @@ int main()
 	}
 	tail_map = head_map;
 	head_map->showMap();
-	int goal_step = 1000;
+	int goal_step = 3;
 	Sports_process(goal_step, head_map, ant); //模拟运动
+	std::cout << "head_map address: " << head_map << std::endl;
+	std::cout << "tail_map address: " << tail_map << std::endl;
 
 	
 	//test
     system("pause");
-	//tail_map->showMap();//可以正常访问第一个地图
+	tail_map->showMap();//不可以正常访问第一个地图
+	system("pause");
 
 	return 0;
 }
