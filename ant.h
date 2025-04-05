@@ -14,4 +14,5 @@ public:
 };
 
 void Sports_process(int step,Map*&,Ant&);
+void Show_process(int step,Map*,Ant&);
 #endif 

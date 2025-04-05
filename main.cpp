@@ -19,16 +19,13 @@ int main()
 	}
 	tail_map = head_map;
 	head_map->showMap();
-	int goal_step = 3;
+	int goal_step = 100;
 	Sports_process(goal_step, head_map, ant); //模拟运动
-	std::cout << "head_map address: " << head_map << std::endl;
-	std::cout << "tail_map address: " << tail_map << std::endl;
+	Show_process(goal_step,tail_map, ant);//展示运动
 
-	
 	//test
     system("pause");
-	tail_map->showMap();//不可以正常访问第一个地图
-	system("pause");
+	//tail_map->showMap();//可以正常访问第一个地图
 
 	return 0;
 }
