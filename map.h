@@ -9,10 +9,11 @@ public:
 	int Width;
     int Height;
 	int Ant_color;//蚂蚁脚下颜色，用于赋给下一个地图
-	
-    void showMap();
 	Map* nextMap;
+
+    void showMap();
     Map();
+	Map(Map& const map);
     ~Map();
 };
 

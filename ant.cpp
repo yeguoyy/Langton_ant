@@ -123,7 +123,6 @@ void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 		}
 		ant.move(head_map);
 		head_map = head_map->nextMap;
-
 	}
 }
 

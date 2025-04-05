@@ -32,7 +32,6 @@ bool chooseMap(Map*& head_map, Ant& ant)
 	case 1:
 		cout << "ÇëÊäÈë¹Ø¿¨±àºÅ£¨1¡¢2£©" << endl;
 		int num;
-		//´ý½â¾ö£ºÎóÊäÈë·ûºÅ
 		while (true)
 		{
 			cin >> num;
@@ -246,4 +245,20 @@ void Map::showMap()
 		}
 		cout << endl;
 	}
+}
+Map::Map(Map& map)
+{
+	this->Width = map.Width;
+    this->Height = map.Height;
+    this->Ant_color = map.Ant_color;
+    this->m_map = new int* [Width + 1];
+    for (int i = 1; i <= Width; i++)
+    {
+        this->m_map[i] = new int[Height + 1];
+        for (int j = 1; j <= Height; j++)
+        {
+            this->m_map[i][j] = map.m_map[i][j];
+        }
+    }
+    this->nextMap = map.nextMap;
 }

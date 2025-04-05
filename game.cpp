@@ -11,3 +11,9 @@ void introduction()
 		<< "若撞墙，则原地不动，自转180度调头但不改变脚下颜色。" << endl;
 	cout << "玩家需要根据蚂蚁的最终蚁行图倒推初始图" << endl;
 }
+
+void player_try(Map& player_map)
+{
+	player_map.showMap();
+
+}
