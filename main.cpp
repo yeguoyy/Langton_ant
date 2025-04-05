@@ -18,15 +18,13 @@ int main()
 		return 0;
 	}
 	tail_map = head_map;
-	head_map->showMap();
 	int goal_step = 100;
 	Sports_process(goal_step, head_map, ant); //模拟运动
-	system("pause");
 	Map player_map(*head_map);
 	player_try(player_map);
 	system("pause");
-	Show_process(goal_step,tail_map, ant);//展示运动
 
+	Show_process(goal_step,tail_map, ant);//展示运动
 	//test
     system("pause");
 	//tail_map->showMap();//可以正常访问第一个地图

@@ -113,6 +113,17 @@ void Ant::move(Map*& map)
 }
 void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 {
+	head_map->showMap();
+	std::cout<< "当前蚂蚁脚下颜色为:";
+    if (head_map->Ant_color == 0)
+    {
+        std::cout << "白色" << std::endl;
+    }
+    else if (head_map->Ant_color == 8)
+    {
+        std::cout << "黑色" << std::endl;
+    }
+	system("pause");
 	int step = 0;
 	while (true)
 	{
