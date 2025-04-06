@@ -89,6 +89,8 @@ void creatMap(Map*& head_map, Ant& ant)
 	head_map->Height = y;
 	ant.Ant_x = (int)(head_map->Width / 2) + 1;
 	ant.Ant_y = (int)(head_map->Height / 2) + 1;
+	Ant::initial_x = ant.Ant_x;
+	Ant::initial_y = ant.Ant_y;
 	// 动态分配二维内存
 	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 	for (int i = 1; i <= head_map->Width; i++)
@@ -109,7 +111,7 @@ void creatMap(Map*& head_map, Ant& ant)
 			{
 				/*if (rand() % 2 == 0)
 				{
-                    head_map->m_map[i][j] = 8;
+					head_map->m_map[i][j] = 8;
 				}
 				else
 				{
@@ -171,6 +173,8 @@ bool Read_map(string filename, Map*& head_map, Ant& ant)
 		}
 		//传入起始位置
 		fil >> ant.Ant_x >> ant.Ant_y;
+		Ant::initial_x = ant.Ant_x;
+		Ant::initial_y = ant.Ant_y;
 		//方向 1上1 v下2 <左3 >右4
 		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];
 		switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
@@ -249,16 +253,16 @@ void Map::showMap()
 Map::Map(Map& map)
 {
 	this->Width = map.Width;
-    this->Height = map.Height;
-    this->Ant_color = map.Ant_color;
-    this->m_map = new int* [Width + 1];
-    for (int i = 1; i <= Width; i++)
-    {
-        this->m_map[i] = new int[Height + 1];
-        for (int j = 1; j <= Height; j++)
-        {
-            this->m_map[i][j] = map.m_map[i][j];
-        }
-    }
-    this->nextMap = map.nextMap;
+	this->Height = map.Height;
+	this->Ant_color = map.Ant_color;
+	this->m_map = new int* [Width + 1];
+	for (int i = 1; i <= Width; i++)
+	{
+		this->m_map[i] = new int[Height + 1];
+		for (int j = 1; j <= Height; j++)
+		{
+			this->m_map[i][j] = map.m_map[i][j];
+		}
+	}
+	this->nextMap = map.nextMap;
 }

@@ -8,7 +8,8 @@ class Ant
 {
 public:
 	Direction direction;//蚂蚁方向
-	int Ant_x, Ant_y;//当前蚂蚁坐标
+	static int Ant_x, Ant_y;//当前蚂蚁坐标
+	static int initial_x, initial_y;//初始坐标
     Ant();
 	void move(Map*&);
 };

@@ -1,11 +1,12 @@
 #include "ant.h"
 #include <iostream>
 
-
+int Ant::Ant_x = 1;
+int Ant::Ant_y = 1;
+int Ant::initial_x = 1;
+int Ant::initial_y = 1;
 Ant::Ant() {
 	direction = DOWN;
-	Ant_x = 5;
-	Ant_y = 5;
 }
 
 void Ant::move(Map*& map)

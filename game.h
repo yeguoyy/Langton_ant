@@ -3,5 +3,5 @@
 #include "ant.h"
 bool chooseMap(Map*&,Ant &);
 void creatMap(Map*&, Ant &);
-void player_try(Map&);
+void player_try(Map&,Map*& const);
 void introduction();

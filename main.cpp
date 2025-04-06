@@ -21,7 +21,7 @@ int main()
 	int goal_step = 100;
 	Sports_process(goal_step, head_map, ant); //模拟运动
 	Map player_map(*head_map);
-	player_try(player_map);
+	player_try(player_map,tail_map);
 	system("pause");
 
 	Show_process(goal_step,tail_map, ant);//展示运动
