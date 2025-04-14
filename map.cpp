@@ -4,6 +4,8 @@
 #include <ctime>
 #include <string>
 #include <fstream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window/Event.hpp>
 using namespace std;
 
 bool Read_map(string, Map*&, Ant&);
