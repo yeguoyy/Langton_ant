@@ -15,10 +15,6 @@ void introduction()
 
 bool if_player_win(Map& player_map, Map*& tail_map)
 {
-
-	cout << "Ant_x:" << Ant::Ant_x << " Ant_y:" << Ant::Ant_y << endl;
-	cout << "Ant_color:" << player_map.Ant_color << endl;
-	system("pause");
 	for (int i = 1; i <= player_map.Height; i++)
 	{
 		for (int j = 1; j <= player_map.Width; j++)
@@ -66,11 +62,17 @@ void player_try(Map& player_map, Map*& tail_map)
 		int x, y;
 		cout << "请输入你想改变颜色的坐标：" << endl;
 		cin >> x >> y;
-		if (x > player_map.Width || y > player_map.Height || x <= 0 || y <= 0)
+		if (x > player_map.Width || y > player_map.Height || x < 0 || y < 0)
 		{
 			cout << "超出地图范围，请重新输入" << endl;
 			cin.clear();
 			system("pause");
+		}
+		else if (x == 0 && y == 0)
+		{
+			cout << "跳过" << endl;
+			system("pause");
+			return;
 		}
 		else if (cin.fail())
 		{

@@ -142,6 +142,7 @@ void Show_process(int goal_step, Map* Tail_map, Ant& ant)
 {
 	Map* head_map = Tail_map;
 	int step = 0;
+	system("cls");
 	std::cout << "\033[?25l";//隐藏光标
 	while (true)
 	{
@@ -150,9 +151,9 @@ void Show_process(int goal_step, Map* Tail_map, Ant& ant)
 		{
 			break;
 		}
-		system("pause");
 		std::cout << "\033[0;0H";//覆盖清屏
 		head_map = head_map->nextMap;
+		std::cout << "回放功能：" << std::endl;
 		head_map->showMap();
 		std::cout << "当前蚂蚁脚下颜色转换，";
 		if (head_map->Ant_color == 0)
@@ -163,5 +164,6 @@ void Show_process(int goal_step, Map* Tail_map, Ant& ant)
 		{
 			std::cout << "变成了黑色" << std::endl;
 		}
+		system("pause");
 	}
 }
