@@ -6,10 +6,10 @@
 #include <fstream>
 using namespace std;
 
-bool Read_map(string, Map*&, Ant&,S_Map&);
+bool Read_map(string, Map*&, Ant&,S_Map&, sf::RenderWindow&);
 static int x, y;
 
-bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map)
+bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map, sf::RenderWindow &window)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
 	int choice;
@@ -48,7 +48,7 @@ bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map)
 		}
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
-		if (!Read_map(filename, head_map, ant,s_map))// 读取关卡地图
+		if (!Read_map(filename, head_map, ant,s_map,window))// 读取关卡地图
 		{
 			return false;
 		}
@@ -148,7 +148,7 @@ void creatMap(Map*& head_map, Ant& ant)
 	}
 }
 
-bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map)
+bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, sf::RenderWindow & window)
 {
 	fstream fil(filename);
 
@@ -159,6 +159,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map)
 	}
 	else {
 		fil >> x >> y;// 读取地图宽高
+		
 		head_map->Width = x;
 		head_map->Height = y;
 		// 动态分配二维内存
@@ -194,6 +195,11 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map)
 			break;
 		}
 		//cout << "w=" << w << "h=" << h << endl;
+		window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));
+		sf::View view = window.getDefaultView();
+		view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
+		view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
+		window.setView(view);
         if(!s_map.loadmap("S_Map.png", {100,100}, head_map->m_map, x, y))
             return false;
 		fil.close();
