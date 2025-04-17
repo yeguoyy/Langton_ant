@@ -38,6 +38,61 @@ bool if_player_win(Map& player_map, Map*& tail_map)
 	}
 	return true;
 }
+void Sports_process(int goal_step, Map*& head_map, Ant& ant)
+{
+	head_map->showMap();
+	std::cout << "当前蚂蚁脚下颜色为:";
+	if (head_map->Ant_color == 0)
+	{
+		std::cout << "白色" << std::endl;
+	}
+	else if (head_map->Ant_color == 1)
+	{
+		std::cout << "黑色" << std::endl;
+	}
+	system("pause");
+	int step = 0;
+	while (true)
+	{
+		step++;
+		if (step == goal_step)
+		{
+			break;
+		}
+		ant.move(head_map);
+		head_map = head_map->nextMap;
+	}
+}
+
+void Show_process(int goal_step, Map* Tail_map, Ant& ant)
+{
+	Map* head_map = Tail_map;
+	int step = 0;
+	system("cls");
+	std::cout << "\033[?25l";//隐藏光标
+	while (true)
+	{
+		step++;
+		if (step == goal_step)
+		{
+			break;
+		}
+		std::cout << "\033[0;0H";//覆盖清屏
+		head_map = head_map->nextMap;
+		std::cout << "回放功能：" << std::endl;
+		head_map->showMap();
+		std::cout << "当前蚂蚁脚下颜色转换，";
+		if (head_map->Ant_color == 0)
+		{
+			std::cout << "变成了白色" << std::endl;
+		}
+		else if (head_map->Ant_color == 1)
+		{
+			std::cout << "变成了黑色" << std::endl;
+		}
+		system("pause");
+	}
+}
 void player_try(Map& player_map, Map*& tail_map)
 {
 	while (true)

@@ -330,3 +330,8 @@ void S_Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_map, states);
 }
+
+void S_showMap(const Map& map, sf::RenderWindow& window)
+{
+
+}

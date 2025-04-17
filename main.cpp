@@ -19,6 +19,7 @@ int main()
 	{
 		return 0;
 	}
+	int temp = 0;
 	while (window.isOpen())
 	{
 		// handle events
@@ -26,6 +27,22 @@ int main()
 		{
 			if (event->is<sf::Event::Closed>())
 				window.close();
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				
+				if (keyPressed->code == sf::Keyboard::Key::Escape&&temp==0)
+				{
+					temp = 1;
+					tail_map = head_map;
+					int goal_step = 100;
+					Sports_process(goal_step, head_map, ant); //模拟运动
+					Map player_map(*head_map);
+					//player_try(player_map,tail_map);//玩家尝试
+					Show_process(goal_step, tail_map, ant);//展示运动
+
+				}
+			}
+
 		}
 
 		// draw the map
@@ -33,13 +50,7 @@ int main()
 		window.draw(s_map);
 		window.display();
 	}
-	system("pause");
-	tail_map = head_map;
-	int goal_step = 100;
-	Sports_process(goal_step, head_map, ant); //模拟运动
-	Map player_map(*head_map);
-	//player_try(player_map,tail_map);//玩家尝试
-	Show_process(goal_step,tail_map, ant);//展示运动
+	
 	//test
     system("pause");
 	//tail_map->showMap();//可以正常访问第一个地图
