@@ -63,17 +63,13 @@ void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 		}
 	}
 }
-void S_showMap(const Map& map, sf::RenderWindow& window,int step)
-{
-	if (step == 1)
-	{
 
-	}
-}
 
-void Show_process(Map* Tail_map, Ant& ant)
+void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map, sf::RenderWindow&window)
 {
 	Map* head_map = Tail_map;
+	Map *S_head_map = Tail_map;
+	int S_step=0;
 	system("cls");
 	std::cout << "\033[?25l";//隐藏光标
 	while (true)
@@ -81,11 +77,10 @@ void Show_process(Map* Tail_map, Ant& ant)
 		std::cout << "\033[0;0H";//覆盖清屏
 		std::cout << "回放功能：" << std::endl;
 		head_map->showMap();
-		head_map = head_map->nextMap;
-		if (head_map == NULL)
-		{
-			break;
-		}
+		s_map.S_showMap(S_head_map, S_step);
+		window.clear();
+		window.draw(s_map);
+		window.display();
 		std::cout << "当前蚂蚁脚下颜色转换，";
 		if (head_map->Ant_color == 0)
 		{
@@ -94,6 +89,17 @@ void Show_process(Map* Tail_map, Ant& ant)
 		else if (head_map->Ant_color == 1)
 		{
 			std::cout << "变成了黑色" << std::endl;
+		}
+		if (head_map != Tail_map)
+		{
+			S_head_map = S_head_map->nextMap;
+			S_step++;
+		}
+		head_map = head_map->nextMap;
+
+		if (head_map == NULL)
+		{
+			break;
 		}
 		system("pause");
 	}

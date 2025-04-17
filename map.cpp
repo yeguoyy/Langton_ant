@@ -259,6 +259,30 @@ void Map::showMap()
 		cout << endl;
 	}
 }
+void S_Map::S_showMap(const Map* head_map, int S_step)
+{
+	if (S_step != 0)
+	{
+		for (int i = 1; i <= head_map->Width; i++)
+		{
+			for (int j = 1; j <= head_map->Height; j++)
+			{
+				if (head_map->m_map[i][j] != head_map->nextMap->m_map[i][j])
+				{
+					int tile_x= head_map->nextMap->m_map[i][j];
+					int tile_y = 0;
+					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
+					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
+					triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+					triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+					triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+					triangles[4].texCoords = sf::Vector2f((tile_x + 1) *100, tile_y * 100);
+					triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
+				}
+			}
+		}
+	}
+}
 Map::Map(Map& map)
 {
 	this->Width = map.Width;
