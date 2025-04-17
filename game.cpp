@@ -24,7 +24,7 @@ bool if_player_win(Map& player_map, Map*& tail_map)
 				if (player_map.m_map[i][j] != tail_map->Ant_color)				
 					return false;				
 			}
-			else if (player_map.m_map[i][j] != 0 && player_map.m_map[i][j] != 8)
+			else if (player_map.m_map[i][j] != 0 && player_map.m_map[i][j] != 1)
 			{
 				if (player_map.Ant_color != tail_map->m_map[i][j])
 					return false;
@@ -49,7 +49,7 @@ void player_try(Map& player_map, Map*& tail_map)
 		{
 			std::cout << "°×É«" << std::endl;
 		}
-		else if (player_map.Ant_color == 8)
+		else if (player_map.Ant_color == 1)
 		{
 			std::cout << "ºÚÉ«" << std::endl;
 		}
@@ -85,9 +85,9 @@ void player_try(Map& player_map, Map*& tail_map)
 		{
 			if (player_map.Ant_color == 0)
 			{
-				player_map.Ant_color = 8;
+				player_map.Ant_color = 1;
 			}
-			else if (player_map.Ant_color == 8)
+			else if (player_map.Ant_color == 1)
 			{
 
 				player_map.Ant_color = 0;
@@ -97,9 +97,9 @@ void player_try(Map& player_map, Map*& tail_map)
 		{
 			if (player_map.m_map[x][y] == 0)
 			{
-				player_map.m_map[x][y] = 8;
+				player_map.m_map[x][y] = 1;
 			}
-			else if (player_map.m_map[x][y] == 8)
+			else if (player_map.m_map[x][y] == 1)
 			{
 				player_map.m_map[x][y] = 0;
 			}

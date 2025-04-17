@@ -54,7 +54,7 @@ void Ant::move(Map*& map)
 		{
 		case UP:
 			direction = DOWN;
-			NewMap->m_map[Ant_x][Ant_y] = 2;
+			NewMap->m_map[Ant_x][Ant_y] = 3;
 			break;
 		case DOWN:
 			direction = UP;
@@ -62,11 +62,11 @@ void Ant::move(Map*& map)
 			break;
 		case LEFT:
 			direction = RIGHT;
-			NewMap->m_map[Ant_x][Ant_y] = 4;
+			NewMap->m_map[Ant_x][Ant_y] = 5;
 			break;
 		case RIGHT:
 			direction = LEFT;
-			NewMap->m_map[Ant_x][Ant_y] = 3;
+			NewMap->m_map[Ant_x][Ant_y] = 4;
 			break;
 		}
 	}
@@ -75,7 +75,7 @@ void Ant::move(Map*& map)
 		Ant_y = new_y;
 		//颜色翻转和转弯（白右黑左）
 		if (NewMap->m_map[Ant_x][Ant_y] == 0) {
-			NewMap->Ant_color = 8;//颜色翻转
+			NewMap->Ant_color = 1;//颜色翻转
 			if (direction == RIGHT)
 			{
 				direction = DOWN;
@@ -84,7 +84,7 @@ void Ant::move(Map*& map)
 				direction = (Direction)((int)direction + 1);
 			}
 		}
-		else if (NewMap->m_map[Ant_x][Ant_y] == 8) {
+		else if (NewMap->m_map[Ant_x][Ant_y] == 1) {
 			NewMap->Ant_color = 0;//颜色翻转
 			if (direction == DOWN)
 			{
@@ -97,16 +97,16 @@ void Ant::move(Map*& map)
 		//前进后位置图标改变
 		switch (direction) {
 		case UP:
-			NewMap->m_map[Ant_x][Ant_y] = 1;
-			break;
-		case DOWN:
 			NewMap->m_map[Ant_x][Ant_y] = 2;
 			break;
-		case LEFT:
+		case DOWN:
 			NewMap->m_map[Ant_x][Ant_y] = 3;
 			break;
-		case RIGHT:
+		case LEFT:
 			NewMap->m_map[Ant_x][Ant_y] = 4;
+			break;
+		case RIGHT:
+			NewMap->m_map[Ant_x][Ant_y] = 5;
 			break;
 		}
 	}
@@ -120,7 +120,7 @@ void Sports_process(int goal_step, Map*& head_map, Ant& ant)
     {
         std::cout << "白色" << std::endl;
     }
-    else if (head_map->Ant_color == 8)
+    else if (head_map->Ant_color == 1)
     {
         std::cout << "黑色" << std::endl;
     }
@@ -160,7 +160,7 @@ void Show_process(int goal_step, Map* Tail_map, Ant& ant)
 		{
 			std::cout << "变成了白色" << std::endl;
 		}
-		else if (head_map->Ant_color == 8)
+		else if (head_map->Ant_color == 1)
 		{
 			std::cout << "变成了黑色" << std::endl;
 		}

@@ -121,7 +121,7 @@ void creatMap(Map*& head_map, Ant& ant)
 				int RandNum = rand() % (ant.Ant_x - edge) * (ant.Ant_y - edge);
 				if (RandNum > (abs(i - ant.Ant_x) + edge) * (abs(j - ant.Ant_y) + edge))
 				{
-					head_map->m_map[i][j] = 8;
+					head_map->m_map[i][j] = 1;
 				}
 				else
 				{
@@ -133,16 +133,16 @@ void creatMap(Map*& head_map, Ant& ant)
 	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
 	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
 	{
-	case 1:
+	case 2:
 		ant.direction = UP;
 		break;
-	case 2:
+	case 3:
 		ant.direction = DOWN;
 		break;
-	case 3:
+	case 4:
 		ant.direction = LEFT;
 		break;
-	case 4:
+	case 5:
 		ant.direction = RIGHT;
 		break;
 	}
@@ -181,16 +181,16 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, sf::Render
 		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];
 		switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
 		{
-		case 1:
+		case 2:
 			ant.direction = UP;
 			break;
-		case 2:
+		case 3:
 			ant.direction = DOWN;
 			break;
-		case 3:
+		case 4:
 			ant.direction = LEFT;
 			break;
-		case 4:
+		case 5:
 			ant.direction = RIGHT;
 			break;
 		}
@@ -236,19 +236,19 @@ void Map::showMap()
 			case 0:
 				cout << 'O' << " ";
 				break;
-			case 8:
+			case 1:
 				cout << '#' << " ";
 				break;
-			case 1:
+			case 2:
 				cout << '1' << " ";
 				break;
-			case 2:
+			case 3:
 				cout << 'v' << " ";
 				break;
-			case 3:
+			case 4:
 				cout << '<' << " ";
 				break;
-			case 4:
+			case 5:
 				cout << '>' << " ";
 				break;
 			default:
