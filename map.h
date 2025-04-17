@@ -1,20 +1,31 @@
 #ifndef MAP_H
 #define MAP_H
 //#include "ant.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
 
 class Map
 {
 public:
 	int** m_map;//地图数组 0白8黑 1↑2↓3←4→
 	int Width;
-    int Height;
+	int Height;
 	int Ant_color;//蚂蚁脚下颜色，用于赋给下一个地图
 	Map* nextMap;
 
-    void showMap();
-    Map();
+	void showMap();
+	Map();
 	Map(Map& const map);
-    ~Map();
+	~Map();
+};
+class S_Map : public sf::Drawable, public sf::Transformable//SFML地图类，用于显示地图
+{
+public:
+	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, int** tiles, const int wide, const int height);//瓦片集路径 瓦片大小 瓦片数组 宽 高
+private:
+	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+	sf::VertexArray m_map;//地图顶点数组（动态）
+	sf::Texture m_tileset;//地图纹理
 };
 
 

@@ -1,7 +1,7 @@
 #pragma once
 #include "map.h"
 #include "ant.h"
-bool chooseMap(Map*&,Ant &);
+bool chooseMap(Map*&,Ant &,S_Map&);
 void creatMap(Map*&, Ant &);
 void player_try(Map&,Map*& const);
 void introduction();

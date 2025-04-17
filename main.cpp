@@ -12,11 +12,28 @@ int main()
 	//该用指针用来读取每一个地图的地址
 	Map *head_map=new Map;
 	Map *tail_map=new Map;
+	sf::RenderWindow window(sf::VideoMode({ 1000, 1000 }), "Tilemap");
+	S_Map s_map;
 	//链表的头尾结点
-	if (!chooseMap(head_map,ant))
+	if (!chooseMap(head_map,ant,s_map))
 	{
 		return 0;
 	}
+	while (window.isOpen())
+	{
+		// handle events
+		while (const std::optional event = window.pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
+				window.close();
+		}
+
+		// draw the map
+		window.clear();
+		window.draw(s_map);
+		window.display();
+	}
+	system("pause");
 	tail_map = head_map;
 	int goal_step = 100;
 	Sports_process(goal_step, head_map, ant); //模拟运动

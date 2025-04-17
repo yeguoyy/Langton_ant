@@ -4,14 +4,12 @@
 #include <ctime>
 #include <string>
 #include <fstream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window/Event.hpp>
 using namespace std;
 
-bool Read_map(string, Map*&, Ant&);
+bool Read_map(string, Map*&, Ant&,S_Map&);
 static int x, y;
 
-bool chooseMap(Map*& head_map, Ant& ant)
+bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
 	int choice;
@@ -37,7 +35,7 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		while (true)
 		{
 			cin >> num;
-			if (cin.fail() || (num != 1 && num != 2))
+			if (cin.fail() || (num != 1 && num != 2&& num!=3))
 			{
 				cout << "输入错误,请重新输入" << endl;
 				cin.clear();
@@ -50,7 +48,7 @@ bool chooseMap(Map*& head_map, Ant& ant)
 		}
 		filename = to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
-		if (!Read_map(filename, head_map, ant))// 读取关卡地图
+		if (!Read_map(filename, head_map, ant,s_map))// 读取关卡地图
 		{
 			return false;
 		}
@@ -150,12 +148,13 @@ void creatMap(Map*& head_map, Ant& ant)
 	}
 }
 
-bool Read_map(string filename, Map*& head_map, Ant& ant)
+bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map)
 {
 	fstream fil(filename);
 
 	if (!fil.is_open()) {
 		cout << "文件打开失败" << endl;
+		system("pause");
 		return false;
 	}
 	else {
@@ -195,6 +194,8 @@ bool Read_map(string filename, Map*& head_map, Ant& ant)
 			break;
 		}
 		//cout << "w=" << w << "h=" << h << endl;
+        if(!s_map.loadmap("S_Map.png", {100,100}, head_map->m_map, x, y))
+            return false;
 		fil.close();
 		return true;
 	}
@@ -267,4 +268,59 @@ Map::Map(Map& map)
 		}
 	}
 	this->nextMap = map.nextMap;
+}
+
+bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,int** tiles, const int width, const int height)
+{
+	if (!m_tileset.loadFromFile(tileset))//读取瓦片集纹理
+		return false;
+
+	m_map.setPrimitiveType(sf::PrimitiveType::Triangles);//设置顶点类型
+	m_map.resize(width * height * 6);//顶点数组的大小为宽度和高度乘积的6倍，因为每个单元格由两个三角形（六个点）组成
+
+	for (unsigned int i = 0; i < width; ++i)
+	{
+        for (unsigned int j = 0; j < height; ++j)
+        {
+			const int tileNumber = tiles[i+1][j+1];//获取当前单元格中的纹理编号 0 1 2 3 
+			//瓦片集纹理按照从左到右，换行继续的方式排列
+
+			//m_tileset.getSize().x 表示纹理的宽度，tileSize.x 表示每个单元格的宽度  m_tileset.getSize().x / tileSize.x 计算瓦片集纹理
+			//const int tile_x = tileNumber % (m_tileset.getSize().x / tileSize.x);//计算当前瓦片所在的行索引
+            //const int tile_y = tileNumber / (m_tileset.getSize().y / tileSize.y);//计算当前瓦片所在的列索引
+			int tile_x = tileNumber;
+			int tile_y = 0;
+
+			sf::Vertex* triangles = &m_map[(i + j * width) * 6];//获取当前顶点数组的指针
+
+			// define the 6 corners of the two triangles
+			triangles[0].position = sf::Vector2f(i * tileSize.x, j * tileSize.y);
+			triangles[1].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
+			triangles[2].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+			triangles[3].position = sf::Vector2f(i * tileSize.x, (j + 1) * tileSize.y);
+			triangles[4].position = sf::Vector2f((i + 1) * tileSize.x, j * tileSize.y);
+			triangles[5].position = sf::Vector2f((i + 1) * tileSize.x, (j + 1) * tileSize.y);
+
+			// define the 6 matching texture coordinates
+			triangles[0].texCoords = sf::Vector2f(tile_x * tileSize.x, tile_y * tileSize.y);
+			triangles[1].texCoords = sf::Vector2f((tile_x + 1) * tileSize.x, tile_y * tileSize.y);
+			triangles[2].texCoords = sf::Vector2f(tile_x * tileSize.x, (tile_y + 1) * tileSize.y);
+			triangles[3].texCoords = sf::Vector2f(tile_x * tileSize.x, (tile_y + 1) * tileSize.y);
+			triangles[4].texCoords = sf::Vector2f((tile_x + 1) * tileSize.x, tile_y * tileSize.y);
+			triangles[5].texCoords = sf::Vector2f((tile_x + 1) * tileSize.x, (tile_y + 1) * tileSize.y);
+        }
+	}
+    return true;
+
+}
+void S_Map::draw(sf::RenderTarget& target, sf::RenderStates states) const 
+{
+	// apply the transform
+	states.transform *= getTransform();
+
+	// apply the tileset texture
+	states.texture = &m_tileset;
+
+	// draw the vertex array
+	target.draw(m_map, states);
 }
