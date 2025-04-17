@@ -30,7 +30,7 @@ bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map, sf::RenderWindow &window)
 	string filename;
 	switch (choice) {
 	case 1:
-		cout << "ÇëÊäÈë¹Ø¿¨±àºÅ£¨1¡¢2£©" << endl;
+		cout << "ÇëÊäÈë¹Ø¿¨±àºÅ£¨1¡¢2¡¢3£©" << endl;
 		int num;
 		while (true)
 		{

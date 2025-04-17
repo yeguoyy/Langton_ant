@@ -71,7 +71,7 @@ void S_showMap(const Map& map, sf::RenderWindow& window,int step)
 	}
 }
 
-void Show_process(int goal_step, Map* Tail_map, Ant& ant)
+void Show_process(Map* Tail_map, Ant& ant)
 {
 	Map* head_map = Tail_map;
 	system("cls");
