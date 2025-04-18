@@ -26,7 +26,10 @@ int main()
 		while (const std::optional event = window.pollEvent())
 		{
 			if (event->is<sf::Event::Closed>())
+			{
 				window.close();
+				return 0;
+			}
 			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 			{
 				
@@ -34,7 +37,7 @@ int main()
 				{
 					temp = 1;
 					tail_map = head_map;
-					int goal_step = 100;
+					int goal_step = 1000;
 					Sports_process(goal_step, head_map, ant); //模拟运动
 					Map player_map(*head_map);
 					//player_try(player_map,tail_map);//玩家尝试

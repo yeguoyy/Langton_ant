@@ -101,7 +101,7 @@ void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map, sf::RenderWindow&window)
 		{
 			break;
 		}
-		system("pause");
+		pause(window);
 	}
 }
 void player_try(Map& player_map, Map*& tail_map)
@@ -171,5 +171,30 @@ void player_try(Map& player_map, Map*& tail_map)
 			}
 		}
 		
+	}
+}
+void pause(sf::RenderWindow& window)
+{
+	bool paused = true;
+	std::cout << "≥Ã–Ú“—‘›Õ££¨∞¥ø’∏Òº¸ºÃ–¯..." << std::endl;
+	while (paused)
+	{
+		while (const std::optional event = window.pollEvent())
+		{
+			if (event->is<sf::Event::Closed>())
+			{
+				window.close();
+				return;
+			}
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				if (keyPressed->code == sf::Keyboard::Key::Space)
+				{
+                    paused = false;
+					break;
+				}
+				sf::sleep(sf::milliseconds(10));//∂Ã‘›—”≥Ÿ
+			}
+		}
 	}
 }

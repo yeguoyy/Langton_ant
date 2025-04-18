@@ -7,4 +7,5 @@ void player_try(Map&,Map*& const);
 void introduction();
 void Sports_process(int step, Map*&, Ant&);
 void Show_process(Map*, Ant&,S_Map &, sf::RenderWindow&);
+void pause(sf::RenderWindow&);
 
