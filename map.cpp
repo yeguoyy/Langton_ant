@@ -6,6 +6,7 @@
 #include <fstream>
 using namespace std;
 
+
 bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
 static int x, y;
 
@@ -91,6 +92,8 @@ void creatMap(Map*& head_map, Ant& ant)
 	ant.Ant_y = (int)(head_map->Height / 2) + 1;
 	Ant::initial_x = ant.Ant_x;
 	Ant::initial_y = ant.Ant_y;
+	head_map->M_ant_x =  ant.Ant_x;
+    head_map->M_ant_y = ant.Ant_y;
 	// 动态分配二维内存
 	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 	for (int i = 1; i <= head_map->Width; i++)
@@ -177,6 +180,8 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		fil >> ant.Ant_x >> ant.Ant_y;
 		Ant::initial_x = ant.Ant_x;
 		Ant::initial_y = ant.Ant_y;
+		head_map->M_ant_x = ant.Ant_x;
+        head_map->M_ant_y = ant.Ant_y;
 		//方向 1上1 v下2 <左3 >右4
 		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];
 		switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
@@ -216,6 +221,8 @@ Map::Map()
 	Height = 0;
 	Ant_color = 0;
 	nextMap = nullptr;
+    M_ant_x = 0;
+    M_ant_y = 0;
 }
 
 Map::~Map()

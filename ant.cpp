@@ -5,8 +5,10 @@ int Ant::Ant_x = 1;
 int Ant::Ant_y = 1;
 int Ant::initial_x = 1;
 int Ant::initial_y = 1;
+sf::Vector2u S_Ant::tileSize = { 100,100 };
 Ant::Ant() {
 	direction = DOWN;
+	
 }
 
 void Ant::move(Map*& map)
@@ -110,7 +112,10 @@ void Ant::move(Map*& map)
 			break;
 		}
 	}
+	NewMap->M_ant_x = new_x;
+	NewMap->M_ant_y = new_y;
 	map->nextMap = NewMap;//将新图赋给nextMap
+	
 }
 
 void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -140,13 +145,59 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 	triangles[4].position = sf::Vector2f((x + 1) * tileSize.x, y * tileSize.y);
 	triangles[5].position = sf::Vector2f((x + 1) * tileSize.x, (y + 1) * tileSize.y);
 
-
-	triangles[0].texCoords = sf::Vector2f(0, 0);
-	triangles[1].texCoords = sf::Vector2f(100, 0);
-	triangles[2].texCoords = sf::Vector2f(0, 100);
-	triangles[3].texCoords = sf::Vector2f(0, 100);
-	triangles[4].texCoords = sf::Vector2f(100, 0);
-	triangles[5].texCoords = sf::Vector2f(100, 100);
-
+	triangles[0].texCoords = sf::Vector2f(0 * tileSize.x, 0 * tileSize.y);
+	triangles[1].texCoords = sf::Vector2f((0 + 1) * tileSize.x, 0 * tileSize.y);
+	triangles[2].texCoords = sf::Vector2f(0 * tileSize.x, (0 + 1) * tileSize.y);
+	triangles[3].texCoords = sf::Vector2f(0 * tileSize.x, (0 + 1) * tileSize.y);
+	triangles[4].texCoords = sf::Vector2f((0 + 1) * tileSize.x, 0 * tileSize.y);
+	triangles[5].texCoords = sf::Vector2f((0 + 1) * tileSize.x, (0 + 1) * tileSize.y);
 	return true;
+}
+
+sf::Angle Way_to_Degree(Direction direction)
+{
+    switch (direction) {
+    case UP:
+        return sf::degrees(0.0f);
+	case RIGHT:
+		return sf::degrees(90.0f);
+	case DOWN:
+		return sf::degrees(180.0f);
+	case LEFT:
+		return sf::degrees(270.0f);
+    }
+}
+
+void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
+{
+	if (S_step != 0)
+	{
+		std::cout << "当前蚂蚁脚下颜色转换，";
+		int color = head_map->Ant_color;
+		if (color == 0)
+		{
+			std::cout << "变成了白色" << std::endl;
+		}
+		else if (color == 1)
+		{
+			std::cout << "变成了黑色" << std::endl;
+		}
+		sf::Vertex* triangles = &m_ant[0];
+		std::cout << "当前位置：" << head_map->M_ant_x << " " << head_map->M_ant_y << std::endl;
+ 		triangles[0].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
+		triangles[1].position = sf::Vector2f((head_map->M_ant_x) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
+		triangles[2].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y ) * tileSize.y);
+		triangles[3].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y ) * tileSize.y);
+		triangles[4].position = sf::Vector2f((head_map->M_ant_x) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
+		triangles[5].position = sf::Vector2f((head_map->M_ant_x ) * tileSize.x, (head_map->M_ant_y) * tileSize.y);
+
+		triangles[0].texCoords = sf::Vector2f(color * tileSize.x, 0 * tileSize.y);
+		triangles[1].texCoords = sf::Vector2f((color + 1) * tileSize.x, 0 * tileSize.y);
+		triangles[2].texCoords = sf::Vector2f(color * tileSize.x, (0+ 1) * tileSize.y);
+		triangles[3].texCoords = sf::Vector2f(color * tileSize.x, (0 + 1) * tileSize.y);
+		triangles[4].texCoords = sf::Vector2f((color + 1) * tileSize.x, 0 * tileSize.y);
+		triangles[5].texCoords = sf::Vector2f((color + 1) * tileSize.x, (0 + 1) * tileSize.y);
+
+		//this->setRotation(Way_to_Degree(ant.direction));
+	}
 }

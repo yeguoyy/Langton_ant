@@ -11,6 +11,7 @@ public:
 	int Width;
 	int Height;
 	int Ant_color;//ÂìÒÏ½ÅÏÂÑÕÉ«£¬ÓÃÓÚ¸³¸øÏÂÒ»¸öµØÍ¼
+	int M_ant_x, M_ant_y;
 	Map* nextMap;
 
 	void showMap();
@@ -23,6 +24,8 @@ class S_Map : public sf::Drawable, public sf::Transformable//SFMLµØÍ¼Àà£¬ÓÃÓÚÏÔÊ
 public:
 	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, int** tiles, const int wide, const int height);//ÍßÆ¬¼¯Â·¾¶ ÍßÆ¬´óĞ¡ ÍßÆ¬Êı×é ¿í ¸ß
 	void S_showMap(const Map* head_map,int);
+	
+
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 	sf::VertexArray m_map;//µØÍ¼¶¥µãÊı×é£¨¶¯Ì¬£©
