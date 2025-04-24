@@ -113,3 +113,40 @@ void Ant::move(Map*& map)
 	map->nextMap = NewMap;//将新图赋给nextMap
 }
 
+void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
+{
+	// apply the transform
+	states.transform *= getTransform();
+
+	// apply the tileset texture
+	states.texture = &m_tileset;
+
+	// draw the vertex array
+	target.draw(m_ant, states);
+}
+bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant)
+{
+	if (!m_tileset.loadFromFile(tileset))//读取Ant纹理
+		return false;
+	m_ant.setPrimitiveType(sf::PrimitiveType::Triangles);//设置顶点类型
+	m_ant.resize(6);//顶点数组的大小为宽度和高度乘积的6倍，因为每个单元格由两个三角形（六个点）组成
+	int x = ant.initial_x;
+	int y = ant.initial_y;
+	sf::Vertex* triangles = &m_ant[0];
+	triangles[0].position = sf::Vector2f(x * tileSize.x, y * tileSize.y);
+	triangles[1].position = sf::Vector2f((x + 1) * tileSize.x, y * tileSize.y);
+	triangles[2].position = sf::Vector2f(x * tileSize.x, (y + 1) * tileSize.y);
+	triangles[3].position = sf::Vector2f(x * tileSize.x, (y + 1) * tileSize.y);
+	triangles[4].position = sf::Vector2f((x + 1) * tileSize.x, y * tileSize.y);
+	triangles[5].position = sf::Vector2f((x + 1) * tileSize.x, (y + 1) * tileSize.y);
+
+
+	triangles[0].texCoords = sf::Vector2f(0, 0);
+	triangles[1].texCoords = sf::Vector2f(100, 0);
+	triangles[2].texCoords = sf::Vector2f(0, 100);
+	triangles[3].texCoords = sf::Vector2f(0, 100);
+	triangles[4].texCoords = sf::Vector2f(100, 0);
+	triangles[5].texCoords = sf::Vector2f(100, 100);
+
+	return true;
+}

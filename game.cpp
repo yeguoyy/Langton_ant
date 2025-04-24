@@ -40,6 +40,7 @@ bool if_player_win(Map& player_map, Map*& tail_map)
 }
 void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 {
+
 	head_map->showMap();
 	std::cout << "当前蚂蚁脚下颜色为:";
 	if (head_map->Ant_color == 0)
