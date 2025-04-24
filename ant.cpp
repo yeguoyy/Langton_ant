@@ -111,9 +111,9 @@ void Ant::move(Map*& map)
 			NewMap->m_map[Ant_x][Ant_y] = 5;
 			break;
 		}
+		NewMap->M_ant_x = Ant_x;
+		NewMap->M_ant_y = Ant_y;
 	}
-	NewMap->M_ant_x = new_x;
-	NewMap->M_ant_y = new_y;
 	map->nextMap = NewMap;//将新图赋给nextMap
 	
 }
@@ -135,8 +135,8 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 		return false;
 	m_ant.setPrimitiveType(sf::PrimitiveType::Triangles);//设置顶点类型
 	m_ant.resize(6);//顶点数组的大小为宽度和高度乘积的6倍，因为每个单元格由两个三角形（六个点）组成
-	int x = ant.initial_x;
-	int y = ant.initial_y;
+	int x = ant.initial_x-1;
+	int y = ant.initial_y-1;
 	sf::Vertex* triangles = &m_ant[0];
 	triangles[0].position = sf::Vector2f(x * tileSize.x, y * tileSize.y);
 	triangles[1].position = sf::Vector2f((x + 1) * tileSize.x, y * tileSize.y);
@@ -170,7 +170,7 @@ sf::Angle Way_to_Degree(Direction direction)
 
 void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
 {
-	if (S_step != 0)
+	//if (S_step != 0)
 	{
 		std::cout << "当前蚂蚁脚下颜色转换，";
 		int color = head_map->Ant_color;

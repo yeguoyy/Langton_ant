@@ -51,7 +51,7 @@ void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 	{
 		std::cout << "黑色" << std::endl;
 	}
-	system("pause");
+	//system("pause");
 	int step = 0;
 	while (true)
 	{
@@ -78,19 +78,24 @@ void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderW
   		std::cout << "\033[0;0H";//覆盖清屏
 		std::cout << "回放功能：" << std::endl;
 		head_map->showMap();
+
+		if (S_step == 0)
+		{
+			window.clear();
+			window.draw(s_map);
+			window.draw(s_ant);
+			window.display();
+		}
 		s_map.S_showMap(S_head_map, S_step);//S_step=0不运行
-		s_ant.S_showAnt(S_head_map, ant,S_step);//S_step=0不运行//
+		s_ant.S_showAnt(S_head_map, ant, S_step);//S_step=0不运行//
 		window.clear();
 		window.draw(s_map);
-        window.draw(s_ant);
+		window.draw(s_ant);
 		window.display();
 		
-		if (head_map != Tail_map)
-		{
-			S_head_map = S_head_map->nextMap;
-			S_step++;
-		}
+		S_head_map = S_head_map->nextMap;
 		head_map = head_map->nextMap;
+		S_step++;
 
 		if (head_map == NULL)
 		{
