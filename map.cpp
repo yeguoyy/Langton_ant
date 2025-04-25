@@ -151,7 +151,7 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 
 	}
 	head_map->m_degree = Way_to_Degree(ant.direction);
-	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));
+	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));//改变窗口大小要注意改变视图中心点
 	sf::View view = window.getDefaultView();
 	view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
 	view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
