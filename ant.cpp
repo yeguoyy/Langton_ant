@@ -123,9 +123,9 @@ void Ant::move(Map*& map)
 			NewMap->m_map[Ant_x][Ant_y] = 5;
 			break;
 		}
-		NewMap->M_ant_x = Ant_x;
-		NewMap->M_ant_y = Ant_y;
 	}
+	NewMap->M_ant_x = Ant_x;
+	NewMap->M_ant_y = Ant_y;
 	NewMap->m_degree=Way_to_Degrees(direction);
 	map->nextMap = NewMap;//½«ĞÂÍ¼¸³¸ønextMap
 	
