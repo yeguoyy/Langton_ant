@@ -143,7 +143,7 @@ void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_ant, states);
 }
-bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map *head_map)//还需加入head_map参数用于设置方向
+bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map *head_map)
 {
 	if (!m_tileset.loadFromFile(tileset))//读取Ant纹理
 		return false;

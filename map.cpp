@@ -9,7 +9,6 @@ using namespace std;
 
 bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
 static int x, y;
-//sf::Angle Way_to_Degree(Direction direction);
 
 bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
 {
@@ -56,13 +55,13 @@ bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 		}
 		break;
 	case 2:
-		creatMap(head_map, ant);
+		creatMap(head_map, ant, s_map, s_ant, window);
 		break;
 	}
 	system("cls");
 	return true;
 }
-void creatMap(Map*& head_map, Ant& ant)
+void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWindow& window)
 {
 	srand(time(0));
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
@@ -76,7 +75,7 @@ void creatMap(Map*& head_map, Ant& ant)
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
-		else if (x > 30 || y > 30)
+		else if (x > 15 || y > 15)
 		{
 			cout << "输入过大,请重新输入" << endl;
 			cin.clear();
@@ -149,7 +148,16 @@ void creatMap(Map*& head_map, Ant& ant)
 	case 5:
 		ant.direction = RIGHT;
 		break;
+
 	}
+	head_map->m_degree = Way_to_Degree(ant.direction);
+	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));
+	sf::View view = window.getDefaultView();
+	view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
+	view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
+	window.setView(view);
+	s_map.loadmap("S_Map.png", { 100,100 }, head_map->m_map, x, y);
+	s_ant.loadmap("S_Ant.png", { 100,100 }, ant, head_map);
 }
 
 bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_ant, sf::RenderWindow & window)

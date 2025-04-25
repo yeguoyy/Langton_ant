@@ -2,7 +2,7 @@
 #include "map.h"
 #include "ant.h"
 bool chooseMap(Map*&,Ant &,S_Map&,S_Ant&, sf::RenderWindow &);
-void creatMap(Map*&, Ant &);
+void creatMap(Map*&, Ant &,S_Map&, S_Ant&, sf::RenderWindow&);
 void player_try(Map&,Map*& const);
 void introduction();
 void Sports_process(int step, Map*&, Ant&);
