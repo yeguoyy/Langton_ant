@@ -209,7 +209,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		window.setView(view);
         if(!s_map.loadmap("S_Map.png", {100,100}, head_map->m_map, x, y))
             return false;
-		if (!s_ant.loadmap("S_Ant.png", { 100,100 }, ant))
+		if (!s_ant.loadmap("S_Ant.png", { 100,100 }, ant,head_map))
             return false;
 		fil.close();
 		return true;
@@ -223,6 +223,7 @@ Map::Map()
 	Height = 0;
 	Ant_color = 0;
 	nextMap = nullptr;
+	preMap = nullptr;
     M_ant_x = 0;
     M_ant_y = 0;
 	m_degree = sf::degrees( 0.0f );
@@ -273,15 +274,15 @@ void Map::showMap()
 }
 void S_Map::S_showMap(const Map* head_map, int S_step)
 {
-	//if (S_step != 0)
+	if (S_step != 0)
 	{
 		for (int i = 1; i <= head_map->Width; i++)
 		{
 			for (int j = 1; j <= head_map->Height; j++)
 			{
-				if (head_map->m_map[i][j] != head_map->nextMap->m_map[i][j])
+				if (head_map->m_map[i][j] != head_map->preMap->m_map[i][j])//如果不一样
 				{
-					int tile_x= head_map->nextMap->m_map[i][j];
+					int tile_x= head_map->m_map[i][j];
 					int tile_y = 0;
 					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
 					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
@@ -313,6 +314,7 @@ Map::Map(Map& map)
 		}
 	}
 	this->nextMap = map.nextMap;
+	this->preMap = map.preMap;
 }
 
 bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,int** tiles, const int width, const int height)

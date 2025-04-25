@@ -14,6 +14,7 @@ public:
 	int M_ant_x, M_ant_y;
 	sf::Angle m_degree;
 	Map* nextMap;
+	Map* preMap;
 
 	void showMap();
 	Map();

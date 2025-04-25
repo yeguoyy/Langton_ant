@@ -127,6 +127,7 @@ void Ant::move(Map*& map)
 	NewMap->M_ant_x = Ant_x;
 	NewMap->M_ant_y = Ant_y;
 	NewMap->m_degree=Way_to_Degrees(direction);
+	NewMap->preMap= map;
 	map->nextMap = NewMap;//将新图赋给nextMap
 	
 }
@@ -142,7 +143,7 @@ void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_ant, states);
 }
-bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant)
+bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map *head_map)//还需加入head_map参数用于设置方向
 {
 	if (!m_tileset.loadFromFile(tileset))//读取Ant纹理
 		return false;
@@ -168,6 +169,7 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 	sf::Vector2f position = sf::Vector2f((x + 0.5) * tileSize.x, (y + 0.5) * tileSize.y);
 	this->setOrigin(position);
 	this->setPosition(position);
+	this->setRotation(head_map->m_degree);
 	return true;
 }
 

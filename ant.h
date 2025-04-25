@@ -19,7 +19,7 @@ public:
 class S_Ant : public sf::Drawable, public sf::Transformable//SFML地图类，用于显示Ant
 {
 public:
-	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant);//瓦片集路径 瓦片大小 
+	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map * head_map);//瓦片集路径 瓦片大小 
 	void S_showAnt(const Map* head_map, const Ant& ant, int);
 	static sf::Vector2u tileSize;//瓦片大小
 private:
