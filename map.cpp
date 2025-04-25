@@ -9,6 +9,7 @@ using namespace std;
 
 bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
 static int x, y;
+//sf::Angle Way_to_Degree(Direction direction);
 
 bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
 {
@@ -199,6 +200,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 			ant.direction = RIGHT;
 			break;
 		}
+		head_map->m_degree = Way_to_Degree(ant.direction);
 		//cout << "w=" << w << "h=" << h << endl;
 		window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));
 		sf::View view = window.getDefaultView();
@@ -223,6 +225,7 @@ Map::Map()
 	nextMap = nullptr;
     M_ant_x = 0;
     M_ant_y = 0;
+	m_degree = sf::degrees( 0.0f );
 }
 
 Map::~Map()
@@ -297,6 +300,9 @@ Map::Map(Map& map)
 	this->Width = map.Width;
 	this->Height = map.Height;
 	this->Ant_color = map.Ant_color;
+    this->M_ant_x = map.M_ant_x;
+    this->M_ant_y = map.M_ant_y;
+	this->m_degree= map.m_degree;
 	this->m_map = new int* [Width + 1];
 	for (int i = 1; i <= Width; i++)
 	{

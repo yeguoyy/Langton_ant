@@ -12,6 +12,7 @@ public:
 	int Height;
 	int Ant_color;//蚂蚁脚下颜色，用于赋给下一个地图
 	int M_ant_x, M_ant_y;
+	sf::Angle m_degree;
 	Map* nextMap;
 
 	void showMap();

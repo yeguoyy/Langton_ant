@@ -198,3 +198,16 @@ void pause(sf::RenderWindow& window)
 		}
 	}
 }
+sf::Angle Way_to_Degree(Direction direction)
+{
+	switch (direction) {
+	case UP:
+		return sf::degrees(0.0f);
+	case RIGHT:
+		return sf::degrees(90.0f);
+	case DOWN:
+		return sf::degrees(180.0f);
+	case LEFT:
+		return sf::degrees(270.0f);
+	}
+}

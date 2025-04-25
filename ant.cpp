@@ -10,7 +10,19 @@ Ant::Ant() {
 	direction = DOWN;
 	
 }
-
+sf::Angle Way_to_Degrees(Direction direction)
+{
+	switch (direction) {
+	case UP:
+		return sf::degrees(0.0f);
+	case RIGHT:
+		return sf::degrees(90.0f);
+	case DOWN:
+		return sf::degrees(180.0f);
+	case LEFT:
+		return sf::degrees(270.0f);
+	}
+}
 void Ant::move(Map*& map)
 {
 	Map* NewMap = new Map;
@@ -114,6 +126,7 @@ void Ant::move(Map*& map)
 		NewMap->M_ant_x = Ant_x;
 		NewMap->M_ant_y = Ant_y;
 	}
+	NewMap->m_degree=Way_to_Degrees(direction);
 	map->nextMap = NewMap;//将新图赋给nextMap
 	
 }
@@ -151,22 +164,14 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 	triangles[3].texCoords = sf::Vector2f(0 * tileSize.x, (0 + 1) * tileSize.y);
 	triangles[4].texCoords = sf::Vector2f((0 + 1) * tileSize.x, 0 * tileSize.y);
 	triangles[5].texCoords = sf::Vector2f((0 + 1) * tileSize.x, (0 + 1) * tileSize.y);
+
+	sf::Vector2f position = sf::Vector2f((x + 0.5) * tileSize.x, (y + 0.5) * tileSize.y);
+	this->setOrigin(position);
+	this->setPosition(position);
 	return true;
 }
 
-sf::Angle Way_to_Degree(Direction direction)
-{
-    switch (direction) {
-    case UP:
-        return sf::degrees(0.0f);
-	case RIGHT:
-		return sf::degrees(90.0f);
-	case DOWN:
-		return sf::degrees(180.0f);
-	case LEFT:
-		return sf::degrees(270.0f);
-    }
-}
+
 
 void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
 {
@@ -184,12 +189,7 @@ void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
 		}
 		sf::Vertex* triangles = &m_ant[0];
 		std::cout << "当前位置：" << head_map->M_ant_x << " " << head_map->M_ant_y << std::endl;
- 		triangles[0].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
-		triangles[1].position = sf::Vector2f((head_map->M_ant_x) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
-		triangles[2].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y ) * tileSize.y);
-		triangles[3].position = sf::Vector2f((head_map->M_ant_x-1) * tileSize.x, (head_map->M_ant_y ) * tileSize.y);
-		triangles[4].position = sf::Vector2f((head_map->M_ant_x) * tileSize.x, (head_map->M_ant_y-1) * tileSize.y);
-		triangles[5].position = sf::Vector2f((head_map->M_ant_x ) * tileSize.x, (head_map->M_ant_y) * tileSize.y);
+		this->setPosition(sf::Vector2f((head_map->M_ant_x - 0.5) * tileSize.x, (head_map->M_ant_y - 0.5) * tileSize.y));
 
 		triangles[0].texCoords = sf::Vector2f(color * tileSize.x, 0 * tileSize.y);
 		triangles[1].texCoords = sf::Vector2f((color + 1) * tileSize.x, 0 * tileSize.y);
@@ -198,6 +198,6 @@ void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
 		triangles[4].texCoords = sf::Vector2f((color + 1) * tileSize.x, 0 * tileSize.y);
 		triangles[5].texCoords = sf::Vector2f((color + 1) * tileSize.x, (0 + 1) * tileSize.y);
 
-		//this->setRotation(Way_to_Degree(ant.direction));
+		this->setRotation(head_map->m_degree);
 	}
 }
