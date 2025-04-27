@@ -140,14 +140,14 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x
 				player_map.m_map[x][y] = 0;
 			}
 		}
+		player_map.showMap();
+		s_map.S_showMap(&player_map, -1);
+		s_ant.S_showAnt(&player_map);
 		if (if_player_win(player_map, tail_map) == true)
 		{
 			cout << "¹§Ï²Äã£¬ÄãÓ®ÁË£¡" << endl;
 			return 1;
 		}
-		player_map.showMap();
-		s_map.S_showMap(&player_map, -1);
-		s_ant.S_showAnt(&player_map);
 		s_ant.setPosition(sf::Vector2f((player_map.M_ant_x - 0.5) * 100, (player_map.M_ant_y - 0.5) * 100));
 		return 0;
 }

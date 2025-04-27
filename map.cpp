@@ -156,8 +156,17 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 	view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
 	view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
 	window.setView(view);
-	s_map.loadmap("S_Map.png", { 100,100 }, head_map->m_map, x, y);
-	s_ant.loadmap("S_Ant.png", { 100,100 }, ant, head_map);
+	if (!s_map.loadmap("tileMap\\S_Map.png", { 100,100 }, head_map->m_map, x, y))
+	{
+		cout << "地图加载失败" << endl;
+		system("pause");
+	}
+
+	if (!s_ant.loadmap("tileMap\\S_Ant.png", { 100,100 }, ant, head_map))
+	{
+		cout << "Ant加载失败" << endl;
+		system("pause");
+	}
 }
 
 bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_ant, sf::RenderWindow & window)
