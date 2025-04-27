@@ -13,7 +13,7 @@ int main()
 	Map* head_map = new Map;
 	Map* tail_map = new Map;
 	sf::Font font;
-	if (!font.openFromFile("msyh.ttc"))
+	if (!font.openFromFile("TTC\\msyh.ttc"))
 	{
 		std::cout << "Failed to load font" << std::endl;
 		return -1;
@@ -22,15 +22,15 @@ int main()
 	introduction(Rules);
 	sf::RenderWindow window(sf::VideoMode({ 600, 900 }), L"兰顿蚂蚁", sf::Style::Default);
 	sf::Texture Start_texture;
-	if (!Start_texture.loadFromFile("Start_game_cover.png", false, sf::IntRect({ 0, 0 }, { 1024, 1536 })))//sf::IntRect 类是一个简单的实用类型，表示一个矩形。它的构造函数接受矩形的左上角坐标和大小。
+	if (!Start_texture.loadFromFile("context\\Start_game_cover.png", false, sf::IntRect({ 0, 0 }, { 1024, 1536 })))//sf::IntRect 类是一个简单的实用类型，表示一个矩形。它的构造函数接受矩形的左上角坐标和大小。
 		return -1;
 	sf::Sprite Start_game_cover(Start_texture);
 	sf::Vector2u original_Start_Size = Start_texture.getSize();
 	sf::Vector2f scale_Start_Size = { 600.f / original_Start_Size.x, 900.f / original_Start_Size.y };
 	Start_game_cover.setScale(scale_Start_Size);
 
-	HCURSOR customCursor1 = LoadCursorFromFile(L"pointer.cur");//从文件中加载光标
-	HCURSOR customCursor2 = LoadCursorFromFile(L"link.cur");//从文件中加载光标
+	HCURSOR customCursor1 = LoadCursorFromFile(L"material\\Vision Cursor White\\pointer.cur");//从文件中加载光标
+	HCURSOR customCursor2 = LoadCursorFromFile(L"material\\Vision Cursor White\\link.cur");//从文件中加载光标
 	if (!customCursor1 || !customCursor2) {
 		DWORD dwError = GetLastError();
 		MessageBox(NULL, L"Failed to load custom cursor", L"Error", MB_OK | MB_ICONERROR);

@@ -47,7 +47,7 @@ bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 				break;
 			}
 		}
-		filename = to_string(num) + ".txt";// 将数字转换为字符串
+		filename = "map\\"+to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
 		if (!Read_map(filename, head_map, ant,s_map,s_ant,window))// 读取关卡地图
 		{
@@ -215,9 +215,9 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
 		view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
 		window.setView(view);
-        if(!s_map.loadmap("S_Map.png", {100,100}, head_map->m_map, x, y))
+        if(!s_map.loadmap("tileMap\\S_Map.png", {100,100}, head_map->m_map, x, y))
             return false;
-		if (!s_ant.loadmap("S_Ant.png", { 100,100 }, ant,head_map))
+		if (!s_ant.loadmap("tileMap\\S_Ant.png", { 100,100 }, ant,head_map))
             return false;
 		fil.close();
 		return true;
