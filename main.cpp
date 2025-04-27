@@ -1,6 +1,7 @@
 #include "game.h"
 #include <iostream>
 #include <windows.h>
+#define goal_step 1000
 using namespace std;
 
 //规则说明 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互 地图保存功能 误输入√ 传送门？障碍物？
@@ -12,6 +13,8 @@ int main()
 	//该用指针用来读取每一个地图的地址
 	Map* head_map = new Map;
 	Map* tail_map = new Map;
+	Map player_map;
+	
 	sf::Font font;
 	if (!font.openFromFile("TTC\\msyh.ttc"))
 	{
@@ -60,7 +63,7 @@ int main()
 	S_Map s_map;
 	S_Ant s_ant;
 	//链表的头尾结点
-	int temp = 0;
+	int temp = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
 	while (window.isOpen())
 	{
 		// handle events
@@ -73,15 +76,16 @@ int main()
 			}
 			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 			{
-				if (keyPressed->code == sf::Keyboard::Key::Escape && temp == 2)
+				if (keyPressed->code == sf::Keyboard::Key::Tab)
 				{
 					temp++;
-					tail_map = head_map;
-					int goal_step = 1000;
-					Sports_process(goal_step, head_map, ant); //模拟运动
-					Map player_map(*head_map);
+				}
+
+				if (keyPressed->code == sf::Keyboard::Key::Enter && temp == 3)
+				{
 					//player_try(player_map,tail_map);//玩家尝试
 					Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
+					temp++;
 				}
 			}
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
@@ -96,43 +100,53 @@ int main()
 			}
 			if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
 			{
-					if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+				{
+					//std::cout << "the Left button was pressed" << std::endl;
+					if (temp == 0)
 					{
-						//std::cout << "the Left button was pressed" << std::endl;
 						if (mouseButtonPressed->position.x >= 87 && mouseButtonPressed->position.x <= 514 && mouseButtonPressed->position.y >= 658 && mouseButtonPressed->position.y <= 784)
 							temp++;
 					}
+					if (temp == 2)
+					{
+							player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试							
+					}
 				}
-
 			}
 
-			if (temp == 1)
-			{
-				if (!chooseMap(head_map, ant, s_map, s_ant, window))
-				{
-					return 0;
-				}
-				temp++;
-			}
-			window.clear();
-			// draw the map
-			if (temp == 0)
-			{
-				/*sf::Vector2i globalPosition = sf::Mouse::getPosition();
-				cout << "globalPosition.x: " << globalPosition.x << std::endl;
-				cout << "globalPosition.y: " << globalPosition.y << std::endl;*/
-				window.draw(Start_game_cover);
-			}
-			else
-			{
-				window.draw(s_map);
-				window.draw(s_ant);
-			}
-			window.display();
 		}
 
-		//test
-		system("pause");
-		//tail_map->showMap();//可以正常访问第一个地图
-		return 0;
+		if (temp == 1)
+		{
+			if (!chooseMap(head_map, ant, s_map, s_ant, window))
+			{
+				return 0;
+			}
+			temp++;
+			tail_map = head_map;
+			Sports_process(goal_step, head_map, ant); //模拟运动
+			player_map.copyMap(*head_map);
+		}
+		window.clear();
+		// draw the map
+		if (temp == 0)
+		{
+			/*sf::Vector2i globalPosition = sf::Mouse::getPosition();
+			cout << "globalPosition.x: " << globalPosition.x << std::endl;
+			cout << "globalPosition.y: " << globalPosition.y << std::endl;*/
+			window.draw(Start_game_cover);
+		}
+		else
+		{
+			window.draw(s_map);
+			window.draw(s_ant);
+		}
+		window.display();
 	}
+
+	//test
+	system("pause");
+	//tail_map->showMap();//可以正常访问第一个地图
+	return 0;
+}

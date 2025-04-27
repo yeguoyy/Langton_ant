@@ -17,6 +17,7 @@ public:
 	Map* preMap;
 
 	void showMap();
+	void copyMap(Map& const map);
 	Map();
 	Map(Map& const map);
 	~Map();
@@ -26,6 +27,8 @@ class S_Map : public sf::Drawable, public sf::Transformable//SFMLµØÍ¼Àà£¬ÓÃÓÚÏÔÊ
 public:
 	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, int** tiles, const int wide, const int height);//ÍßÆ¬¼¯Â·¾¶ ÍßÆ¬´óĞ¡ ÍßÆ¬Êı×é ¿í ¸ß
 	void S_showMap(const Map* head_map,int);
+	void S_showMap(const Map* player_map);
+	
 	
 
 private:

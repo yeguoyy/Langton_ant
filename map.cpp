@@ -292,7 +292,7 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 				{
 					int tile_x= head_map->m_map[i][j];
 					int tile_y = 0;
-					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
+					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->Width) * 6];
 					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
 					triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
 					triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
@@ -301,6 +301,42 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 					triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
 				}
 			}
+		}
+	}
+	else if (S_step == 0)
+	{
+		for (int i = 1; i <= head_map->Width; i++)
+		{
+			for (int j = 1; j <= head_map->Height; j++)
+			{
+					int tile_x = head_map->m_map[i][j];
+					int tile_y = 0;
+					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->Width) * 6];
+					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
+					triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+					triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+					triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+					triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+					triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
+			}
+		}
+	}
+}
+void S_Map::S_showMap(const Map* head_map)
+{
+	for (int i = 1; i <= head_map->Width; i++)
+	{
+		for (int j = 1; j <= head_map->Height; j++)
+		{
+				int tile_x = head_map->m_map[i][j];
+				int tile_y = 0;
+				sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
+				triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
+				triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+				triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+				triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+				triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+				triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
 		}
 	}
 }
@@ -312,6 +348,26 @@ Map::Map(Map& map)
     this->M_ant_x = map.M_ant_x;
     this->M_ant_y = map.M_ant_y;
 	this->m_degree= map.m_degree;
+	this->m_map = new int* [Width + 1];
+	for (int i = 1; i <= Width; i++)
+	{
+		this->m_map[i] = new int[Height + 1];
+		for (int j = 1; j <= Height; j++)
+		{
+			this->m_map[i][j] = map.m_map[i][j];
+		}
+	}
+	this->nextMap = map.nextMap;
+	this->preMap = map.preMap;
+}
+void Map::copyMap(Map& map)
+{
+	this->Width = map.Width;
+	this->Height = map.Height;
+	this->Ant_color = map.Ant_color;
+	this->M_ant_x = map.M_ant_x;
+	this->M_ant_y = map.M_ant_y;
+	this->m_degree = map.m_degree;
 	this->m_map = new int* [Width + 1];
 	for (int i = 1; i <= Width; i++)
 	{

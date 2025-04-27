@@ -20,7 +20,7 @@ class S_Ant : public sf::Drawable, public sf::Transformable//SFMLµÿÕº¿‡£¨”√”⁄œ‘ 
 {
 public:
 	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map * head_map);//Õﬂ∆¨ºØ¬∑æ∂ Õﬂ∆¨¥Û–° 
-	void S_showAnt(const Map* head_map, const Ant& ant, int);
+	void S_showAnt(const Map* head_map);
 	static sf::Vector2u tileSize;//Õﬂ∆¨¥Û–°
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

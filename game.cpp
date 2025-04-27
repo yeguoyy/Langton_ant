@@ -87,7 +87,7 @@ void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderW
 			window.display();
 		}
 		s_map.S_showMap(S_head_map, S_step);//S_step=0不运行
-		s_ant.S_showAnt(S_head_map, ant, S_step);//S_step=0不运行//
+		s_ant.S_showAnt(S_head_map);//S_step=0不运行//
 		window.clear();
 		window.draw(s_map);
 		window.draw(s_ant);
@@ -104,75 +104,53 @@ void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderW
 		pause(window);
 	}
 }
-//void player_try(Map& player_map, Map*& tail_map)
-//{
-//	while (true)
-//	{
-//		system("cls");
-//		player_map.showMap();
-//		cout << "蚂蚁脚下的颜色为：";
-//		if (player_map.Ant_color == 0)
-//		{
-//			std::cout << "白色" << std::endl;
-//		}
-//		else if (player_map.Ant_color == 1)
-//		{
-//			std::cout << "黑色" << std::endl;
-//		}
-//		if (if_player_win(player_map, tail_map) == true)
-//		{
-//			cout << "恭喜你，你赢了！" << endl;
-//			system("pause");
-//			return;
-//		}
-//		int x, y;
-//		cout << "请输入你想改变颜色的坐标：" << endl;
-//		cin >> x >> y;
-//		if (x > player_map.Width || y > player_map.Height || x < 0 || y < 0)
-//		{
-//			cout << "超出地图范围，请重新输入" << endl;
-//			cin.clear();
-//			system("pause");
-//		}
-//		else if (x == 0 && y == 0)
-//		{
-//			cout << "跳过" << endl;
-//			system("pause");
-//			return;
-//		}
-//		else if (cin.fail())
-//		{
-//			cout << "输入错误,请重新输入" << endl;
-//			cin.clear();
-//			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-//			system("pause");
-//		}
-//		else if (x == Ant::Ant_x && y == Ant::Ant_y)
-//		{
-//			if (player_map.Ant_color == 0)
-//			{
-//				player_map.Ant_color = 1;
-//			}
-//			else if (player_map.Ant_color == 1)
-//			{
-//
-//				player_map.Ant_color = 0;
-//			}
-//		}
-//		else
-//		{
-//			if (player_map.m_map[x][y] == 0)
-//			{
-//				player_map.m_map[x][y] = 1;
-//			}
-//			else if (player_map.m_map[x][y] == 1)
-//			{
-//				player_map.m_map[x][y] = 0;
-//			}
-//		}
-//		
-//	}
-//}
+void player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x,int y)
+{
+		
+		cout <<x << " " << y << endl;
+		cout << "蚂蚁脚下的颜色为：";
+		if (player_map.Ant_color == 0)
+		{
+			std::cout << "白色" << std::endl;
+		}
+		else if (player_map.Ant_color == 1)
+		{
+			std::cout << "黑色" << std::endl;
+		}
+		if (if_player_win(player_map, tail_map) == true)
+		{
+			cout << "恭喜你，你赢了！" << endl;
+			system("pause");
+			return;
+		}
+		if (x == Ant::Ant_x && y == Ant::Ant_y)
+		{
+			if (player_map.Ant_color == 0)
+			{
+				player_map.Ant_color = 1;
+			}
+			else if (player_map.Ant_color == 1)
+			{
+				player_map.Ant_color = 0;
+			}
+		}
+		else
+		{
+			if (player_map.m_map[x][y] == 0)
+			{
+				player_map.m_map[x][y] = 1;
+			}
+			else if (player_map.m_map[x][y] == 1)
+			{
+				player_map.m_map[x][y] = 0;
+			}
+		}
+		player_map.showMap();
+		s_map.S_showMap(&player_map, 0);
+		s_ant.S_showAnt(&player_map);
+		s_ant.setPosition(sf::Vector2f((player_map.M_ant_x - 0.5) * 100, (player_map.M_ant_y - 0.5) * 100));
+		//s_ant.S_showAnt(&player_map, ant, 0);
+}
 void pause(sf::RenderWindow& window)
 {
 	bool paused = true;

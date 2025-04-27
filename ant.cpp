@@ -175,19 +175,17 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 
 
 
-void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
+void S_Ant::S_showAnt(const Map* head_map)
 {
-	//if (S_step != 0)
-	{
-		std::cout << "当前蚂蚁脚下颜色转换，";
+		std::cout << "当前蚂蚁脚下为：";
 		int color = head_map->Ant_color;
 		if (color == 0)
 		{
-			std::cout << "变成了白色" << std::endl;
+			std::cout << "白色" << std::endl;
 		}
 		else if (color == 1)
 		{
-			std::cout << "变成了黑色" << std::endl;
+			std::cout << "黑色" << std::endl;
 		}
 		sf::Vertex* triangles = &m_ant[0];
 		std::cout << "当前位置：" << head_map->M_ant_x << " " << head_map->M_ant_y << std::endl;
@@ -201,5 +199,4 @@ void S_Ant::S_showAnt(const Map* head_map,const Ant& ant,int S_step)
 		triangles[5].texCoords = sf::Vector2f((color + 1) * tileSize.x, (0 + 1) * tileSize.y);
 
 		this->setRotation(head_map->m_degree);
-	}
 }
