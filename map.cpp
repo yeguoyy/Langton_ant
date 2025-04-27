@@ -282,7 +282,7 @@ void Map::showMap()
 }
 void S_Map::S_showMap(const Map* head_map, int S_step)
 {
-	if (S_step != 0)
+	if (S_step > 0)
 	{
 		for (int i = 1; i <= head_map->Width; i++)
 		{
@@ -303,7 +303,7 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 			}
 		}
 	}
-	else if (S_step == 0)
+	else if (S_step == -1)
 	{
 		for (int i = 1; i <= head_map->Width; i++)
 		{

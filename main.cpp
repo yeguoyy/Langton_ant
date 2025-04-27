@@ -110,7 +110,7 @@ int main()
 					}
 					if (temp == 2)
 					{
-							player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//Íæ¼Ò³¢ÊÔ							
+							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//Íæ¼Ò³¢ÊÔ							
 					}
 				}
 			}

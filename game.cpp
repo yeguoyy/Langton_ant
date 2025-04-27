@@ -104,7 +104,7 @@ void Show_process(Map* Tail_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderW
 		pause(window);
 	}
 }
-void player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x,int y)
+int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x,int y)
 {
 		
 		cout <<x << " " << y << endl;
@@ -117,12 +117,7 @@ void player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int 
 		{
 			std::cout << "ºÚÉ«" << std::endl;
 		}
-		if (if_player_win(player_map, tail_map) == true)
-		{
-			cout << "¹§Ï²Äã£¬ÄãÓ®ÁË£¡" << endl;
-			system("pause");
-			return;
-		}
+		
 		if (x == Ant::Ant_x && y == Ant::Ant_y)
 		{
 			if (player_map.Ant_color == 0)
@@ -145,11 +140,16 @@ void player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int 
 				player_map.m_map[x][y] = 0;
 			}
 		}
+		if (if_player_win(player_map, tail_map) == true)
+		{
+			cout << "¹§Ï²Äã£¬ÄãÓ®ÁË£¡" << endl;
+			return 1;
+		}
 		player_map.showMap();
-		s_map.S_showMap(&player_map, 0);
+		s_map.S_showMap(&player_map, -1);
 		s_ant.S_showAnt(&player_map);
 		s_ant.setPosition(sf::Vector2f((player_map.M_ant_x - 0.5) * 100, (player_map.M_ant_y - 0.5) * 100));
-		//s_ant.S_showAnt(&player_map, ant, 0);
+		return 0;
 }
 void pause(sf::RenderWindow& window)
 {
