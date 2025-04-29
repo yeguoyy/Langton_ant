@@ -110,7 +110,27 @@ int main()
 					}
 					if (temp == 2)
 					{
-							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试							
+						if(mouseButtonPressed->position.x>=0&&mouseButtonPressed->position.y>=0&& mouseButtonPressed->position.y<=player_map.Height*100&&mouseButtonPressed->position.x<=player_map.Width*100)
+							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
+						tail_map->showMap();
+					}
+					if (temp == -2)
+					{
+						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= player_map.Height * 100 && mouseButtonPressed->position.x <= player_map.Width * 100)
+						{
+							int i = 0;
+							/*while (i < 5)
+							{
+								i += GoldenFingerMode_player_try(head_map, tail_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);
+								window.clear();
+								window.draw(s_map);
+								window.draw(s_ant);
+								cout << i << endl;
+							}*/
+							//head_map = &player_map;
+							//Sports_process(5, head_map, ant);
+							//Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
+						}
 					}
 				}
 			}
@@ -119,14 +139,25 @@ int main()
 
 		if (temp == 1)
 		{
-			if (!chooseMap(head_map, ant, s_map, s_ant, window))
+			int choise= chooseMap(head_map, ant, s_map, s_ant, window);
+			if (choise==-1)
 			{
 				return 0;
 			}
-			temp++;
-			tail_map = head_map;
-			Sports_process(goal_step, head_map, ant); //模拟运动
-			player_map.copyMap(*head_map);
+			else if (choise == 3)
+			{
+				temp=-2;
+				tail_map = head_map;
+				//Sports_process(goal_step, head_map, ant); //模拟运动
+				player_map.copyMap(*head_map);
+			}
+			else
+			{
+				temp++;
+				tail_map = head_map;
+				Sports_process(goal_step, head_map, ant); //模拟运动
+				player_map.copyMap(*head_map);
+			}
 		}
 		window.clear();
 		// draw the map

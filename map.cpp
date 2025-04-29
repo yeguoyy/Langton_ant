@@ -10,14 +10,14 @@ using namespace std;
 bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
 static int x, y;
 
-bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
+int chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
 {
-	cout << "选择关卡模式请按1，随机生成关卡模式请按2" << endl;
+	cout << "选择关卡模式请按1，随机生成关卡模式请按2,金手指模式请按3" << endl;
 	int choice;
 	while (true)
 	{
 		cin >> choice;
-		if (cin.fail() || (choice != 1 && choice != 2))
+		if (cin.fail() || (choice != 1 && choice != 2&&choice !=3))
 		{
 			cout << "输入错误,请重新输入" << endl;
 			cin.clear();
@@ -51,15 +51,23 @@ bool chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 		//cout << filename << endl;
 		if (!Read_map(filename, head_map, ant,s_map,s_ant,window))// 读取关卡地图
 		{
-			return false;
+			return -1;
 		}
 		break;
 	case 2:
 		creatMap(head_map, ant, s_map, s_ant, window);
 		break;
+	case 3:
+        //introduction(window);
+        //pause(window);
+		GoldenFingerMode_creatMap(head_map, ant, s_map, s_ant, window);
+		return 3;
+        break;
+        default:
+			return -1;
 	}
 	system("cls");
-	return true;
+	return 1;
 }
 void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWindow& window)
 {
@@ -131,6 +139,88 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 					head_map->m_map[i][j] = 0;
 				}
 			}
+		}
+	}
+	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
+	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+	{
+	case 2:
+		ant.direction = UP;
+		break;
+	case 3:
+		ant.direction = DOWN;
+		break;
+	case 4:
+		ant.direction = LEFT;
+		break;
+	case 5:
+		ant.direction = RIGHT;
+		break;
+
+	}
+	head_map->m_degree = Way_to_Degree(ant.direction);
+	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));//改变窗口大小要注意改变视图中心点
+	sf::View view = window.getDefaultView();
+	view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
+	view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
+	window.setView(view);
+	if (!s_map.loadmap("tileMap\\S_Map.png", { 100,100 }, head_map->m_map, x, y))
+	{
+		cout << "地图加载失败" << endl;
+		system("pause");
+	}
+
+	if (!s_ant.loadmap("tileMap\\S_Ant.png", { 100,100 }, ant, head_map))
+	{
+		cout << "Ant加载失败" << endl;
+		system("pause");
+	}
+}
+
+void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
+{
+	cout << "请输入想要生成的题目的长度和宽度" << endl;
+	while (true)
+	{
+		cin >> x >> y;
+		if (cin.fail() || (x <= 0 || y <= 0))
+		{
+			cout << "输入错误,请重新输入" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		else if (x > 15 || y > 15)
+		{
+			cout << "输入过大,请重新输入" << endl;
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		else
+		{
+			break;
+		}
+	}
+	head_map->Width = x;
+	head_map->Height = y;
+	ant.Ant_x = (int)(head_map->Width / 2) + 1;
+	ant.Ant_y = (int)(head_map->Height / 2) + 1;
+	Ant::initial_x = ant.Ant_x;
+	Ant::initial_y = ant.Ant_y;
+	head_map->M_ant_x = ant.Ant_x;
+	head_map->M_ant_y = ant.Ant_y;
+	// 动态分配二维内存
+	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
+	for (int i = 1; i <= head_map->Width; i++)
+	{
+		head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
+	}
+	//全白
+	
+	for (int i = 1; i <= head_map->Width; i++)
+	{
+		for (int j = 1; j <= head_map->Height; j++)
+		{
+				head_map->m_map[i][j] = 0;
 		}
 	}
 	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
@@ -312,7 +402,7 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 			}
 		}
 	}
-	else if (S_step == -1)
+	else if (S_step == 0)
 	{
 		for (int i = 1; i <= head_map->Width; i++)
 		{

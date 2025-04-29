@@ -15,9 +15,9 @@ void introduction(sf::Text &Rules)
 
 bool if_player_win(Map& player_map, Map*& tail_map)
 {
-	for (int i = 1; i <= player_map.Height; i++)
+	for (int i = 1; i <= player_map.Width; i++)
 	{
-		for (int j = 1; j <= player_map.Width; j++)
+		for (int j = 1; j <= player_map.Height; j++)//不能反了！！！
 		{
 			if (i == Ant::initial_x && j == Ant::initial_y)
 			{
@@ -141,16 +141,59 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x
 			}
 		}
 		player_map.showMap();
-		s_map.S_showMap(&player_map, -1);
+		s_map.S_showMap(&player_map, 0);
 		s_ant.S_showAnt(&player_map);
 		if (if_player_win(player_map, tail_map) == true)
 		{
 			cout << "恭喜你，你赢了！" << endl;
+			cout << "按Enter继续..." << endl;
 			return 1;
 		}
 		s_ant.setPosition(sf::Vector2f((player_map.M_ant_x - 0.5) * 100, (player_map.M_ant_y - 0.5) * 100));
 		return 0;
 }
+int GoldenFingerMode_player_try(Map*& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
+{
+	cout << x << " " << y << endl;
+	cout << "蚂蚁脚下的颜色为：";
+	if (player_map->Ant_color == 0)
+	{
+		std::cout << "白色" << std::endl;
+	}
+	else if (player_map->Ant_color == 1)
+	{
+		std::cout << "黑色" << std::endl;
+	}
+
+	if (x == Ant::Ant_x && y == Ant::Ant_y)
+	{
+		if (player_map->Ant_color == 0)
+		{
+			player_map->Ant_color = 1;
+		}
+		else if (player_map->Ant_color == 1)
+		{
+			player_map->Ant_color = 0;
+		}
+	}
+	else
+	{
+		if (player_map->m_map[x][y] == 0)
+		{
+			player_map->m_map[x][y] = 1;
+		}
+		else if (player_map->m_map[x][y] == 1)
+		{
+			player_map->m_map[x][y] = 0;
+		}
+	}
+	player_map->showMap();
+	s_map.S_showMap(player_map, 0);
+	s_ant.S_showAnt(player_map);
+	s_ant.setPosition(sf::Vector2f((player_map->M_ant_x - 0.5) * 100, (player_map->M_ant_y - 0.5) * 100));
+	return 1;
+}
+
 void pause(sf::RenderWindow& window)
 {
 	bool paused = true;
