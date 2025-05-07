@@ -141,8 +141,8 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 			}
 		}
 	}
-	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
-	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+	int way = rand() % 4 + 1;
+	switch (way)
 	{
 	case 2:
 		ant.direction = UP;
@@ -156,7 +156,6 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 	case 5:
 		ant.direction = RIGHT;
 		break;
-
 	}
 	head_map->m_degree = Way_to_Degree(ant.direction);
 	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));//改变窗口大小要注意改变视图中心点
@@ -259,6 +258,21 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 	}
 }
 
+void Map::creatBar()
+{
+	srand(time(NULL));
+	int bar_x=rand() % this->Width + 1;
+    int bar_y=rand() % this->Height + 1;
+	if (this->m_map[bar_x][bar_y] == 3)
+	{
+		this->creatBar();
+		return;
+	}
+    m_map[bar_x][bar_y] = 3;
+	return;
+}
+
+
 bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_ant, sf::RenderWindow & window)
 {
 	fstream fil(filename);
@@ -290,9 +304,9 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		Ant::initial_y = ant.Ant_y;
 		head_map->M_ant_x = ant.Ant_x;
         head_map->M_ant_y = ant.Ant_y;
-		//方向 1上1 v下2 <左3 >右4
-		fil >> head_map->m_map[ant.Ant_x][ant.Ant_y];
-		switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+		int way;
+		fil >> way;
+		switch (way)
 		{
 		case 2:
 			ant.direction = UP;
@@ -359,7 +373,7 @@ void Map::showMap()
 			case 1:
 				cout << '#' << " ";
 				break;
-			case 2:
+			/*case 2:
 				cout << '1' << " ";
 				break;
 			case 3:
@@ -370,7 +384,7 @@ void Map::showMap()
 				break;
 			case 5:
 				cout << '>' << " ";
-				break;
+				break;*/
 			default:
 				cout << m_map[i][j] << " ";
 				break;

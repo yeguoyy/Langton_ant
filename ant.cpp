@@ -69,19 +69,19 @@ void Ant::move(Map*& map)
 		{
 		case UP:
 			direction = DOWN;
-			NewMap->m_map[Ant_x][Ant_y] = 3;
+
 			break;
 		case DOWN:
 			direction = UP;
-			NewMap->m_map[Ant_x][Ant_y] = 1;
+
 			break;
 		case LEFT:
 			direction = RIGHT;
-			NewMap->m_map[Ant_x][Ant_y] = 5;
+
 			break;
 		case RIGHT:
 			direction = LEFT;
-			NewMap->m_map[Ant_x][Ant_y] = 4;
+
 			break;
 		}
 	}
@@ -91,6 +91,7 @@ void Ant::move(Map*& map)
 		//颜色翻转和转弯（白右黑左）
 		if (NewMap->m_map[Ant_x][Ant_y] == 0) {
 			NewMap->Ant_color = 1;//颜色翻转
+			NewMap->m_map[Ant_x][Ant_y] = 1;
 			if (direction == RIGHT)
 			{
 				direction = DOWN;
@@ -101,6 +102,7 @@ void Ant::move(Map*& map)
 		}
 		else if (NewMap->m_map[Ant_x][Ant_y] == 1) {
 			NewMap->Ant_color = 0;//颜色翻转
+			NewMap->m_map[Ant_x][Ant_y] = 0;
 			if (direction == DOWN)
 			{
 				direction = RIGHT;
@@ -109,21 +111,7 @@ void Ant::move(Map*& map)
 				direction = (Direction)((int)direction - 1);
 			}
 		}
-		//前进后位置图标改变
-		switch (direction) {
-		case UP:
-			NewMap->m_map[Ant_x][Ant_y] = 2;
-			break;
-		case DOWN:
-			NewMap->m_map[Ant_x][Ant_y] = 3;
-			break;
-		case LEFT:
-			NewMap->m_map[Ant_x][Ant_y] = 4;
-			break;
-		case RIGHT:
-			NewMap->m_map[Ant_x][Ant_y] = 5;
-			break;
-		}
+		
 	}
 	NewMap->M_ant_x = Ant_x;
 	NewMap->M_ant_y = Ant_y;

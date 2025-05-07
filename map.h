@@ -7,7 +7,7 @@
 class Map
 {
 public:
-	int** m_map;//地图数组 0白1黑 2↑ 3↓ 4← 5→
+	int** m_map;//地图数组 0白1黑 3障碍
 	int Width;
 	int Height;
 	int Ant_color;//蚂蚁脚下颜色，用于赋给下一个地图
@@ -18,6 +18,8 @@ public:
 
 	void showMap();
 	void copyMap(Map& const map);
+	void creatBar();
+	void creatBar(int x, int y);
 	Map();
 	Map(Map& const map);
 	~Map();
@@ -36,7 +38,6 @@ private:
 	sf::VertexArray m_map;//地图顶点数组（动态）
 	sf::Texture m_tileset;//地图纹理
 };
-
 
 
 
