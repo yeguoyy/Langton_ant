@@ -189,7 +189,7 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 	player_map->showMap();
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
-	return 0;
+	return -1;
 }
 
 void pause(sf::RenderWindow& window)

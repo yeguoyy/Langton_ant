@@ -113,12 +113,12 @@ int main()
 							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
 						//tail_map->showMap();
 					}
-					if (temp == -2)
+					if (temp <= -2)
 					{
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-								GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
-								GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window);
+								temp+=GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
+								cout << temp;
 						}
 					}
 				}
@@ -148,8 +148,10 @@ int main()
 				player_map.copyMap(*head_map);
 			}
 		}
-		else if (temp == -2)
+		else if (temp == -7)
 		{
+			GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window);//自带show和draw
+			temp = -2;
 		}
 		window.clear();
 		// draw the map
