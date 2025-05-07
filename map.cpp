@@ -10,7 +10,7 @@ using namespace std;
 bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
 static int x, y;
 
-int chooseMap(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
+int chooseMode(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2,金手指模式请按3" << endl;
 	int choice;

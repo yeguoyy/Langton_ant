@@ -149,10 +149,9 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x
 			cout << "按Enter继续..." << endl;
 			return 1;
 		}
-		s_ant.setPosition(sf::Vector2f((player_map.M_ant_x - 0.5) * 100, (player_map.M_ant_y - 0.5) * 100));
 		return 0;
 }
-int GoldenFingerMode_player_try(Map*& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
+int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
 {
 	cout << x << " " << y << endl;
 	cout << "蚂蚁脚下的颜色为：";
@@ -190,8 +189,7 @@ int GoldenFingerMode_player_try(Map*& player_map, Map*& tail_map, S_Map& s_map, 
 	player_map->showMap();
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
-	s_ant.setPosition(sf::Vector2f((player_map->M_ant_x - 0.5) * 100, (player_map->M_ant_y - 0.5) * 100));
-	return 1;
+	return 0;
 }
 
 void pause(sf::RenderWindow& window)

@@ -129,8 +129,13 @@ void Ant::move(Map*& map)
 	NewMap->m_degree=Way_to_Degrees(direction);
 	NewMap->preMap= map;
 	map->nextMap = NewMap;//½«ÐÂÍ¼¸³¸ønextMap
-	
 }
+void GoldenFinger_move(Ant& ant , Map*& head_map,int step)
+{
+	ant.move(head_map);
+	head_map = head_map->nextMap;
+}
+
 
 void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {

@@ -5,7 +5,7 @@
 using namespace std;
 
 //规则说明 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 地图保存功能 误输入√ 传送门？障碍物？
-//挑战赛（通过改变黑白，以最小的步数让蚂蚁到目标区域）
+//金手指挑战赛（通过改变黑白，以最小的步数让蚂蚁到目标区域）
 
 int main()
 {
@@ -102,7 +102,6 @@ int main()
 			{
 				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 				{
-					//std::cout << "the Left button was pressed" << std::endl;
 					if (temp == 0)
 					{
 						if (mouseButtonPressed->position.x >= 87 && mouseButtonPressed->position.x <= 514 && mouseButtonPressed->position.y >= 658 && mouseButtonPressed->position.y <= 784)
@@ -112,24 +111,17 @@ int main()
 					{
 						if(mouseButtonPressed->position.x>=0&&mouseButtonPressed->position.y>=0&& mouseButtonPressed->position.y<=player_map.Height*100&&mouseButtonPressed->position.x<=player_map.Width*100)
 							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
-						tail_map->showMap();
+						//tail_map->showMap();
 					}
 					if (temp == -2)
 					{
-						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= player_map.Height * 100 && mouseButtonPressed->position.x <= player_map.Width * 100)
+						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-							int i = 0;
-							/*while (i < 5)
-							{
-								i += GoldenFingerMode_player_try(head_map, tail_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);
-								window.clear();
-								window.draw(s_map);
-								window.draw(s_ant);
-								cout << i << endl;
-							}*/
-							//head_map = &player_map;
-							//Sports_process(5, head_map, ant);
-							//Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
+								GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);
+								GoldenFinger_move(ant, head_map, 5);
+								head_map->showMap();
+								s_map.S_showMap(head_map, 0);
+								s_ant.S_showAnt(head_map);
 						}
 					}
 				}
@@ -139,7 +131,7 @@ int main()
 
 		if (temp == 1)
 		{
-			int choise= chooseMap(head_map, ant, s_map, s_ant, window);
+			int choise= chooseMode(head_map, ant, s_map, s_ant, window);
 			if (choise==-1)
 			{
 				return 0;
@@ -149,7 +141,7 @@ int main()
 				temp=-2;
 				tail_map = head_map;
 				//Sports_process(goal_step, head_map, ant); //模拟运动
-				player_map.copyMap(*head_map);
+				//player_map.copyMap(*head_map);
 			}
 			else
 			{
