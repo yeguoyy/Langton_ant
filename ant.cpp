@@ -1,5 +1,6 @@
 #include "ant.h"
 #include <iostream>
+#include <Windows.h>
 
 int Ant::Ant_x = 1;
 int Ant::Ant_y = 1;
@@ -130,10 +131,26 @@ void Ant::move(Map*& map)
 	NewMap->preMap= map;
 	map->nextMap = NewMap;//½«ÐÂÍ¼¸³¸ønextMap
 }
-void GoldenFinger_move(Ant& ant , Map*& head_map,int step)
+void GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
-	ant.move(head_map);
-	head_map = head_map->nextMap;
+	s_map.S_showMap(head_map, 0);
+	s_ant.S_showAnt(head_map);
+	window.draw(s_map);
+	window.draw(s_ant);
+	window.display();
+	for (int i = 0; i < step; i++)
+	{
+		Sleep(500);
+		ant.move(head_map);
+		head_map = head_map->nextMap;
+		head_map->showMap();
+		s_map.S_showMap(head_map, 0);
+		s_ant.S_showAnt(head_map);
+		window.clear();
+		window.draw(s_map);
+		window.draw(s_ant);
+		window.display();
+	}
 }
 
 

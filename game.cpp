@@ -151,7 +151,7 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant&s_ant, int x
 		}
 		return 0;
 }
-int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
+int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y,int times)
 {
 	cout << x << " " << y << endl;
 	cout << "蚂蚁脚下的颜色为：";

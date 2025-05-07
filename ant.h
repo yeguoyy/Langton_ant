@@ -27,5 +27,5 @@ private:
 	sf::VertexArray m_ant;//地图顶点数组（动态）
 	sf::Texture m_tileset;//地图纹理
 };
-void GoldenFinger_move(Ant &,Map*&,int step);
+void GoldenFinger_move(Ant &,Map*&,int step,S_Map&, S_Ant&, sf::RenderWindow&);
 #endif 

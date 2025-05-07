@@ -117,11 +117,8 @@ int main()
 					{
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-								GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);
-								GoldenFinger_move(ant, head_map, 5);
-								head_map->showMap();
-								s_map.S_showMap(head_map, 0);
-								s_ant.S_showAnt(head_map);
+								GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
+								GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window);
 						}
 					}
 				}
@@ -150,6 +147,9 @@ int main()
 				Sports_process(goal_step, head_map, ant); //Ä£ÄâÔË¶¯
 				player_map.copyMap(*head_map);
 			}
+		}
+		else if (temp == -2)
+		{
 		}
 		window.clear();
 		// draw the map
