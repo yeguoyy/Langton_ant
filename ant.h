@@ -14,7 +14,7 @@ public:
 	static int initial_x, initial_y;//初始坐标
 
 	Ant();
-	void move(Map*&);
+	int move(Map*&);
 };
 class S_Ant : public sf::Drawable, public sf::Transformable//SFML地图类，用于显示Ant
 {
@@ -27,5 +27,5 @@ private:
 	sf::VertexArray m_ant;//地图顶点数组（动态）
 	sf::Texture m_tileset;//地图纹理
 };
-void GoldenFinger_move(Ant &,Map*&,int step,S_Map&, S_Ant&, sf::RenderWindow&);
+int GoldenFinger_move(Ant &,Map*&,int step,S_Map&, S_Ant&, sf::RenderWindow&);
 #endif 

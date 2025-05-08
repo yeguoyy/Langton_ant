@@ -24,7 +24,7 @@ sf::Angle Way_to_Degrees(Direction direction)
 		return sf::degrees(270.0f);
 	}
 }
-void Ant::move(Map*& map)
+int Ant::move(Map*& map)
 {
 	Map* NewMap = new Map;
 	NewMap->Height = map->Height;
@@ -111,6 +111,10 @@ void Ant::move(Map*& map)
 				direction = (Direction)((int)direction - 1);
 			}
 		}
+		else if (NewMap->m_map[Ant_x][Ant_y] == 2)//撞到障碍物
+		{
+			return -1;
+		}
 		
 	}
 	NewMap->M_ant_x = Ant_x;
@@ -119,7 +123,7 @@ void Ant::move(Map*& map)
 	NewMap->preMap= map;
 	map->nextMap = NewMap;//将新图赋给nextMap
 }
-void GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
+int GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
 	s_map.S_showMap(head_map, 0);
 	s_ant.S_showAnt(head_map);
@@ -129,7 +133,11 @@ void GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& 
 	for (int i = 0; i < step; i++)
 	{
 		Sleep(500);
-		ant.move(head_map);
+		if (ant.move(head_map) == -1)
+		{
+			std::cout << "撞到障碍物了！" << std:: endl;
+            return -1;
+		}
 		head_map = head_map->nextMap;
 		head_map->showMap();
 		s_map.S_showMap(head_map, 0);
@@ -139,6 +147,7 @@ void GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& 
 		window.draw(s_ant);
 		window.display();
 	}
+    return 0;
 }
 
 

@@ -263,13 +263,16 @@ void Map::creatBar()
 	srand(time(NULL));
 	int bar_x=rand() % this->Width + 1;
     int bar_y=rand() % this->Height + 1;
-	if (this->m_map[bar_x][bar_y] == 3)
+	if (this->m_map[bar_x][bar_y] == 2)
 	{
 		this->creatBar();
 		return;
 	}
-    m_map[bar_x][bar_y] = 3;
-	return;
+	else
+	{
+		m_map[bar_x][bar_y] = 2;
+		return;
+	}
 }
 
 

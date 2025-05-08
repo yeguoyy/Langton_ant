@@ -4,7 +4,7 @@
 #define goal_step 1000
 using namespace std;
 
-//规则说明 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 地图保存功能 误输入√ 传送门？障碍物？胜利动画
+//规则说明 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 地图保存功能 误输入√ 传送门？障碍物！胜利动画 重新开始游戏（重置）
 //金手指挑战赛（通过改变黑白，以最小的步数让蚂蚁到目标区域，消灭敌人掉落道具、得分）
 //道具：（坦克大战）激光，飞弹，换位（抓取），磁铁，
 //事件：（随机盒子）敌人生成，阔图，核弹（大范围洗牌），
@@ -150,9 +150,17 @@ int main()
 		}
 		else if (temp == -7)
 		{
-			GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window);//自带show和draw
-			//head_map->creatBar();
-			temp = -2;
+			if (GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window) == -1)//自带show和draw
+			{
+				temp = -1;//-1 结束游戏
+                pause(window);
+			}
+			else
+			{
+				head_map->creatBar();
+				s_map.S_showMap(head_map, 0);
+				temp = -2;
+			}
 		}
 		window.clear();
 		// draw the map
