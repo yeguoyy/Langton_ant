@@ -145,6 +145,10 @@ int GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& s
 		window.clear();
 		window.draw(s_map);
 		window.draw(s_ant);
+		/*for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}*/
 		window.display();
 	}
     return 0;
@@ -162,7 +166,7 @@ void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_ant, states);
 }
-bool S_Ant::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, Ant& ant,const Map *head_map)
+bool S_Ant::loadmap(const std::filesystem::path& tileset, Ant& ant,const Map *head_map)
 {
 	if (!m_tileset.loadFromFile(tileset))//¶ÁÈ¡AntÎÆÀí
 		return false;
