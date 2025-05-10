@@ -31,8 +31,6 @@ public:
 	bool loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, int** tiles, const int wide, const int height);//瓦片集路径 瓦片大小 瓦片数组 宽 高
 	void S_showMap(const Map* head_map,int);
 	void S_showMap(const Map* player_map);
-	
-	
 
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

@@ -223,7 +223,7 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s
 		window.draw(prop_list[i]);
 	}
 	window.display();
-	for (int i = 0; i < step; i++)
+	for (int i = 0; i < step; i++)//改：改到主循环里去，要插入火箭操作
 	{
 		Sleep(500);
 		if (ant.move(head_map) == -1)
@@ -231,6 +231,7 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s
 			std::cout << "撞到障碍物了！" << std::endl;
 			return -1;
 		}
+		
 		head_map = head_map->nextMap;
 		head_map->showMap();
 		s_map.S_showMap(head_map, 0);
@@ -240,11 +241,25 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s
 		window.draw(s_ant);
 		for (int i = 0; i < prop_list.size(); i++)
 		{
+			if (head_map->M_ant_x == prop_list[i].getX() && head_map->M_ant_y == prop_list[i].getY())
+			{
+				int type = prop_list[i].getType();
+				prop_list.erase(prop_list.begin() + i);
+				for (int i = 0; i < prop_list.size(); i++)
+				{
+					window.draw(prop_list[i]);
+				}
+				window.display();
+				return type;
+			}
+		}
+		for (int i = 0; i < prop_list.size(); i++)
+		{
 			window.draw(prop_list[i]);
 		}
 		window.display();
 	}
-	return 0;
+	return 8;
 }
 
 void pause(sf::RenderWindow& window)
@@ -286,49 +301,3 @@ sf::Angle Way_to_Degree(Direction direction)
 	}
 }
 
-Prop::Prop(int x, int y)
-{
-	m_x = x;
-	m_y = y;
-}
-
-bool Prop::loadmap(const std::filesystem::path& tileset)
-{
-	if (!m_tileset.loadFromFile(tileset))//读取Ant纹理
-		return false;
-	m_prop.setPrimitiveType(sf::PrimitiveType::Triangles);//设置顶点类型
-	m_prop.resize(6);//顶点数组的大小为宽度和高度乘积的6倍，因为每个单元格由两个三角形（六个点）组成
-	int x = m_x-1;
-    int y = m_y-1;
-	sf::Vertex* triangles = &m_prop[0];
-	triangles[0].position = sf::Vector2f(x * map_tileSize.x+ prop_tileSize.x/2, y * map_tileSize.y+ prop_tileSize.y/2);
-	triangles[1].position = sf::Vector2f((x + 1) * map_tileSize.x- prop_tileSize.x/2, y * map_tileSize.y+ prop_tileSize.y/2);
-	triangles[2].position = sf::Vector2f(x * map_tileSize.x+ prop_tileSize.x/2, (y + 1) * map_tileSize.y- prop_tileSize.y/2);
-	triangles[3].position = sf::Vector2f(x * map_tileSize.x + prop_tileSize.x / 2, (y + 1) * map_tileSize.y - prop_tileSize.y / 2);
-	triangles[4].position = sf::Vector2f((x + 1) * map_tileSize.x- prop_tileSize.x/2, y * map_tileSize.y+ prop_tileSize.y/2);
-	triangles[5].position = sf::Vector2f((x + 1) * map_tileSize.x- prop_tileSize.x/2, (y + 1) * map_tileSize.y- prop_tileSize.y/2);
-
-	triangles[0].texCoords = sf::Vector2f(0 * prop_tileSize.x, 0 * prop_tileSize.y);
-	triangles[1].texCoords = sf::Vector2f((0 + 1) * prop_tileSize.x, 0 * prop_tileSize.y);
-	triangles[2].texCoords = sf::Vector2f(0 * prop_tileSize.x, (0 + 1) * prop_tileSize.y);
-	triangles[3].texCoords = sf::Vector2f(0 * prop_tileSize.x, (0 + 1) * prop_tileSize.y);
-	triangles[4].texCoords = sf::Vector2f((0 + 1) * prop_tileSize.x, 0 * prop_tileSize.y);
-	triangles[5].texCoords = sf::Vector2f((0 + 1) * prop_tileSize.x, (0 + 1) * prop_tileSize.y);
-
-	sf::Vector2f position = sf::Vector2f((x + 0.5) * map_tileSize.x, (y + 0.5) * map_tileSize.y);
-	this->setOrigin(position);
-	this->setPosition(position);
-	return true;
-}
-
-void Prop::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	// apply the transform
-	states.transform *= getTransform();
-
-	// apply the tileset texture
-	states.texture = &m_tileset;
-
-	// draw the vertex array
-	target.draw(m_prop, states);
-}

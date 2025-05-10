@@ -1,6 +1,7 @@
 #ifndef ANT_H
 #define ANT_H
 #include "map.h"
+#include "prop.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 

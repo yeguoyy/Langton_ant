@@ -16,7 +16,7 @@ int main()
 	Map* head_map = new Map;
 	Map* tail_map = new Map;
 	Map player_map;
-	
+
 	sf::Font font;
 	if (!font.openFromFile("TTC/msyh.ttc"))
 	{
@@ -98,7 +98,7 @@ int main()
 					//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
 					if (mouseMoved->position.x >= 128 && mouseMoved->position.x <= 475 && mouseMoved->position.y >= 325 && mouseMoved->position.y <= 410)
 					{
-						
+
 						SetCursor(customCursor2);//暂时设置鼠标指针图标
 					}
 				}
@@ -114,15 +114,15 @@ int main()
 					}
 					if (process == 2)
 					{
-						if(mouseButtonPressed->position.x>=0&&mouseButtonPressed->position.y>=0&& mouseButtonPressed->position.y<=player_map.Height*100&&mouseButtonPressed->position.x<=player_map.Width*100)
-							process+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
+						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= player_map.Height * 100 && mouseButtonPressed->position.x <= player_map.Width * 100)
+							process += player_try(player_map, tail_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);//玩家尝试		
 						//tail_map->showMap();
 					}
 					if (process <= -2)
 					{
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-								process+=GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
+							process += GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1, 5);
 						}
 					}
 				}
@@ -131,19 +131,17 @@ int main()
 
 		if (process == 1)
 		{
-			int choise= chooseMode(head_map, ant, s_map, s_ant, window);
-			if (choise==-1)
+			int choise = chooseMode(head_map, ant, s_map, s_ant, window);
+			if (choise == -1)
 			{
 				return 0;
 			}
 			else if (choise == 3)
 			{
-				process=-2;
+				process = -2;
 				tail_map = head_map;
-				prop_list.push_back(Prop(5, 5));
-				prop_list[0].loadmap("tileMap/Prop.png");
-				//Sports_process(goal_step, head_map, ant); //模拟运动
-				//player_map.copyMap(*head_map);
+				prop_list.push_back(Prop(5, 5, 0));//创建道具
+				prop_list[prop_list.size() - 1].loadmap("tileMap/Prop.png");
 			}
 			else
 			{
@@ -155,14 +153,22 @@ int main()
 		}
 		else if (process == -7)
 		{
-			if (GoldenFinger_move(ant, head_map, 5, s_map, s_ant,prop_list, window) == -1)//自带show和draw
+			int temp = GoldenFinger_move(ant, head_map, 5, s_map, s_ant, prop_list, window);//5 步
+			if (temp == -1)//自带show和draw
 			{
 				process = -1;//-1 结束游戏
-                pause(window);
+				pause(window);
 			}
 			else
 			{
-				
+				if (temp == 0)
+				{
+					cout << "你拾取了火箭弹！！！" << endl;
+				}
+				else if (temp == 1)
+				{
+					cout << "你拾取了激光指示器！！！" << endl;
+				}
 				head_map->creatBarLava();
 				head_map->creatBarStone();
 				s_map.S_showMap(head_map, 0);
