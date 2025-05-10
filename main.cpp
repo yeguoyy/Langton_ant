@@ -66,7 +66,7 @@ int main()
 	S_Ant s_ant;
 	vector<Prop> prop_list;
 	//链表的头尾结点
-	int temp = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
+	int process = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
 	while (window.isOpen())
 	{
 		// handle events
@@ -81,19 +81,19 @@ int main()
 			{
 				if (keyPressed->code == sf::Keyboard::Key::Tab)
 				{
-					temp++;
+					process++;
 				}
 
-				if (keyPressed->code == sf::Keyboard::Key::Enter && temp == 3)
+				if (keyPressed->code == sf::Keyboard::Key::Enter && process == 3)
 				{
 					//player_try(player_map,tail_map);//玩家尝试
 					Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
-					temp++;
+					process++;
 				}
 			}
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
 			{
-				if (temp == 0)
+				if (process == 0)
 				{
 					//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
 					if (mouseMoved->position.x >= 128 && mouseMoved->position.x <= 475 && mouseMoved->position.y >= 325 && mouseMoved->position.y <= 410)
@@ -107,29 +107,29 @@ int main()
 			{
 				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 				{
-					if (temp == 0)
+					if (process == 0)
 					{
 						if (mouseButtonPressed->position.x >= 128 && mouseButtonPressed->position.x <= 475 && mouseButtonPressed->position.y >= 325 && mouseButtonPressed->position.y <= 410)
-							temp++;
+							process++;
 					}
-					if (temp == 2)
+					if (process == 2)
 					{
 						if(mouseButtonPressed->position.x>=0&&mouseButtonPressed->position.y>=0&& mouseButtonPressed->position.y<=player_map.Height*100&&mouseButtonPressed->position.x<=player_map.Width*100)
-							temp+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
+							process+=player_try(player_map, tail_map, s_map,s_ant,(int)mouseButtonPressed->position.x/100+1, (int)mouseButtonPressed->position.y/100+1);//玩家尝试		
 						//tail_map->showMap();
 					}
-					if (temp <= -2)
+					if (process <= -2)
 					{
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-								temp+=GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
+								process+=GoldenFingerMode_player_try(head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,5);
 						}
 					}
 				}
 			}
 		}
 
-		if (temp == 1)
+		if (process == 1)
 		{
 			int choise= chooseMode(head_map, ant, s_map, s_ant, window);
 			if (choise==-1)
@@ -138,7 +138,7 @@ int main()
 			}
 			else if (choise == 3)
 			{
-				temp=-2;
+				process=-2;
 				tail_map = head_map;
 				prop_list.push_back(Prop(5, 5));
 				prop_list[0].loadmap("tileMap/Prop.png");
@@ -147,17 +147,17 @@ int main()
 			}
 			else
 			{
-				temp++;
+				process++;
 				tail_map = head_map;
 				Sports_process(goal_step, head_map, ant); //模拟运动
 				player_map.copyMap(*head_map);
 			}
 		}
-		else if (temp == -7)
+		else if (process == -7)
 		{
-			if (GoldenFinger_move(ant, head_map, 5, s_map, s_ant, window) == -1)//自带show和draw
+			if (GoldenFinger_move(ant, head_map, 5, s_map, s_ant,prop_list, window) == -1)//自带show和draw
 			{
-				temp = -1;//-1 结束游戏
+				process = -1;//-1 结束游戏
                 pause(window);
 			}
 			else
@@ -166,12 +166,12 @@ int main()
 				head_map->creatBarLava();
 				head_map->creatBarStone();
 				s_map.S_showMap(head_map, 0);
-				temp = -2;
+				process = -2;
 			}
 		}
 		window.clear();
 		// draw the map
-		if (temp == 0)
+		if (process == 0)
 		{
 			/*sf::Vector2i globalPosition = sf::Mouse::getPosition();
 			cout << "globalPosition.x: " << globalPosition.x << std::endl;

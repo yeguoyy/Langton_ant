@@ -265,7 +265,8 @@ void Map::creatBarLava()
 	{
 		int bar_x = rand() % this->Width + 1;
 		int bar_y = rand() % this->Height + 1;
-		if (this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1)
+
+		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x!=M_ant_x && bar_y!=M_ant_y)
 		{
 			m_map[bar_x][bar_y] = 2;
 			return;
@@ -274,13 +275,12 @@ void Map::creatBarLava()
 }
 void Map::creatBarStone()
 {
-    srand(time(NULL));
 	srand(time(NULL));
 	while (true)
 	{
 		int bar_x = rand() % this->Width + 1;
 		int bar_y = rand() % this->Height + 1;
-		if (this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1)
+		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x != M_ant_x && bar_y != M_ant_y)
 		{
 			m_map[bar_x][bar_y] += 3;
 			return;

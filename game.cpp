@@ -1,5 +1,6 @@
 #include "game.h"
 #include <iostream>
+#include <Windows.h>
 using namespace std;
 sf::Vector2u Prop::map_tileSize = { 100,100 };
 sf::Vector2u Prop::prop_tileSize = { 50,50 };
@@ -208,6 +209,42 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
 	return -1;
+}
+
+int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)
+{
+	//先输出一遍
+	s_map.S_showMap(head_map, 0);
+	s_ant.S_showAnt(head_map);
+	window.draw(s_map);
+	window.draw(s_ant);
+	for (int i = 0; i < prop_list.size(); i++)
+	{
+		window.draw(prop_list[i]);
+	}
+	window.display();
+	for (int i = 0; i < step; i++)
+	{
+		Sleep(500);
+		if (ant.move(head_map) == -1)
+		{
+			std::cout << "撞到障碍物了！" << std::endl;
+			return -1;
+		}
+		head_map = head_map->nextMap;
+		head_map->showMap();
+		s_map.S_showMap(head_map, 0);
+		s_ant.S_showAnt(head_map);
+		window.clear();
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.display();
+	}
+	return 0;
 }
 
 void pause(sf::RenderWindow& window)

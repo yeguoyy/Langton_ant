@@ -1,6 +1,5 @@
 #ifndef MAP_H
 #define MAP_H
-//#include "ant.h"
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 

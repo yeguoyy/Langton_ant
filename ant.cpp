@@ -1,6 +1,6 @@
 #include "ant.h"
 #include <iostream>
-#include <Windows.h>
+
 
 int Ant::Ant_x = 1;
 int Ant::Ant_y = 1;
@@ -122,36 +122,6 @@ int Ant::move(Map*& map)
 	NewMap->m_degree=Way_to_Degrees(direction);
 	NewMap->preMap= map;
 	map->nextMap = NewMap;//将新图赋给nextMap
-}
-int GoldenFinger_move(Ant& ant , Map*& head_map,int step, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
-{
-	s_map.S_showMap(head_map, 0);
-	s_ant.S_showAnt(head_map);
-	window.draw(s_map);
-	window.draw(s_ant);
-	window.display();
-	for (int i = 0; i < step; i++)
-	{
-		Sleep(500);
-		if (ant.move(head_map) == -1)
-		{
-			std::cout << "撞到障碍物了！" << std:: endl;
-            return -1;
-		}
-		head_map = head_map->nextMap;
-		head_map->showMap();
-		s_map.S_showMap(head_map, 0);
-		s_ant.S_showAnt(head_map);
-		window.clear();
-		window.draw(s_map);
-		window.draw(s_ant);
-		/*for (int i = 0; i < prop_list.size(); i++)
-		{
-			window.draw(prop_list[i]);
-		}*/
-		window.display();
-	}
-    return 0;
 }
 
 
