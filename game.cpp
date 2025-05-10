@@ -164,6 +164,23 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 		std::cout << "黑色" << std::endl;
 	}
 
+
+	if (player_map->m_map[x][y] == 2)
+	{
+		std::cout << "熔岩，不可更改" << std::endl;
+        return 0;
+	}
+	else if (player_map->m_map[x][y] == 3)
+	{
+		std::cout << "大理石，不可更改" << std::endl;
+		return 0;
+	}
+	else if (player_map->m_map[x][y] == 4)
+	{
+		std::cout << "黑曜石，不可更改" << std::endl;
+		return 0;
+	}
+
 	if (x == Ant::Ant_x && y == Ant::Ant_y)
 	{
 		if (player_map->Ant_color == 0)

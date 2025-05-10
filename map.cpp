@@ -258,20 +258,33 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 	}
 }
 
-void Map::creatBar()
+void Map::creatBarLava()
 {
 	srand(time(NULL));
-	int bar_x=rand() % this->Width + 1;
-    int bar_y=rand() % this->Height + 1;
-	if (this->m_map[bar_x][bar_y] == 2)
+	while(true)
 	{
-		this->creatBar();
-		return;
+		int bar_x = rand() % this->Width + 1;
+		int bar_y = rand() % this->Height + 1;
+		if (this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1)
+		{
+			m_map[bar_x][bar_y] = 2;
+			return;
+		}
 	}
-	else
+}
+void Map::creatBarStone()
+{
+    srand(time(NULL));
+	srand(time(NULL));
+	while (true)
 	{
-		m_map[bar_x][bar_y] = 2;
-		return;
+		int bar_x = rand() % this->Width + 1;
+		int bar_y = rand() % this->Height + 1;
+		if (this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1)
+		{
+			m_map[bar_x][bar_y] += 3;
+			return;
+		}
 	}
 }
 

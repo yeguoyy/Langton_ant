@@ -157,7 +157,8 @@ int main()
 			}
 			else
 			{
-				head_map->creatBar();
+				head_map->creatBarLava();
+				head_map->creatBarStone();
 				s_map.S_showMap(head_map, 0);
 				temp = -2;
 			}

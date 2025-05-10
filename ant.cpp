@@ -111,7 +111,7 @@ int Ant::move(Map*& map)
 				direction = (Direction)((int)direction - 1);
 			}
 		}
-		else if (NewMap->m_map[Ant_x][Ant_y] == 2)//撞到障碍物
+		else if (NewMap->m_map[Ant_x][Ant_y] >= 2)//撞到障碍物
 		{
 			return -1;
 		}
