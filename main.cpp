@@ -94,8 +94,10 @@ int main()
 			{
 				if (temp == 0)
 				{
-					if (mouseMoved->position.x >= 87 && mouseMoved->position.x <= 514 && mouseMoved->position.y >= 658 && mouseMoved->position.y <= 784)
+					//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
+					if (mouseMoved->position.x >= 128 && mouseMoved->position.x <= 475 && mouseMoved->position.y >= 325 && mouseMoved->position.y <= 410)
 					{
+						
 						SetCursor(customCursor2);//暂时设置鼠标指针图标
 					}
 				}
@@ -106,7 +108,7 @@ int main()
 				{
 					if (temp == 0)
 					{
-						if (mouseButtonPressed->position.x >= 87 && mouseButtonPressed->position.x <= 514 && mouseButtonPressed->position.y >= 658 && mouseButtonPressed->position.y <= 784)
+						if (mouseButtonPressed->position.x >= 128 && mouseButtonPressed->position.x <= 475 && mouseButtonPressed->position.y >= 325 && mouseButtonPressed->position.y <= 410)
 							temp++;
 					}
 					if (temp == 2)
