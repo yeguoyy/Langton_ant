@@ -215,44 +215,47 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 
 int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)
 {
-	
-	
-		//Sleep(500);
-		if (ant.move(head_map) == -1)
+
+
+	/*Sleep(500);*/
+	if (ant.move(head_map) == -1)
+	{
+		std::cout << "撞到障碍物了！" << std::endl;
+		return -1;
+	}
+
+	head_map = head_map->nextMap;
+	head_map->showMap();
+	s_map.S_showMap(head_map, 0);
+	s_ant.S_showAnt(head_map);
+	window.clear();
+	window.draw(s_map);
+	window.draw(s_ant);
+	//捡道具
+	for (int i = 0; i < prop_list.size(); i++)
+	{
+		if (head_map->M_ant_x == prop_list[i].getX() && head_map->M_ant_y == prop_list[i].getY())
 		{
-			std::cout << "撞到障碍物了！" << std::endl;
-			return -1;
-		}
-		
-		head_map = head_map->nextMap;
-		head_map->showMap();
-		s_map.S_showMap(head_map, 0);
-		s_ant.S_showAnt(head_map);
-		window.clear();
-		window.draw(s_map);
-		window.draw(s_ant);
-		for (int i = 0; i < prop_list.size(); i++)
-		{
-			if (head_map->M_ant_x == prop_list[i].getX() && head_map->M_ant_y == prop_list[i].getY())
+			int type = prop_list[i].getType();
+			prop_list.erase(prop_list.begin() + i);
+			for (int i = 0; i < prop_list.size(); i++)
 			{
-				int type = prop_list[i].getType();
-				prop_list.erase(prop_list.begin() + i);
-				for (int i = 0; i < prop_list.size(); i++)
-				{
-					window.draw(prop_list[i]);
-				}
-				window.display();
-				return type;
+				window.draw(prop_list[i]);
 			}
+			window.display();
+			return type;
 		}
-		for (int i = 0; i < prop_list.size(); i++)
-		{
-			window.draw(prop_list[i]);
-		}
-		window.display();
-		return 8;
+	}
+	for (int i = 0; i < prop_list.size(); i++)
+	{
+		window.draw(prop_list[i]);
+	}
+	window.display();
+	return 8;
 }
-void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window,int step,int & process)
+
+
+void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process)
 {
 	for (int j = 1; j <= step; j++)
 	{
@@ -276,7 +279,65 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 				{
 					if (keyPressed->code == sf::Keyboard::Key::Space)
 					{
-						cout << "按下了空格" << endl;//多线程
+						cout << "按下了空格" << endl;
+						sf::Texture rocketTexture;
+						if (!rocketTexture.loadFromFile("prop/rocket.png"))
+						{
+							std::cerr << "Failed to load rocket texture" << std::endl;
+							return;
+						}
+						sf::Sprite rocketSprite(rocketTexture);
+						rocketSprite.setOrigin(sf::Vector2f{ 50.f, 50.f });
+						rocketSprite.setRotation(head_map->m_degree);
+						sf::Vector2f rocketPosition(ant.Ant_x * 100 - 50, ant.Ant_y * 100 - 50);
+						rocketSprite.setPosition(rocketPosition);
+						while (true)
+						{
+							switch (ant.direction)//控制速度
+							{
+							case Direction::UP:
+								rocketPosition.y -= 0.08;
+								break;
+							case Direction::DOWN:
+								rocketPosition.y += 0.08;
+								break;
+							case Direction::LEFT:
+								rocketPosition.x -= 0.08;
+								break;
+							case Direction::RIGHT:
+								rocketPosition.x += 0.08;
+								break;
+							}
+							rocketSprite.setPosition(rocketPosition);
+							window.draw(s_map);
+							window.draw(s_ant);
+							for (int i = 0; i < prop_list.size(); i++)
+							{
+								window.draw(prop_list[i]);
+							}
+							window.draw(rocketSprite);
+							window.display();
+							if (rocketPosition.x >= 100 * head_map->Width || rocketPosition.y >= 100 * head_map->Height || rocketPosition.x <= 0 || rocketPosition.y <= 0)
+							{
+								break;
+							}
+							if (head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 3 || head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 4)
+							{
+								head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] -= 3;
+								s_map.S_showMap(head_map,0);
+								window.draw(s_map);
+								window.draw(s_ant);
+								for (int i = 0; i < prop_list.size(); i++)
+								{
+									window.draw(prop_list[i]);
+								}
+								window.draw(rocketSprite);
+								window.display();
+								break;
+							}
+
+						}
+
 					}
 				}
 			}
@@ -288,6 +349,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		{
 			process = -1;//-1 结束游戏
 			pause(window);
+			return;
 		}
 		else
 		{

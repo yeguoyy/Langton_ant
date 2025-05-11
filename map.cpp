@@ -389,18 +389,6 @@ void Map::showMap()
 			case 1:
 				cout << '#' << " ";
 				break;
-			/*case 2:
-				cout << '1' << " ";
-				break;
-			case 3:
-				cout << 'v' << " ";
-				break;
-			case 4:
-				cout << '<' << " ";
-				break;
-			case 5:
-				cout << '>' << " ";
-				break;*/
 			default:
 				cout << m_map[i][j] << " ";
 				break;
