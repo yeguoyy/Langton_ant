@@ -7,17 +7,17 @@
 using namespace std;
 
 
-bool Read_map(string, Map*&, Ant&,S_Map&, S_Ant& ,sf::RenderWindow&);
+bool Read_map(string, Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
 static int x, y;
 
-int chooseMode(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWindow &window)
+int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2,金手指模式请按3" << endl;
 	int choice;
 	while (true)
 	{
 		cin >> choice;
-		if (cin.fail() || (choice != 1 && choice != 2&&choice !=3))
+		if (cin.fail() || (choice != 1 && choice != 2 && choice != 3))
 		{
 			cout << "输入错误,请重新输入" << endl;
 			cin.clear();
@@ -36,7 +36,7 @@ int chooseMode(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 		while (true)
 		{
 			cin >> num;
-			if (cin.fail() || (num != 1 && num != 2&& num!=3))
+			if (cin.fail() || (num != 1 && num != 2 && num != 3))
 			{
 				cout << "输入错误,请重新输入" << endl;
 				cin.clear();
@@ -47,9 +47,9 @@ int chooseMode(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 				break;
 			}
 		}
-		filename = "map/"+to_string(num) + ".txt";// 将数字转换为字符串
+		filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
 		//cout << filename << endl;
-		if (!Read_map(filename, head_map, ant,s_map,s_ant,window))// 读取关卡地图
+		if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
 		{
 			return -1;
 		}
@@ -58,18 +58,18 @@ int chooseMode(Map*& head_map, Ant& ant,S_Map &s_map,S_Ant &s_ant, sf::RenderWin
 		creatMap(head_map, ant, s_map, s_ant, window);
 		break;
 	case 3:
-        //introduction(window);
-        //pause(window);
+		//introduction(window);
+		//pause(window);
 		GoldenFingerMode_creatMap(head_map, ant, s_map, s_ant, window);
 		return 3;
-        break;
-        default:
-			return -1;
+		break;
+	default:
+		return -1;
 	}
 	system("cls");
 	return 1;
 }
-void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWindow& window)
+void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
 	srand(time(0));
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
@@ -100,8 +100,8 @@ void creatMap(Map*& head_map, Ant& ant, S_Map&s_map, S_Ant&s_ant, sf::RenderWind
 	ant.Ant_y = (int)(head_map->Height / 2) + 1;
 	Ant::initial_x = ant.Ant_x;
 	Ant::initial_y = ant.Ant_y;
-	head_map->M_ant_x =  ant.Ant_x;
-    head_map->M_ant_y = ant.Ant_y;
+	head_map->M_ant_x = ant.Ant_x;
+	head_map->M_ant_y = ant.Ant_y;
 	// 动态分配二维内存
 	head_map->m_map = new int* [head_map->Width + 1];// 动态分配内存
 	for (int i = 1; i <= head_map->Width; i++)
@@ -214,12 +214,12 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 		head_map->m_map[i] = new int[head_map->Height + 1];// 动态分配内存
 	}
 	//全白
-	
+
 	for (int i = 1; i <= head_map->Width; i++)
 	{
 		for (int j = 1; j <= head_map->Height; j++)
 		{
-				head_map->m_map[i][j] = 0;
+			head_map->m_map[i][j] = 0;
 		}
 	}
 	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
@@ -261,12 +261,29 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 void Map::creatBarLava()
 {
 	srand(time(NULL));
-	while(true)
+	while (true)
 	{
 		int bar_x = rand() % this->Width + 1;
 		int bar_y = rand() % this->Height + 1;
-
-		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x!=M_ant_x && bar_y!=M_ant_y)
+		int next_x = 0;
+		int next_y = 0;
+		if (this->m_degree == Way_to_Degree(UP))
+		{
+			next_y++;
+		}
+		else if (this->m_degree == Way_to_Degree(DOWN))
+		{
+			next_y--;
+		}
+		else if (this->m_degree == Way_to_Degree(LEFT))
+		{
+			next_x++;
+		}
+		else if (this->m_degree == Way_to_Degree(RIGHT))
+		{
+			next_x--;
+		}
+		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x != M_ant_x && bar_y != M_ant_y && bar_x != M_ant_x + next_x && bar_y != M_ant_y + next_y)
 		{
 			m_map[bar_x][bar_y] = 2;
 			return;
@@ -289,7 +306,7 @@ void Map::creatBarStone()
 }
 
 
-bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_ant, sf::RenderWindow & window)
+bool Read_map(string filename, Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
 	fstream fil(filename);
 
@@ -300,7 +317,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 	}
 	else {
 		fil >> x >> y;// 读取地图宽高
-		
+
 		head_map->Width = x;
 		head_map->Height = y;
 		// 动态分配二维内存
@@ -319,7 +336,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		Ant::initial_x = ant.Ant_x;
 		Ant::initial_y = ant.Ant_y;
 		head_map->M_ant_x = ant.Ant_x;
-        head_map->M_ant_y = ant.Ant_y;
+		head_map->M_ant_y = ant.Ant_y;
 		int way;
 		fil >> way;
 		switch (way)
@@ -344,10 +361,10 @@ bool Read_map(string filename, Map*& head_map, Ant& ant,S_Map &s_map, S_Ant& s_a
 		view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
 		view.setCenter(sf::Vector2f(static_cast<float>(x * 50), static_cast<float>(y * 50))); // 设置视图中心点
 		window.setView(view);
-        if(!s_map.loadmap("tileMap/S_Map.png", {100,100}, head_map->m_map, x, y))
-            return false;
-		if (!s_ant.loadmap("tileMap/S_Ant.png", ant,head_map))
-            return false;
+		if (!s_map.loadmap("tileMap/S_Map.png", { 100,100 }, head_map->m_map, x, y))
+			return false;
+		if (!s_ant.loadmap("tileMap/S_Ant.png", ant, head_map))
+			return false;
 		fil.close();
 		return true;
 	}
@@ -361,9 +378,9 @@ Map::Map()
 	Ant_color = 0;
 	nextMap = nullptr;
 	preMap = nullptr;
-    M_ant_x = 0;
-    M_ant_y = 0;
-	m_degree = sf::degrees( 0.0f );
+	M_ant_x = 0;
+	M_ant_y = 0;
+	m_degree = sf::degrees(0.0f);
 }
 
 Map::~Map()
@@ -407,14 +424,14 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 			{
 				if (head_map->m_map[i][j] != head_map->preMap->m_map[i][j])//如果不一样
 				{
-					int tile_x= head_map->m_map[i][j];
+					int tile_x = head_map->m_map[i][j];
 					int tile_y = 0;
 					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->Width) * 6];
 					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
 					triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
 					triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
 					triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
-					triangles[4].texCoords = sf::Vector2f((tile_x + 1) *100, tile_y * 100);
+					triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
 					triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
 				}
 			}
@@ -426,15 +443,15 @@ void S_Map::S_showMap(const Map* head_map, int S_step)
 		{
 			for (int j = 1; j <= head_map->Height; j++)
 			{
-					int tile_x = head_map->m_map[i][j];
-					int tile_y = 0;
-					sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->Width) * 6];
-					triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
-					triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
-					triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
-					triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
-					triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
-					triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
+				int tile_x = head_map->m_map[i][j];
+				int tile_y = 0;
+				sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->Width) * 6];
+				triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
+				triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+				triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+				triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+				triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+				triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
 			}
 		}
 	}
@@ -445,15 +462,15 @@ void S_Map::S_showMap(const Map* head_map)
 	{
 		for (int j = 1; j <= head_map->Height; j++)
 		{
-				int tile_x = head_map->m_map[i][j];
-				int tile_y = 0;
-				sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
-				triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
-				triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
-				triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
-				triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
-				triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
-				triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
+			int tile_x = head_map->m_map[i][j];
+			int tile_y = 0;
+			sf::Vertex* triangles = &m_map[((i - 1) + (j - 1) * head_map->nextMap->Width) * 6];
+			triangles[0].texCoords = sf::Vector2f(tile_x * 100, tile_y * 100);
+			triangles[1].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+			triangles[2].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+			triangles[3].texCoords = sf::Vector2f(tile_x * 100, (tile_y + 1) * 100);
+			triangles[4].texCoords = sf::Vector2f((tile_x + 1) * 100, tile_y * 100);
+			triangles[5].texCoords = sf::Vector2f((tile_x + 1) * 100, (tile_y + 1) * 100);
 		}
 	}
 }
@@ -462,9 +479,9 @@ Map::Map(Map& map)
 	this->Width = map.Width;
 	this->Height = map.Height;
 	this->Ant_color = map.Ant_color;
-    this->M_ant_x = map.M_ant_x;
-    this->M_ant_y = map.M_ant_y;
-	this->m_degree= map.m_degree;
+	this->M_ant_x = map.M_ant_x;
+	this->M_ant_y = map.M_ant_y;
+	this->m_degree = map.m_degree;
 	this->m_map = new int* [Width + 1];
 	for (int i = 1; i <= Width; i++)
 	{
@@ -498,7 +515,7 @@ void Map::copyMap(Map& map)
 	this->preMap = map.preMap;
 }
 
-bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,int** tiles, const int width, const int height)
+bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize, int** tiles, const int width, const int height)
 {
 	if (!m_tileset.loadFromFile(tileset))//读取瓦片集纹理
 		return false;
@@ -508,14 +525,14 @@ bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 
 	for (unsigned int i = 0; i < width; ++i)
 	{
-        for (unsigned int j = 0; j < height; ++j)
-        {
-			const int tileNumber = tiles[i+1][j+1];//获取当前单元格中的纹理编号 0 1 2 3 
+		for (unsigned int j = 0; j < height; ++j)
+		{
+			const int tileNumber = tiles[i + 1][j + 1];//获取当前单元格中的纹理编号 0 1 2 3 
 			//瓦片集纹理按照从左到右，换行继续的方式排列
 
 			//m_tileset.getSize().x 表示纹理的宽度，tileSize.x 表示每个单元格的宽度  m_tileset.getSize().x / tileSize.x 计算瓦片集纹理
 			//const int tile_x = tileNumber % (m_tileset.getSize().x / tileSize.x);//计算当前瓦片所在的行索引
-            //const int tile_y = tileNumber / (m_tileset.getSize().y / tileSize.y);//计算当前瓦片所在的列索引
+			//const int tile_y = tileNumber / (m_tileset.getSize().y / tileSize.y);//计算当前瓦片所在的列索引
 			int tile_x = tileNumber;
 			int tile_y = 0;
 
@@ -536,12 +553,12 @@ bool S_Map::loadmap(const std::filesystem::path& tileset, sf::Vector2u tileSize,
 			triangles[3].texCoords = sf::Vector2f(tile_x * tileSize.x, (tile_y + 1) * tileSize.y);
 			triangles[4].texCoords = sf::Vector2f((tile_x + 1) * tileSize.x, tile_y * tileSize.y);
 			triangles[5].texCoords = sf::Vector2f((tile_x + 1) * tileSize.x, (tile_y + 1) * tileSize.y);
-        }
+		}
 	}
-    return true;
+	return true;
 
 }
-void S_Map::draw(sf::RenderTarget& target, sf::RenderStates states) const 
+void S_Map::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	// apply the transform
 	states.transform *= getTransform();
