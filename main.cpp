@@ -1,6 +1,9 @@
 #include "game.h"
 #include <iostream>
 #include <windows.h>
+#include <thread>
+#include <chrono>
+
 #define goal_step 1000
 using namespace std;
 
@@ -153,27 +156,7 @@ int main()
 		}
 		else if (process == -7)
 		{
-			int temp = GoldenFinger_move(ant, head_map, 5, s_map, s_ant, prop_list, window);//5 步
-			if (temp == -1)//自带show和draw
-			{
-				process = -1;//-1 结束游戏
-				pause(window);
-			}
-			else
-			{
-				if (temp == 0)
-				{
-					cout << "你拾取了火箭弹！！！" << endl;
-				}
-				else if (temp == 1)
-				{
-					cout << "你拾取了激光指示器！！！" << endl;
-				}
-				head_map->creatBarLava();
-				head_map->creatBarStone();
-				s_map.S_showMap(head_map, 0);
-				process = -2;
-			}
+			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process);//5 步
 		}
 		window.clear();
 		// draw the map

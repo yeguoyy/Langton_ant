@@ -1,6 +1,8 @@
 #include "game.h"
 #include <iostream>
 #include <Windows.h>
+#include <chrono>
+#include <thread>
 using namespace std;
 sf::Vector2u Prop::map_tileSize = { 100,100 };
 sf::Vector2u Prop::prop_tileSize = { 50,50 };
@@ -211,21 +213,11 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 	return -1;
 }
 
-int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)
+int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)
 {
-	//先输出一遍
-	s_map.S_showMap(head_map, 0);
-	s_ant.S_showAnt(head_map);
-	window.draw(s_map);
-	window.draw(s_ant);
-	for (int i = 0; i < prop_list.size(); i++)
-	{
-		window.draw(prop_list[i]);
-	}
-	window.display();
-	for (int i = 0; i < step; i++)//改：改到主循环里去，要插入火箭操作
-	{
-		Sleep(500);
+	
+	
+		//Sleep(500);
 		if (ant.move(head_map) == -1)
 		{
 			std::cout << "撞到障碍物了！" << std::endl;
@@ -258,8 +250,64 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, int step, S_Map& s_map, S_Ant& s
 			window.draw(prop_list[i]);
 		}
 		window.display();
+		return 8;
+}
+void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window,int step,int & process)
+{
+	for (int j = 1; j <= step; j++)
+	{
+		//先输出一遍
+		s_map.S_showMap(head_map, 0);
+		s_ant.S_showAnt(head_map);
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.display();
+		auto start = std::chrono::steady_clock::now(); // 获取起始时间
+		auto end = start + std::chrono::milliseconds(500); // 设置目标时间（5秒后）
+		while (std::chrono::steady_clock::now() < end)
+		{
+			while (const std::optional event = window.pollEvent())
+			{
+				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+				{
+					if (keyPressed->code == sf::Keyboard::Key::Space)
+					{
+						cout << "按下了空格" << endl;//多线程
+					}
+				}
+			}
+			std::cout << "Looping..." << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(50)); // 暂停100毫秒，避免CPU占用过高
+		}
+		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);//5 步
+		if (temp == -1)//自带show和draw
+		{
+			process = -1;//-1 结束游戏
+			pause(window);
+		}
+		else
+		{
+			if (temp == 0)
+			{
+				cout << "你拾取了火箭弹！！！" << endl;
+			}
+			else if (temp == 1)
+			{
+				cout << "你拾取了激光指示器！！！" << endl;
+			}
+			if (j == 5)
+			{
+				head_map->creatBarLava();
+				head_map->creatBarStone();
+				s_map.S_showMap(head_map, 0);
+				process = -2;
+			}
+		}
 	}
-	return 8;
 }
 
 void pause(sf::RenderWindow& window)
