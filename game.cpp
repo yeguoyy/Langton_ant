@@ -312,6 +312,81 @@ void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& 
 	}
 }
 
+void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)//小火箭
+{
+	sf::Texture big_rocketTexture;
+	if (!big_rocketTexture.loadFromFile("prop/big_rocket.png"))
+	{
+		std::cerr << "Failed to load big_rocket texture" << std::endl;
+		return;
+	}
+	sf::Sprite rocketSprite(big_rocketTexture);
+	rocketSprite.setOrigin(sf::Vector2f{ 50.f, 50.f });
+	rocketSprite.setRotation(head_map->m_degree);
+	sf::Vector2f rocketPosition(ant.Ant_x * 100 - 50, ant.Ant_y * 100 - 50);
+	rocketSprite.setPosition(rocketPosition);
+	while (true)
+	{
+		switch (ant.direction)
+		{
+		case Direction::UP:
+			rocketPosition.y -= 0.08;//控制速度
+			break;
+		case Direction::DOWN:
+			rocketPosition.y += 0.08;
+			break;
+		case Direction::LEFT:
+			rocketPosition.x -= 0.08;
+			break;
+		case Direction::RIGHT:
+			rocketPosition.x += 0.08;
+			break;
+		}
+		rocketSprite.setPosition(rocketPosition);
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.draw(rocketSprite);
+		window.display();
+		if (rocketPosition.x >= 100 * head_map->Width || rocketPosition.y >= 100 * head_map->Height || rocketPosition.x <= 0 || rocketPosition.y <= 0)
+		{
+			break;
+		}
+		if (head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 3 || head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 4)
+		{
+			int x = (int)rocketPosition.x / 100 + 1;
+			int y = (int)rocketPosition.y / 100 + 1;
+			for (int i = x - 1; i <= x + 1; i++)
+			{
+				for (int j = y - 1; j <= y + 1; j++)
+				{
+					if (i <= 0 || j <= 0 || i > head_map->Height || j > head_map->Width)
+					{
+						continue;
+					}
+					else if (head_map->m_map[i][j] == 3 || head_map->m_map[i][j] == 4)
+					{
+						head_map->m_map[i][j] -= 3;
+					}
+				}
+			}
+			s_map.S_showMap(head_map, 0);
+			window.draw(s_map);
+			window.draw(s_ant);
+			for (int i = 0; i < prop_list.size(); i++)
+			{
+				window.draw(prop_list[i]);
+			}
+			window.draw(rocketSprite);
+			window.display();
+			break;
+		}
+	}
+}
+
 void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process)
 {
 	for (int j = 1; j <= step; j++)
@@ -339,7 +414,13 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 						cout << "按下了空格" << endl;
 						rocket(ant, head_map, s_map, s_ant, prop_list, window);
 					}
+					else if (keyPressed->code == sf::Keyboard::Key::LShift)
+					{
+						cout << "按下了LShift" << endl;
+						big_rocket(ant, head_map, s_map, s_ant, prop_list, window);
+					}
 				}
+
 			}
 			std::cout << "Looping..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(50)); // 暂停100毫秒，避免CPU占用过高
