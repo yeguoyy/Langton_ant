@@ -59,3 +59,8 @@ void Prop::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_prop, states);
 }
+
+void creatRocket(std::vector<Prop>& prop_list)
+{
+
+}

@@ -13,6 +13,9 @@ public:
 	Direction direction;//蚂蚁方向
 	static int Ant_x, Ant_y;//当前蚂蚁坐标
 	static int initial_x, initial_y;//初始坐标
+	int num_rocket;
+	int num_big_rocket;
+	int num_LaserPointer;
 
 	Ant();
 	int move(Map*&);

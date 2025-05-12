@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <vector>
 
 class Prop : public sf::Drawable, public sf::Transformable
 {
@@ -14,8 +15,12 @@ public:
 	int getY();
 private:
 	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	int m_type; //0火箭，1激光指示器
+	int m_type; //0火箭，1大火箭，2激光指示器
 	int m_x, m_y;
 	sf::VertexArray m_prop;//地图顶点数组（动态）
 	sf::Texture m_tileset;//地图纹理
 };
+
+
+void creatRocket(std::vector<Prop>& prop_list);
+

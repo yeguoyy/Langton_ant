@@ -9,6 +9,9 @@ int Ant::initial_y = 1;
 sf::Vector2u S_Ant::tileSize = { 100,100 };
 Ant::Ant() {
 	direction = DOWN;
+	num_rocket = 10;
+	num_big_rocket = 10;
+	num_LaserPointer = 10;
 	
 }
 sf::Angle Way_to_Degrees(Direction direction)

@@ -155,7 +155,7 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int 
 	}
 	return 0;
 }
-int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y, int times)
+int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y, int times)
 {
 	cout << x << " " << y << endl;
 	cout << "蚂蚁脚下的颜色为：";
@@ -208,6 +208,9 @@ int GoldenFingerMode_player_try(Map*& player_map, S_Map& s_map, S_Ant& s_ant, in
 		}
 	}
 	player_map->showMap();
+	cout <<"火箭道具数量："<< ant.num_rocket << endl;
+    cout <<"大火箭道具数量："<< ant.num_big_rocket << endl;
+    cout <<"激光指示器道具数量："<< ant.num_LaserPointer << endl;
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
 	return -1;
@@ -224,6 +227,9 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 
 	head_map = head_map->nextMap;
 	head_map->showMap();
+	cout << "火箭道具数量：" << ant.num_rocket << endl;
+	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
 	s_map.S_showMap(head_map, 0);
 	s_ant.S_showAnt(head_map);
 	window.clear();
@@ -239,6 +245,18 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 			for (int i = 0; i < prop_list.size(); i++)
 			{
 				window.draw(prop_list[i]);
+			}
+			switch (type)
+			{
+			case 0:
+				ant.num_rocket++;
+				break;
+			case 1:
+				ant.num_big_rocket++;
+				break;
+			case 2:
+				ant.num_LaserPointer++;
+				break;
 			}
 			window.display();
 			return type;
@@ -409,15 +427,17 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
-					if (keyPressed->code == sf::Keyboard::Key::Space)
+					if (keyPressed->code == sf::Keyboard::Key::Space&&ant.num_rocket>0)
 					{
 						cout << "按下了空格" << endl;
 						rocket(ant, head_map, s_map, s_ant, prop_list, window);
+                        ant.num_rocket--;
 					}
-					else if (keyPressed->code == sf::Keyboard::Key::LShift)
+					else if (keyPressed->code == sf::Keyboard::Key::LShift && ant.num_big_rocket > 0)
 					{
 						cout << "按下了LShift" << endl;
 						big_rocket(ant, head_map, s_map, s_ant, prop_list, window);
+						ant.num_big_rocket--;
 					}
 				}
 
