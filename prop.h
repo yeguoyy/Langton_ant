@@ -22,5 +22,5 @@ private:
 };
 
 
-void creatRocket(std::vector<Prop>& prop_list);
+
 

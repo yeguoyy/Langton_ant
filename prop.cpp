@@ -1,4 +1,6 @@
 #include "prop.h"
+#include "map.h"
+#include <iostream>
 
 Prop::Prop(int x, int y,int type)
 {
@@ -60,7 +62,31 @@ void Prop::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(m_prop, states);
 }
 
-void creatRocket(std::vector<Prop>& prop_list)
-{
 
+void creatProp(std::vector<Prop>& prop_list, const Map& map, int type)//创建道具 0小火箭 1大火箭
+{
+	while (true)
+	{
+		int rocket_x = rand() % map.Width + 1;
+		int rocket_y = rand() % map.Height + 1;
+		
+		int if_right = 0;
+		if (map.m_map[rocket_x][rocket_y] != 2  && rocket_x != map.M_ant_x && rocket_y != map.M_ant_y)
+		{
+			for (int i = 0; i <= prop_list.size(); i++)
+			{
+				if (prop_list[i].getX() == rocket_x && prop_list[i].getY() == rocket_y)
+				{
+					if_right = 1;
+					break;
+				}
+			}
+			if (if_right == 1)
+				continue;
+			std::cout << "新道具位置" << rocket_x << " " << rocket_y << std::endl;
+			prop_list.push_back(Prop(rocket_x, rocket_y, type));
+			prop_list[prop_list.size() - 1].loadmap("tileMap/Prop.png");
+			return;
+		}
+	}
 }

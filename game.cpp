@@ -445,7 +445,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			std::cout << "Looping..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(50)); // 暂停100毫秒，避免CPU占用过高
 		}
-		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);//5 步
+		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);
 		if (temp == -1)//自带show和draw
 		{
 			process = -1;//-1 结束游戏
@@ -462,10 +462,11 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				cout << "你拾取了激光指示器！！！" << endl;
 			}
-			if (j == 5)
+			if (j == step)
 			{
 				head_map->creatBarLava();
 				head_map->creatBarStone();
+				creatProp(prop_list,*head_map,rand()%2);
 				s_map.S_showMap(head_map, 0);
 				process = -2;
 			}

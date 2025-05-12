@@ -1,4 +1,4 @@
-#include "game.h"// 同时包含两个头文件
+#include "game.h"// 同时包含三个头文件
 #include <iostream>
 #include <cstdlib>
 #include <ctime>
@@ -297,7 +297,25 @@ void Map::creatBarStone()
 	{
 		int bar_x = rand() % this->Width + 1;
 		int bar_y = rand() % this->Height + 1;
-		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x != M_ant_x && bar_y != M_ant_y)
+		int next_x = 0;
+		int next_y = 0;
+		if (this->m_degree == Way_to_Degree(UP))
+		{
+			next_y++;
+		}
+		else if (this->m_degree == Way_to_Degree(DOWN))
+		{
+			next_y--;
+		}
+		else if (this->m_degree == Way_to_Degree(LEFT))
+		{
+			next_x++;
+		}
+		else if (this->m_degree == Way_to_Degree(RIGHT))
+		{
+			next_x--;
+		}
+		if ((this->m_map[bar_x][bar_y] == 0 || this->m_map[bar_x][bar_y] == 1) && bar_x != M_ant_x && bar_y != M_ant_y && bar_x != M_ant_x + next_x && bar_y != M_ant_y + next_y)
 		{
 			m_map[bar_x][bar_y] += 3;
 			return;

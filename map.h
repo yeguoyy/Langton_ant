@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 
+
+
 class Map
 {
 public:
@@ -18,9 +20,7 @@ public:
 	void showMap();
 	void copyMap(Map& const map);
 	void creatBarLava();
-	void creatBarLava(int x, int y);
 	void creatBarStone();
-	void creatBarStone(int x, int y);
 	Map();
 	Map(Map& const map);
 	~Map();
