@@ -419,9 +419,10 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			window.draw(prop_list[i]);
 		}
 		window.display();
-		auto start = std::chrono::steady_clock::now(); // 获取起始时间
-		auto end = start + std::chrono::milliseconds(500); // 设置目标时间（5秒后）
-		while (std::chrono::steady_clock::now() < end)
+		//auto start = std::chrono::steady_clock::now(); // 获取起始时间
+		//auto end = start + std::chrono::milliseconds(500); // 设置目标时间（0.5秒后）
+		/*while (std::chrono::steady_clock::now() < end)*/
+		for (int i = 0; i < 50; i++)
 		{
 			while (const std::optional event = window.pollEvent())
 			{
@@ -443,7 +444,31 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 
 			}
 			std::cout << "Looping..." << std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds(50)); // 暂停100毫秒，避免CPU占用过高
+			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
+			sf::Vector2f Position=s_ant.getPosition();
+			switch (ant.direction)
+			{
+			case Direction::UP:
+				Position.y -=2;
+				break;
+                case Direction::DOWN:
+				Position.y +=2;
+				break;
+                case Direction::LEFT:
+				Position.x -=2;
+				break;
+                case Direction::RIGHT:
+				Position.x +=2;
+				break;
+			}
+			s_ant.setPosition(Position);
+			window.draw(s_map);
+			window.draw(s_ant);
+			for (int i = 0; i < prop_list.size(); i++)
+			{
+				window.draw(prop_list[i]);
+			}
+			window.display();
 		}
 		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);
 		if (temp == -1)//自带show和draw
