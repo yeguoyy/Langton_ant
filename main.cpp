@@ -14,6 +14,7 @@ using namespace std;
 
 int main()
 {
+	srand(time(NULL));
 	Ant ant;
 	//该用指针用来读取每一个地图的地址
 	Map* head_map = new Map;

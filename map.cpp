@@ -71,7 +71,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 }
 void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
-	srand(time(0));
 	cout << "请输入想要生成的题目的长度和宽度" << endl;
 
 	while (true)
@@ -260,7 +259,6 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 
 void Map::creatBarLava()
 {
-	srand(time(NULL));
 	while (true)
 	{
 		int bar_x = rand() % this->Width + 1;
@@ -292,7 +290,6 @@ void Map::creatBarLava()
 }
 void Map::creatBarStone()
 {
-	srand(time(NULL));
 	while (true)
 	{
 		int bar_x = rand() % this->Width + 1;
