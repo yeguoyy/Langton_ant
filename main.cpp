@@ -69,6 +69,7 @@ int main()
 	S_Map s_map;
 	S_Ant s_ant;
 	vector<Prop> prop_list;
+	sf::VertexArray line(sf::PrimitiveType::LineStrip, 6);
 	//链表的头尾结点
 	int process = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
 	while (window.isOpen())
@@ -124,10 +125,13 @@ int main()
 					}
 					if (process <= -2)
 					{
+						
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
 							process += GoldenFingerMode_player_try(ant,head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1, 5);
 						}
+						Confirm_line(line, *head_map);
+						
 					}
 				}
 			}
@@ -158,6 +162,7 @@ int main()
 		else if (process == -7)
 		{
 			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process);//5 步
+			Confirm_line(line, *head_map);
 		}
 		window.clear();
 		// draw the map
@@ -176,6 +181,7 @@ int main()
 			{
 				window.draw(prop_list[i]);
 			}
+			window.draw(line);
 		}
 		window.display();
 	}

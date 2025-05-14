@@ -20,3 +20,5 @@ void pause(sf::RenderWindow&);
 sf::Angle Way_to_Degree(Direction direction);
 
 void creatProp(std::vector<Prop>& prop_list, const Map&,int type);
+
+void Confirm_line(sf::VertexArray&,Map );

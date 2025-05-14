@@ -167,8 +167,6 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 	{
 		std::cout << "黑色" << std::endl;
 	}
-
-
 	if (player_map->m_map[x][y] == 2)
 	{
 		std::cout << "熔岩，不可更改" << std::endl;
@@ -208,11 +206,12 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 		}
 	}
 	player_map->showMap();
-	cout <<"火箭道具数量："<< ant.num_rocket << endl;
-    cout <<"大火箭道具数量："<< ant.num_big_rocket << endl;
-    cout <<"激光指示器道具数量："<< ant.num_LaserPointer << endl;
+	cout << "火箭道具数量：" << ant.num_rocket << endl;
+	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
+
 	return -1;
 }
 
@@ -411,6 +410,81 @@ void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Pro
 	}
 }
 
+void Confirm_line(sf::VertexArray& line, Map head_map)
+{
+	line[0].position = sf::Vector2f(head_map.M_ant_x * 100 - 50, head_map.M_ant_y * 100 - 50);
+	for (int i = 1; i <= 5; i++)
+	{
+		
+		if (head_map.m_degree == sf::degrees(0.f))
+		{
+			//cout << "0" << endl;
+			head_map.M_ant_y -= 1;
+		}
+		else if (head_map.m_degree == sf::degrees(90.f))
+		{
+            //cout << "90" << endl;
+			head_map.M_ant_x += 1;
+		}
+		else if (head_map.m_degree == sf::degrees(180.f))
+		{
+            //cout << "180" << endl;
+			head_map.M_ant_y += 1;
+		}
+		else if (head_map.m_degree == sf::degrees(270.f))
+		{
+            //cout << "270" << endl;
+			head_map.M_ant_x -= 1;
+		}
+		if (head_map.M_ant_x < 1 || head_map.M_ant_x > head_map.Width || head_map.M_ant_y < 1 || head_map.M_ant_y > head_map.Height)
+		{
+			for (int j = i; j <= 5; j++)
+			{
+				line[j].position = line[i].position;
+			}
+			break;
+		}
+		//cout << line[i].position.x << " " << line[i].position.y << endl;
+		line[i].color = sf::Color::Red;
+		line[i].position = sf::Vector2f(head_map.M_ant_x * 100 - 50, head_map.M_ant_y * 100 - 50);
+		if (head_map.m_map[head_map.M_ant_x][head_map.M_ant_y] == 0) {
+			head_map.m_map[head_map.M_ant_x][head_map.M_ant_y] = 1;
+			if (head_map.m_degree == sf::degrees(270.f))
+			{
+				head_map.m_degree = sf::degrees(0.f);
+			}
+			else 
+			{
+				head_map.m_degree += sf::degrees(90.f);
+			}
+		}
+		else if (head_map.m_map[head_map.M_ant_x][head_map.M_ant_y] == 1) {
+			head_map.m_map[head_map.M_ant_x][head_map.M_ant_y] = 0;
+			if (head_map.m_degree == sf::degrees(0.f))
+			{
+				head_map.m_degree = sf::degrees(270.f);
+			}
+			else if(head_map.m_degree == sf::degrees(270.f))
+			{
+				
+				head_map.m_degree = sf::degrees(180.f);
+			}
+			else
+			{
+				head_map.m_degree -= sf::degrees(90.f);
+			}
+		}
+		else
+		{
+			for (int j = i; j <= 5; j++)
+			{
+				line[j].position = line[i].position;
+			}
+			break;
+		}
+	}
+}
+
 void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process)
 {
 	for (int j = 1; j <= step; j++)
@@ -434,11 +508,11 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
-					if (keyPressed->code == sf::Keyboard::Key::Space&&ant.num_rocket>0)
+					if (keyPressed->code == sf::Keyboard::Key::Space && ant.num_rocket > 0)
 					{
 						cout << "按下了空格" << endl;
 						rocket(ant, head_map, s_map, s_ant, prop_list, window);
-                        ant.num_rocket--;
+						ant.num_rocket--;
 					}
 					else if (keyPressed->code == sf::Keyboard::Key::LShift && ant.num_big_rocket > 0)
 					{
@@ -451,20 +525,20 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			}
 			std::cout << "Looping..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
-			sf::Vector2f Position=s_ant.getPosition();
+			sf::Vector2f Position = s_ant.getPosition();
 			switch (ant.direction)
 			{
 			case Direction::UP:
-				Position.y -=2;
+				Position.y -= 2;
 				break;
-                case Direction::DOWN:
-				Position.y +=2;
+			case Direction::DOWN:
+				Position.y += 2;
 				break;
-                case Direction::LEFT:
-				Position.x -=2;
+			case Direction::LEFT:
+				Position.x -= 2;
 				break;
-                case Direction::RIGHT:
-				Position.x +=2;
+			case Direction::RIGHT:
+				Position.x += 2;
 				break;
 			}
 			s_ant.setPosition(Position);
@@ -497,7 +571,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				head_map->creatBarLava();
 				head_map->creatBarStone();
-				creatProp(prop_list,*head_map,rand()%2);
+				creatProp(prop_list, *head_map, rand() % 2);
 				s_map.S_showMap(head_map, 0);
 				process = -2;
 			}
@@ -543,4 +617,6 @@ sf::Angle Way_to_Degree(Direction direction)
 		return sf::degrees(270.0f);
 	}
 }
+
+
 
