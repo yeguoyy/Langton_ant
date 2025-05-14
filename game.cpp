@@ -309,10 +309,13 @@ void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& 
 		}
 		window.draw(rocketSprite);
 		window.display();
+		//检测
+		//超出地图
 		if (rocketPosition.x >= 100 * head_map->Width || rocketPosition.y >= 100 * head_map->Height || rocketPosition.x <= 0 || rocketPosition.y <= 0)
 		{
 			break;
 		}
+		//碰到障碍物
 		if (head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 3 || head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 4)
 		{
 			head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] -= 3;
@@ -348,16 +351,16 @@ void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Pro
 		switch (ant.direction)
 		{
 		case Direction::UP:
-			rocketPosition.y -= 0.08;//控制速度
+			rocketPosition.y -= 0.07;//控制速度，大火箭稍慢
 			break;
 		case Direction::DOWN:
-			rocketPosition.y += 0.08;
+			rocketPosition.y += 0.07;
 			break;
 		case Direction::LEFT:
-			rocketPosition.x -= 0.08;
+			rocketPosition.x -= 0.07;
 			break;
 		case Direction::RIGHT:
-			rocketPosition.x += 0.08;
+			rocketPosition.x += 0.07;
 			break;
 		}
 		rocketSprite.setPosition(rocketPosition);
@@ -369,10 +372,13 @@ void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Pro
 		}
 		window.draw(rocketSprite);
 		window.display();
+		//检测
+		//超出地图
 		if (rocketPosition.x >= 100 * head_map->Width || rocketPosition.y >= 100 * head_map->Height || rocketPosition.x <= 0 || rocketPosition.y <= 0)
 		{
 			break;
 		}
+		//碰到障碍物
 		if (head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 3 || head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 4)
 		{
 			int x = (int)rocketPosition.x / 100 + 1;

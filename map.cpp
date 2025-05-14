@@ -221,8 +221,8 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 			head_map->m_map[i][j] = 0;
 		}
 	}
-	head_map->m_map[ant.Ant_x][ant.Ant_y] = rand() % 4 + 1;
-	switch (head_map->m_map[ant.Ant_x][ant.Ant_y])
+	int way  = rand() % 4 + 1;
+	switch (way)
 	{
 	case 2:
 		ant.direction = UP;
