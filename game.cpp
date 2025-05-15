@@ -155,7 +155,7 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int 
 	}
 	return 0;
 }
-int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y, int times)
+int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y, int& if_line)
 {
 	cout << x << " " << y << endl;
 	cout << "蚂蚁脚下的颜色为：";
@@ -209,9 +209,9 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 	cout << "火箭道具数量：" << ant.num_rocket << endl;
 	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
 	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
+	cout << "激光指示器剩余电量:" << if_line << endl;
 	s_map.S_showMap(player_map, 0);
 	s_ant.S_showAnt(player_map);
-
 	return -1;
 }
 
@@ -485,7 +485,7 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 	}
 }
 
-void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process)
+void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line)
 {
 	for (int j = 1; j <= step; j++)
 	{
@@ -502,28 +502,62 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		//auto start = std::chrono::steady_clock::now(); // 获取起始时间
 		//auto end = start + std::chrono::milliseconds(500); // 设置目标时间（0.5秒后）
 		/*while (std::chrono::steady_clock::now() < end)*/
+
+		//等待操作
 		for (int i = 0; i < 50; i++)
 		{
 			while (const std::optional event = window.pollEvent())
 			{
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
-					if (keyPressed->code == sf::Keyboard::Key::Space && ant.num_rocket > 0)
+					if (keyPressed->code == sf::Keyboard::Key::Space )
 					{
 						cout << "按下了空格" << endl;
-						rocket(ant, head_map, s_map, s_ant, prop_list, window);
-						ant.num_rocket--;
+						if (ant.num_rocket > 0)
+						{
+							rocket(ant, head_map, s_map, s_ant, prop_list, window);
+							ant.num_rocket--;
+						}
+						else
+						{
+							cout << "小火箭用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
 					}
-					else if (keyPressed->code == sf::Keyboard::Key::LShift && ant.num_big_rocket > 0)
+					else if (keyPressed->code == sf::Keyboard::Key::LShift)
 					{
 						cout << "按下了LShift" << endl;
-						big_rocket(ant, head_map, s_map, s_ant, prop_list, window);
-						ant.num_big_rocket--;
+						if (ant.num_big_rocket > 0)
+						{
+							big_rocket(ant, head_map, s_map, s_ant, prop_list, window);
+							ant.num_big_rocket--;
+						}
+						else
+						{
+							cout << "大火箭用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+						
+					}
+					else if (keyPressed->code == sf::Keyboard::Key::V)
+					{
+						cout << "按下了V" << endl;
+						if (ant.num_LaserPointer > 0)
+						{
+							if_line += 3;
+							cout << "激光指示器充电成功！！！" << endl;
+							cout << "当前激光指示器电量：" << if_line << endl;
+							ant.num_LaserPointer--;
+						}
+						else
+						{
+							cout << "激光指示器用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
 					}
 				}
-
 			}
-			std::cout << "Looping..." << std::endl;
+			//std::cout << "Looping..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
 			sf::Vector2f Position = s_ant.getPosition();
 			switch (ant.direction)
@@ -571,7 +605,8 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				head_map->creatBarLava();
 				head_map->creatBarStone();
-				creatProp(prop_list, *head_map, rand() % 2);
+				//创建道具
+				creatProp(prop_list, *head_map, rand() % 3);
 				s_map.S_showMap(head_map, 0);
 				process = -2;
 			}

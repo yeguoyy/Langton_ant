@@ -12,7 +12,7 @@ Ant::Ant() {
 	num_rocket = 10;
 	num_big_rocket = 10;
 	num_LaserPointer = 10;
-	
+	num_falcula = 10;
 }
 sf::Angle Way_to_Degrees(Direction direction)
 {

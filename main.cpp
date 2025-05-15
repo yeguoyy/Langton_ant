@@ -72,6 +72,7 @@ int main()
 	sf::VertexArray line(sf::PrimitiveType::LineStrip, 6);
 	//链表的头尾结点
 	int process = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
+	int if_line = 0;
 	while (window.isOpen())
 	{
 		// handle events
@@ -95,6 +96,22 @@ int main()
 					Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
 					process++;
 				}
+				if (keyPressed->code == sf::Keyboard::Key::V && process <= -2)
+				{
+					if (ant.num_LaserPointer > 0)
+					{
+						if_line += 3;
+						ant.num_LaserPointer--;
+						cout << "激光指示器充电成功！！！" << endl;
+						cout << "当前激光指示器电量：" << if_line << endl;
+					}
+					else
+					{
+                        cout << "激光指示器用完了！！！" << endl;
+						cout << "快去地图中拾取吧 >_<" <<endl;
+					}
+
+				}
 			}
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
 			{
@@ -103,7 +120,6 @@ int main()
 					//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
 					if (mouseMoved->position.x >= 128 && mouseMoved->position.x <= 475 && mouseMoved->position.y >= 325 && mouseMoved->position.y <= 410)
 					{
-
 						SetCursor(customCursor2);//暂时设置鼠标指针图标
 					}
 				}
@@ -128,9 +144,9 @@ int main()
 						
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
-							process += GoldenFingerMode_player_try(ant,head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1, 5);
+							process += GoldenFingerMode_player_try(ant,head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,if_line);
 						}
-						Confirm_line(line, *head_map);
+						Confirm_line(line, *head_map);//计算路径坐标
 						
 					}
 				}
@@ -146,7 +162,9 @@ int main()
 			}
 			else if (choise == 3)
 			{
-				process = -2;
+				process = -2;//加入循环
+				cout << "黑左白右" << endl;
+				cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
 				tail_map = head_map;
 				prop_list.push_back(Prop(5, 5, 0));//创建道具
 				prop_list[prop_list.size() - 1].loadmap("tileMap/Prop.png");
@@ -161,7 +179,13 @@ int main()
 		}
 		else if (process == -7)
 		{
-			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process);//5 步
+			
+			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process,if_line);//5 步
+			if (if_line > 0)//每个回合扣一格电
+				if_line--;
+			cout << "激光指示器剩余电量:" << if_line << endl;
+			cout << "黑左白右"<<endl;
+			cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
 			Confirm_line(line, *head_map);
 		}
 		window.clear();
@@ -181,13 +205,12 @@ int main()
 			{
 				window.draw(prop_list[i]);
 			}
+			if (if_line!=0)//剩余次数不为0就show线
 			window.draw(line);
 		}
 		window.display();
 	}
 
-	//test
 	system("pause");
-	//tail_map->showMap();//可以正常访问第一个地图
 	return 0;
 }

@@ -16,6 +16,7 @@ public:
 	int num_rocket;
 	int num_big_rocket;
 	int num_LaserPointer;
+	int num_falcula;
 
 	Ant();
 	int move(Map*&);
