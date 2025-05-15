@@ -73,7 +73,7 @@ void creatProp(std::vector<Prop>& prop_list, const Map& map, int type)//创建道具
 		int if_right = 0;
 		if (map.m_map[rocket_x][rocket_y] != 2  && rocket_x != map.M_ant_x && rocket_y != map.M_ant_y)
 		{
-			for (int i = 0; i <= prop_list.size(); i++)
+			for (int i = 0; i < prop_list.size(); i++)
 			{
 				if (prop_list[i].getX() == rocket_x && prop_list[i].getY() == rocket_y)
 				{
