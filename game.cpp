@@ -292,16 +292,16 @@ void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& 
 		switch (ant.direction)//控制速度
 		{
 		case Direction::UP:
-			rocketPosition.y -= 0.08;
+			rocketPosition.y -= 0.09;
 			break;
 		case Direction::DOWN:
-			rocketPosition.y += 0.08;
+			rocketPosition.y += 0.09;
 			break;
 		case Direction::LEFT:
-			rocketPosition.x -= 0.08;
+			rocketPosition.x -= 0.09;
 			break;
 		case Direction::RIGHT:
-			rocketPosition.x += 0.08;
+			rocketPosition.x += 0.09;
 			break;
 		}
 		rocketSprite.setPosition(rocketPosition);
@@ -355,16 +355,16 @@ void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Pro
 		switch (ant.direction)
 		{
 		case Direction::UP:
-			rocketPosition.y -= 0.07;//控制速度，大火箭稍慢
+			rocketPosition.y -= 0.08;//控制速度，大火箭稍慢
 			break;
 		case Direction::DOWN:
-			rocketPosition.y += 0.07;
+			rocketPosition.y += 0.08;
 			break;
 		case Direction::LEFT:
-			rocketPosition.x -= 0.07;
+			rocketPosition.x -= 0.08;
 			break;
 		case Direction::RIGHT:
-			rocketPosition.x += 0.07;
+			rocketPosition.x += 0.08;
 			break;
 		}
 		rocketSprite.setPosition(rocketPosition);
@@ -571,7 +571,24 @@ void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>&
 						break;
 					}
 					lineSize.x -= 0.07;//线长减
-					prop_list[i].setPosition(falculaPosition);//道具位置
+
+					sf::Vector2f propPosition = falculaPosition;
+					switch (ant.direction)//使道具抓回时在钩爪中心
+					{
+					case Direction::UP:
+						propPosition.y -= 25;
+						break;
+					case Direction::DOWN:
+						propPosition.y += 25;
+						break;
+					case Direction::LEFT:
+						propPosition.x -= 25;
+						break;
+					case Direction::RIGHT:
+						propPosition.x += 25;
+						break;
+					}
+					prop_list[i].setPosition(propPosition);//道具位置
 					falculaSprite.setPosition(falculaPosition);//钩爪位置
 					line.setSize(lineSize);//线长设置
 					window.draw(s_map);
