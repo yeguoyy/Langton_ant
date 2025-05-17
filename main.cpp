@@ -9,7 +9,7 @@ using namespace std;
 
 //规则说明 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 地图保存功能 误输入√ 传送门？障碍物！胜利动画 重新开始游戏（重置）
 //金手指挑战赛（通过改变黑白，以最小的步数让蚂蚁到目标区域，消灭敌人掉落道具、得分）
-//道具：（坦克大战）激光√，大小飞弹√，换位（抓取），磁铁，钩爪
+//道具：（坦克大战）激光√，大小飞弹√，换位（抓取），磁铁，钩爪√
 //事件：（随机盒子）敌人生成，阔图，核弹（大范围洗牌），
 
 int main()
@@ -125,6 +125,11 @@ int main()
 						cout << "快去地图中拾取吧 >_<" << endl;
 					}
 				}
+				if (keyPressed->code == sf::Keyboard::Key::Enter && process <= -2)
+				{
+					cout << "成功跳过操作..." << endl;
+					process = -7;
+				}
 			}
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
 			{
@@ -158,6 +163,8 @@ int main()
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= head_map->Height * 100 && mouseButtonPressed->position.x <= head_map->Width * 100)
 						{
 							process += GoldenFingerMode_player_try(ant,head_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1,if_line);
+							cout <<"剩余操作次数："<<(process+7)<<"次"<<endl;
+							cout<< "按Enter可跳过" << endl;
 						}
 						Confirm_line(line, *head_map);//计算路径坐标
 						
