@@ -21,4 +21,10 @@ sf::Angle Way_to_Degree(Direction direction);
 
 void creatProp(std::vector<Prop>& prop_list, const Map&,int type);
 
+void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, std::vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position);//小火箭
+void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, std::vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position);//小火箭
+void Confirm_line(sf::VertexArray& line, Map head_map);//确认激光指示器坐标
+void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, std::vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position);//钩爪
+
+
 void Confirm_line(sf::VertexArray&,Map );

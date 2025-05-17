@@ -208,6 +208,7 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 	player_map->showMap();
 	cout << "火箭道具数量：" << ant.num_rocket << endl;
 	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+	cout << "钩爪道具数量：" << ant.num_falcula << endl;
 	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
 	cout << "激光指示器剩余电量:" << if_line << endl;
 	s_map.S_showMap(player_map, 0);
@@ -228,6 +229,7 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 	head_map->showMap();
 	cout << "火箭道具数量：" << ant.num_rocket << endl;
 	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+	cout << "钩爪道具数量：" << ant.num_falcula << endl;
 	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
 	s_map.S_showMap(head_map, 0);
 	s_ant.S_showAnt(head_map);
@@ -256,6 +258,9 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 			case 2:
 				ant.num_LaserPointer++;
 				break;
+			case 3:
+				ant.num_falcula++;
+				break;
 			}
 			window.display();
 			return type;
@@ -269,7 +274,7 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 	return 8;
 }
 
-void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)//小火箭
+void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position)//小火箭
 {
 	sf::Texture rocketTexture;
 	if (!rocketTexture.loadFromFile("prop/rocket.png"))
@@ -332,10 +337,10 @@ void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& 
 	}
 }
 
-void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)//小火箭
+void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position)//小火箭
 {
 	sf::Texture big_rocketTexture;
-	if (!big_rocketTexture.loadFromFile("prop/big_rocket.png"))
+	if (!big_rocketTexture.loadFromFile("prop/big_rocket.png"))//加载图片
 	{
 		std::cerr << "Failed to load big_rocket texture" << std::endl;
 		return;
@@ -415,7 +420,7 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 	line[0].position = sf::Vector2f(head_map.M_ant_x * 100 - 50, head_map.M_ant_y * 100 - 50);
 	for (int i = 1; i <= 5; i++)
 	{
-		
+
 		if (head_map.m_degree == sf::degrees(0.f))
 		{
 			//cout << "0" << endl;
@@ -423,17 +428,17 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 		}
 		else if (head_map.m_degree == sf::degrees(90.f))
 		{
-            //cout << "90" << endl;
+			//cout << "90" << endl;
 			head_map.M_ant_x += 1;
 		}
 		else if (head_map.m_degree == sf::degrees(180.f))
 		{
-            //cout << "180" << endl;
+			//cout << "180" << endl;
 			head_map.M_ant_y += 1;
 		}
 		else if (head_map.m_degree == sf::degrees(270.f))
 		{
-            //cout << "270" << endl;
+			//cout << "270" << endl;
 			head_map.M_ant_x -= 1;
 		}
 		if (head_map.M_ant_x < 1 || head_map.M_ant_x > head_map.Width || head_map.M_ant_y < 1 || head_map.M_ant_y > head_map.Height)
@@ -453,7 +458,7 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 			{
 				head_map.m_degree = sf::degrees(0.f);
 			}
-			else 
+			else
 			{
 				head_map.m_degree += sf::degrees(90.f);
 			}
@@ -464,9 +469,9 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 			{
 				head_map.m_degree = sf::degrees(270.f);
 			}
-			else if(head_map.m_degree == sf::degrees(270.f))
+			else if (head_map.m_degree == sf::degrees(270.f))
 			{
-				
+
 				head_map.m_degree = sf::degrees(180.f);
 			}
 			else
@@ -484,6 +489,223 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 		}
 	}
 }
+
+void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position)
+{
+	cout << "钩爪拾取中..." << endl;
+	sf::Texture falculaTexture;
+	if (!falculaTexture.loadFromFile("prop/falcula.png"))
+	{
+		std::cerr << "Failed to load falcula texture" << std::endl;
+		return;
+	}
+
+	sf::Vector2f falculaPosition = Position;
+	sf::Sprite falculaSprite(falculaTexture);
+	falculaSprite.setOrigin({ 25.f,45.f });
+	falculaSprite.setRotation(head_map->m_degree);
+	falculaSprite.setPosition(falculaPosition);
+
+	sf::Vector2f lineSize(1.f, 5.f);//长度 0.f 宽度 5.f
+	sf::RectangleShape line(lineSize);
+	line.setFillColor(sf::Color::Black);
+	line.setOrigin({ 1.f,3.f });
+	line.rotate(head_map->m_degree - sf::degrees(90));
+	line.setPosition(falculaPosition);
+	while (true)//伸出
+	{
+		switch (ant.direction)//控制速度
+		{
+		case Direction::UP:
+			falculaPosition.y -= 0.07;
+			break;
+		case Direction::DOWN:
+			falculaPosition.y += 0.07;
+			break;
+		case Direction::LEFT:
+			falculaPosition.x -= 0.07;
+			break;
+		case Direction::RIGHT:
+			falculaPosition.x += 0.07;
+			break;
+		}
+		lineSize.x += 0.07;
+		falculaSprite.setPosition(falculaPosition);
+		line.setSize(lineSize);
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.draw(line);
+		window.draw(falculaSprite);
+		window.display();
+		//检测
+		//超出地图
+		if (falculaPosition.x >= 100 * head_map->Width || falculaPosition.y >= 100 * head_map->Height || falculaPosition.x <= 0 || falculaPosition.y <= 0)
+		{
+			break;
+		}
+		//检测是否触碰道具
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			if ((int)falculaPosition.x == (int)prop_list[i].getX() * 100 - 50 && (int)falculaPosition.y == (int)prop_list[i].getY() * 100 - 50)
+			{
+				//抓着道具回
+				while (true)
+				{
+					switch (ant.direction)//控制速度
+					{
+					case Direction::UP:
+						falculaPosition.y += 0.07;
+						break;
+					case Direction::DOWN:
+						falculaPosition.y -= 0.07;
+						break;
+					case Direction::LEFT:
+						falculaPosition.x += 0.07;
+						break;
+					case Direction::RIGHT:
+						falculaPosition.x -= 0.07;
+						break;
+					}
+					lineSize.x -= 0.07;//线长减
+					prop_list[i].setPosition(falculaPosition);//道具位置
+					falculaSprite.setPosition(falculaPosition);//钩爪位置
+					line.setSize(lineSize);//线长设置
+					window.draw(s_map);
+					window.draw(s_ant);
+					for (int j = 0; j < prop_list.size(); j++)
+					{
+						window.draw(prop_list[j]);
+					}
+					window.draw(line);
+					window.draw(falculaSprite);
+					window.display();
+					bool if_catch = false;
+					switch (ant.direction)
+					{
+					case Direction::UP:
+						if (falculaPosition.y >= line.getPosition().y+30)
+						{
+							if_catch = true;
+						}
+						break;
+					case Direction::DOWN:
+						if (falculaPosition.y <= line.getPosition().y)
+						{
+							if_catch = true;
+						}
+						break;
+					case Direction::LEFT:
+						if (falculaPosition.x >= line.getPosition().x)
+						{
+							if_catch = true;
+						}
+						break;
+					case Direction::RIGHT:
+						if (falculaPosition.x <= line.getPosition().x)
+						{
+							if_catch = true;
+						}
+						break;
+					}
+					if (if_catch == true)
+					{
+						int type = prop_list[i].getType();
+						prop_list.erase(prop_list.begin() + i);
+						for (int j = 0; j < prop_list.size(); j++)
+						{
+							window.draw(prop_list[j]);
+						}
+						switch (type)
+						{
+						case 0:
+							ant.num_rocket++;
+							cout << "你勾中了火箭弹道具！！！" << endl;
+							break;
+						case 1:
+							ant.num_big_rocket++;
+                            cout << "你勾中了大火箭弹道具！！！" << endl;
+							break;
+						case 2:
+							ant.num_LaserPointer++;
+                            cout << "你勾中激光指示器道具！！！" << endl;
+							break;
+						case 3:
+							ant.num_falcula++;
+                            cout << "你勾中了钩爪道具！！！" << endl;
+							break;
+						}
+						window.display();
+						return;
+					}
+				}
+			}
+		}
+	}
+	//空爪回
+	while (true)
+	{
+		switch (ant.direction)//控制速度
+		{
+		case Direction::UP:
+			falculaPosition.y += 0.07;
+			break;
+		case Direction::DOWN:
+			falculaPosition.y -= 0.07;
+			break;
+		case Direction::LEFT:
+			falculaPosition.x += 0.07;
+			break;
+		case Direction::RIGHT:
+			falculaPosition.x -= 0.07;
+			break;
+		}
+		lineSize.x -= 0.07;
+		falculaSprite.setPosition(falculaPosition);
+		line.setSize(lineSize);
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.draw(line);
+		window.draw(falculaSprite);
+		window.display();
+		switch (ant.direction)
+		{
+		case Direction::UP:
+			if (falculaPosition.y >= line.getPosition().y)
+			{
+				return;
+			}
+			break;
+		case Direction::DOWN:
+			if (falculaPosition.y <= line.getPosition().y)
+			{
+				return;
+			}
+			break;
+		case Direction::LEFT:
+			if (falculaPosition.x >= line.getPosition().x)
+			{
+				return;
+			}
+			break;
+		case Direction::RIGHT:
+			if (falculaPosition.x <= line.getPosition().x)
+			{
+				return;
+			}
+			break;
+		}
+	}
+}
+
+
 
 void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line)
 {
@@ -506,16 +728,17 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		//等待操作
 		for (int i = 0; i < 50; i++)
 		{
+			sf::Vector2f Position = s_ant.getPosition();
 			while (const std::optional event = window.pollEvent())
 			{
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
-					if (keyPressed->code == sf::Keyboard::Key::Space )
+					if (keyPressed->code == sf::Keyboard::Key::Space)
 					{
 						cout << "按下了空格" << endl;
 						if (ant.num_rocket > 0)
 						{
-							rocket(ant, head_map, s_map, s_ant, prop_list, window);
+							rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
 							ant.num_rocket--;
 						}
 						else
@@ -529,7 +752,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 						cout << "按下了LShift" << endl;
 						if (ant.num_big_rocket > 0)
 						{
-							big_rocket(ant, head_map, s_map, s_ant, prop_list, window);
+							big_rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
 							ant.num_big_rocket--;
 						}
 						else
@@ -537,7 +760,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 							cout << "大火箭用完了！！！" << endl;
 							cout << "快去地图中拾取吧 >_<" << endl;
 						}
-						
+
 					}
 					else if (keyPressed->code == sf::Keyboard::Key::V)
 					{
@@ -555,11 +778,24 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 							cout << "快去地图中拾取吧 >_<" << endl;
 						}
 					}
+					else if (keyPressed->code == sf::Keyboard::Key::C)
+					{
+						cout << "按下了C" << endl;
+						if (ant.num_falcula > 0)
+						{
+							falcula(ant, head_map, s_map, s_ant, prop_list, window, Position);
+							ant.num_falcula--;
+						}
+						else
+						{
+							cout << "钩爪用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+					}
 				}
 			}
 			//std::cout << "Looping..." << std::endl;
 			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
-			sf::Vector2f Position = s_ant.getPosition();
 			switch (ant.direction)
 			{
 			case Direction::UP:
@@ -599,14 +835,22 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			}
 			else if (temp == 1)
 			{
+				cout << "你拾取了大火箭弹！！！" << endl;
+			}
+            else if (temp == 2)
+			{
 				cout << "你拾取了激光指示器！！！" << endl;
+			}
+            else if (temp == 3)
+			{
+				cout << "你拾取了钩爪！！！" << endl;
 			}
 			if (j == step)
 			{
 				head_map->creatBarLava();
 				head_map->creatBarStone();
 				//创建道具
-				creatProp(prop_list, *head_map, rand() % 3);
+				creatProp(prop_list, *head_map, rand() % 4);
 				s_map.S_showMap(head_map, 0);
 				process = -2;
 			}

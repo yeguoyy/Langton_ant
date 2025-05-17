@@ -5,6 +5,8 @@ VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Langton's ant", "Langton's ant.vcxproj", "{213133D0-91AE-42C6-AE7F-F6696DE36190}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "兰顿蚂蚁1.0", "..\兰顿蚂蚁1.0\兰顿蚂蚁1.0.vdproj", "{145F753C-9640-5903-BF9D-A4A1569CFEBF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -21,6 +23,10 @@ Global
 		{213133D0-91AE-42C6-AE7F-F6696DE36190}.Release|x64.Build.0 = Release|x64
 		{213133D0-91AE-42C6-AE7F-F6696DE36190}.Release|x86.ActiveCfg = Release|Win32
 		{213133D0-91AE-42C6-AE7F-F6696DE36190}.Release|x86.Build.0 = Release|Win32
+		{145F753C-9640-5903-BF9D-A4A1569CFEBF}.Debug|x64.ActiveCfg = Debug
+		{145F753C-9640-5903-BF9D-A4A1569CFEBF}.Debug|x86.ActiveCfg = Debug
+		{145F753C-9640-5903-BF9D-A4A1569CFEBF}.Release|x64.ActiveCfg = Release
+		{145F753C-9640-5903-BF9D-A4A1569CFEBF}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
