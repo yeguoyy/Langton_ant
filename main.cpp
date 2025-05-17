@@ -203,6 +203,7 @@ int main()
 			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process,if_line);//5 步
 			if (if_line > 0)//每个回合扣一格电
 				if_line--;
+			ant.Rounds += 1;
 			cout << "激光指示器剩余电量:" << if_line << endl;
 			cout << "黑左白右"<<endl;
 			cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;

@@ -7,13 +7,17 @@ int Ant::Ant_y = 1;
 int Ant::initial_x = 1;
 int Ant::initial_y = 1;
 sf::Vector2u S_Ant::tileSize = { 100,100 };
+
 Ant::Ant() {
 	direction = DOWN;
 	num_rocket = 10;
 	num_big_rocket = 10;
 	num_LaserPointer = 10;
 	num_falcula = 10;
+	Rounds = 0;
+	DestroyedStones = 0;
 }
+
 sf::Angle Way_to_Degrees(Direction direction)
 {
 	switch (direction) {
@@ -27,6 +31,7 @@ sf::Angle Way_to_Degrees(Direction direction)
 		return sf::degrees(270.0f);
 	}
 }
+
 int Ant::move(Map*& map)
 {
 	Map* NewMap = new Map;
@@ -139,6 +144,7 @@ void S_Ant::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	// draw the vertex array
 	target.draw(m_ant, states);
 }
+
 bool S_Ant::loadmap(const std::filesystem::path& tileset, Ant& ant,const Map *head_map)
 {
 	if (!m_tileset.loadFromFile(tileset))//¶ÁÈ¡AntÎÆÀí
@@ -168,8 +174,6 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, Ant& ant,const Map *he
 	this->setRotation(head_map->m_degree);
 	return true;
 }
-
-
 
 void S_Ant::S_showAnt(const Map* head_map)
 {

@@ -323,6 +323,7 @@ void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& 
 		if (head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 3 || head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] == 4)
 		{
 			head_map->m_map[(int)rocketPosition.x / 100 + 1][(int)rocketPosition.y / 100 + 1] -= 3;
+			ant.DestroyedStones++;
 			s_map.S_showMap(head_map, 0);
 			window.draw(s_map);
 			window.draw(s_ant);
@@ -398,6 +399,7 @@ void big_rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Pro
 					else if (head_map->m_map[i][j] == 3 || head_map->m_map[i][j] == 4)
 					{
 						head_map->m_map[i][j] -= 3;
+						ant.DestroyedStones++;
 					}
 				}
 			}
@@ -841,6 +843,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		if (temp == -1)//自带show和draw
 		{
 			process = -1;//-1 结束游戏
+			cout << "你的蚂蚁度过了"<<ant.Rounds << "回合" << endl;
+			cout << "摧毁了"<<ant.DestroyedStones << "块石头" << endl;
+			cout << "你的最终分数是："<< ant.DestroyedStones*20+ant.Rounds*10<< endl;
 			pause(window);
 			return;
 		}

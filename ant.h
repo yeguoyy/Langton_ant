@@ -18,6 +18,9 @@ public:
 	int num_LaserPointer;
 	int num_falcula;
 
+	int Rounds;
+	int DestroyedStones;
+
 	Ant();
 	int move(Map*&);
 };
