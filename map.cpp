@@ -4,6 +4,7 @@
 #include <ctime>
 #include <string>
 #include <fstream>
+#include <windows.h>
 using namespace std;
 
 
@@ -12,59 +13,150 @@ static int x, y;
 
 int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
+	sf::Texture StartChoose_texture;
+	if (!StartChoose_texture.loadFromFile("context/Start_game_choose.png", false, sf::IntRect({ 0, 0 }, { 1024, 1536 })))//sf::IntRect 类是一个简单的实用类型，表示一个矩形。它的构造函数接受矩形的左上角坐标和大小。
+		return -1;
+	sf::Sprite Start_game_cover(StartChoose_texture);
+	sf::Vector2u original_Start_Size = StartChoose_texture.getSize();
+	sf::Vector2f scale_Start_Size = { 600.f / original_Start_Size.x, 900.f / original_Start_Size.y };
+	Start_game_cover.setScale(scale_Start_Size);
+
+	sf::Texture ordinary_button_texture;
+	sf::Texture goldenFinger_button_texture;
+	if (!ordinary_button_texture.loadFromFile("context/ordinary_button.png"))
+		return -1;
+	if (!goldenFinger_button_texture.loadFromFile("context/goldenFinger_button.png"))
+		return -1;
+	sf::Sprite ordinary_button(ordinary_button_texture);
+	sf::Sprite goldenFinger_button(goldenFinger_button_texture);
+	ordinary_button.setOrigin(sf::Vector2f(ordinary_button_texture.getSize().x / 2, ordinary_button_texture.getSize().y / 2));
+	goldenFinger_button.setOrigin(sf::Vector2f(goldenFinger_button_texture.getSize().x / 2, goldenFinger_button_texture.getSize().y / 2));
+	ordinary_button.setPosition(sf::Vector2f(300.f, 485.f));
+	goldenFinger_button.setPosition(sf::Vector2f(300.f, 705.f));
+
+	HCURSOR customCursor2 = LoadCursorFromFile(L"material/Vision Cursor White/link.cur");//从文件中加载光标
+
 	cout << "选择关卡模式请按1，随机生成关卡模式请按2,金手指模式请按3" << endl;
-	int choice;
-	while (true)
+	int choice_mode = 0;
+	int mapGeneration_mode = 0;
+	while (true)//选择
 	{
-		cin >> choice;
-		if (cin.fail() || (choice != 1 && choice != 2 && choice != 3))
+		while (const std::optional event = window.pollEvent())
 		{
-			cout << "输入错误,请重新输入" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
+			{
+				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+				{
+					cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
+					if (mouseButtonPressed->position.x >= ordinary_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.x <= ordinary_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.y >= ordinary_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseButtonPressed->position.y <= ordinary_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
+					{
+						if (choice_mode == 0)
+						{
+							choice_mode = 1;
+						}
+						else if (choice_mode == 1)
+						{
+							mapGeneration_mode = 1;
+						}
+					}
+					else if (mouseButtonPressed->position.x >= goldenFinger_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.x <= goldenFinger_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.y >= goldenFinger_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseButtonPressed->position.y <= goldenFinger_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
+					{
+						if (choice_mode == 0)
+						{
+							choice_mode = 2;
+						}
+						if (choice_mode == 1)
+						{
+							mapGeneration_mode = 2;
+						}
+					}
+				}
+
+			}
+			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
+			{
+				//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
+				if (mouseMoved->position.x >= ordinary_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.x <= ordinary_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.y >= ordinary_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseMoved->position.y <= ordinary_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
+				{
+					SetCursor(customCursor2);//暂时设置鼠标指针图标
+				}
+				if (mouseMoved->position.x >= goldenFinger_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.x <= goldenFinger_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.y >= goldenFinger_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseMoved->position.y <= goldenFinger_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
+				{
+					SetCursor(customCursor2);//暂时设置鼠标指针图标
+				}
+			}
 		}
-		else
+
+		window.draw(Start_game_cover);
+		window.draw(ordinary_button);
+		window.draw(goldenFinger_button);
+		window.display();
+
+		if (choice_mode == 1)
+		{
+			sf::Image image1;//image大小不能大于texture大小
+			sf::Image image2;
+			if (!image1.loadFromFile("context/select_level.png"))//选择关卡模式
+			{
+				system("pause");
+				return -1;
+			}
+			if (!image2.loadFromFile("context/random_generation.png"))//随机生成模式
+			{
+				system("pause");
+				return -1;
+			}
+			ordinary_button_texture.update(image1);
+			goldenFinger_button_texture.update(image2);
+		}
+		else if (choice_mode == 2)
+		{
+			break;
+		}
+		if (mapGeneration_mode == 1 || mapGeneration_mode == 2)
 		{
 			break;
 		}
 	}
+
 	string filename;
-	switch (choice) {
-	case 1:
-		cout << "请输入关卡编号（1、2、3）" << endl;
-		int num;
-		while (true)
+	if (choice_mode == 1)
+	{
+		switch (mapGeneration_mode)
 		{
-			cin >> num;
-			if (cin.fail() || (num != 1 && num != 2 && num != 3))
+		case 1:
+			cout << "请输入关卡编号（1、2、3）" << endl;
+			int num;
+			while (true)
 			{
-				cout << "输入错误,请重新输入" << endl;
-				cin.clear();
-				cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				cin >> num;
+				if (cin.fail() || (num != 1 && num != 2 && num != 3))
+				{
+					cout << "输入错误,请重新输入" << endl;
+					cin.clear();
+					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+				}
+				else
+				{
+					break;
+				}
 			}
-			else
+			filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
+			//cout << filename << endl;
+			if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
 			{
-				break;
+				return -1;
 			}
+			break;
+		case 2:
+			creatMap(head_map, ant, s_map, s_ant, window);
+			break;
 		}
-		filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
-		//cout << filename << endl;
-		if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
-		{
-			return -1;
-		}
-		break;
-	case 2:
-		creatMap(head_map, ant, s_map, s_ant, window);
-		break;
-	case 3:
-		//introduction(window);
-		//pause(window);
+	}
+	else if (choice_mode == 2)
+	{
 		GoldenFingerMode_creatMap(head_map, ant, s_map, s_ant, window);
 		return 3;
-		break;
-	default:
-		return -1;
 	}
 	system("cls");
 	return 1;
@@ -221,7 +313,7 @@ void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 			head_map->m_map[i][j] = 0;
 		}
 	}
-	int way  = rand() % 4 + 1;
+	int way = rand() % 4 + 1;
 	switch (way)
 	{
 	case 2:
