@@ -9,7 +9,7 @@ using namespace std;
 
 
 bool Read_map(string, Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
-static int x, y;
+
 
 int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
@@ -46,7 +46,7 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 			if (event->is<sf::Event::Closed>())
 			{
 				window.close();
-				return 0;
+				return -1;
 			}
 
 			if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
@@ -143,9 +143,8 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 	{
 		if (mapGeneration_mode == 1)
 		{
-			
 			sf::Image image;
-			if (!image.loadFromFile("context/ordinary_rule.png"))//金手指模式
+			if (!image.loadFromFile("context/ordinary_rule.png"))//普通模式
 			{
 				system("pause");
 				return -1;
@@ -167,14 +166,14 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 			s_choice.setFillColor(c_choice);
 			int num;
 			bool is_break = false;
-			while (true)
+			while (true)//普通模式规则界面
 			{
 				while (const std::optional event = window.pollEvent())
 				{
 					if (event->is<sf::Event::Closed>())
 					{
 						window.close();
-						return 0;
+						return -1;
 					}
 					if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
 					{
@@ -188,8 +187,8 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 
 						if (keyPressed->code == sf::Keyboard::Key::Enter)
 						{
-							if(choice[0] !='n')
-							is_break = true;
+							if (choice[0] != 'n')
+								is_break = true;
 						}
 					}
 					if (const auto* textEntered = event->getIf<sf::Event::TextEntered>())
@@ -204,12 +203,12 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 					}
 				}
 				window.draw(Start_game_cover);
-                window.draw(s_choice);
+				window.draw(s_choice);
 				window.display();
 				if (is_break == true)
 					break;
 			}
-            num = (int)(choice[0] - '0');
+			num = (int)(choice[0] - '0');
 			filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
 			//cout << filename << endl;
 			if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
@@ -219,8 +218,152 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 		}
 		else if (mapGeneration_mode == 2)
 		{
-			creatMap(head_map, ant, s_map, s_ant, window);
+			sf::Image image;
+			if (!image.loadFromFile("context/random_rule.png"))//随机生成地图模式
+			{
+				system("pause");
+				return -1;
+			}
+			StartChoose_texture.update(image);
+			string choice_x = "00", choice_y = "00";
+			int x = 0, y = 0;
+			sf::Font font;
+			if (!font.openFromFile("TTC/msyh.ttc"))//微软雅黑
+			{
+				std::cout << "Failed to load font" << std::endl;
+				return -1;
+			}
+			sf::Text s_choice_x(font);
+			sf::Text s_choice_y(font);
+			s_choice_x.setString(choice_x);
+			s_choice_y.setString(choice_y);
+			s_choice_x.setCharacterSize(40);
+			s_choice_y.setCharacterSize(40);
+			s_choice_x.setStyle(sf::Text::Bold);
+			s_choice_y.setStyle(sf::Text::Bold);
+			sf::Color c_choice(141, 207, 244);
+			s_choice_x.setFillColor(c_choice);
+			s_choice_y.setFillColor(c_choice);
+			s_choice_x.setPosition(sf::Vector2f(151.f, 1055.f));
+			s_choice_y.setPosition(sf::Vector2f(401.f, 1055.f));
+			bool is_break = false;
+			bool if_error = false;
+			int change = 0;
+			int bit = 0;
+			while (true)
+			{
+				while (const std::optional event = window.pollEvent())
+				{
+					if (event->is<sf::Event::Closed>())
+					{
+						window.close();
+						return -1;
+					}
+					//if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
+					//{
+					//	if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+					//	{
+					//		//cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
+					//	}
+					//}
+					if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+					{
 
+						if (keyPressed->code == sf::Keyboard::Key::Enter)
+						{
+							if ((choice_x[0] != '0' || choice_x[1] != '0') && (choice_y[0] != '0' || choice_y[1] != '0'))
+							{
+								if ((int)(choice_x[0] - '0') > 1 || (int)(choice_y[0] - '0') > 1)
+								{
+									if_error = true;
+								}
+								else if (choice_x[0] == '1' && (int)(choice_x[1] - '0') >= 5)
+								{
+									if_error = true;
+								}
+								else if (choice_y[0] == '1' && (int)(choice_y[1] - '0') >= 5)
+								{
+									if_error = true;
+								}
+								else
+								{
+									x = (choice_x[0] - '0') * 10 + (choice_x[1] - '0');
+									y = (choice_y[0] - '0') * 10 + (choice_y[1] - '0');
+									is_break = true;
+								}
+							}
+
+						}
+						if (keyPressed->code == sf::Keyboard::Key::Space)
+						{
+							if (change == 0)
+								change = 1;
+							if (change == 1)
+								change = 0;
+							bit = 0;
+						}
+						if (keyPressed->code == sf::Keyboard::Key::Backspace)
+						{
+							if (change == 0)
+							{
+								choice_x[bit] = '0';
+								if (bit > 0)bit--;
+								s_choice_x.setString(choice_x);
+							}
+							else if (change == 1)
+							{
+								choice_y[bit] = '0';
+								if (bit > 0)bit--;
+								s_choice_y.setString(choice_y);
+							}
+						}
+					}
+					if (const auto* textEntered = event->getIf<sf::Event::TextEntered>())
+					{
+						if (textEntered->unicode >= 48 && textEntered->unicode <= 57)//0-9
+						{
+							if (change == 0)
+							{
+								choice_x[bit] = static_cast<char>(textEntered->unicode);
+								bit++;
+								if (bit == 2)//自动切换
+								{
+									bit = 0;
+									change = 1;
+								}
+								s_choice_x.setString(choice_x);
+							}
+							else if (change == 1)
+							{
+								choice_y[bit] = static_cast<char>(textEntered->unicode);
+								if (bit != 1)//防止超出
+									bit++;
+								s_choice_y.setString(choice_y);
+							}
+							//std::cout << "ASCII character typed: " << static_cast<char>(textEntered->unicode) << std::endl;
+							//cout << choice << endl;
+						}
+					}
+				}
+				window.draw(Start_game_cover);
+				window.draw(s_choice_x);
+				window.draw(s_choice_y);
+				window.display();
+				if (if_error == true)
+				{
+					//输入错误,请重新输入
+					change = 0;
+					bit = 0;
+					choice_x = "00";
+					choice_y = "00";
+					s_choice_x.setString(choice_x);
+					s_choice_y.setString(choice_y);
+					if_error = false;
+				}
+				if (is_break == true)
+					break;
+			}
+			creatMap(head_map, ant, s_map, s_ant, window, x, y);
 		}
 	}
 	else if (choice_mode == 2)
@@ -233,7 +376,7 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 				if (event->is<sf::Event::Closed>())
 				{
 					window.close();
-					return 0;
+					return -1;
 				}
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
@@ -254,30 +397,9 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 	system("cls");
 	return 1;
 }
-void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
+void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window, int x, int y)
 {
-	cout << "请输入想要生成的题目的长度和宽度" << endl;
 
-	while (true)
-	{
-		cin >> x >> y;
-		if (cin.fail() || (x <= 0 || y <= 0))
-		{
-			cout << "输入错误,请重新输入" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else if (x > 15 || y > 15)
-		{
-			cout << "输入过大,请重新输入" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else
-		{
-			break;
-		}
-	}
 	head_map->Width = x;
 	head_map->Height = y;
 	ant.Ant_x = (int)(head_map->Width / 2) + 1;
@@ -498,6 +620,7 @@ bool Read_map(string filename, Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_
 		return false;
 	}
 	else {
+		int x, y;
 		fil >> x >> y;// 读取地图宽高
 
 		head_map->Width = x;

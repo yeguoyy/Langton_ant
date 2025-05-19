@@ -4,7 +4,7 @@
 #include "prop.h"
 
 int chooseMode(Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
-void creatMap(Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
+void creatMap(Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&, int x, int y);
 
 void GoldenFingerMode_creatMap(Map*&, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
 int player_try(Map&, Map*& const, S_Map&, S_Ant&, int, int);
