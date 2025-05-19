@@ -7,15 +7,6 @@ using namespace std;
 sf::Vector2u Prop::map_tileSize = { 100,100 };
 sf::Vector2u Prop::prop_tileSize = { 50,50 };
 
-void introduction(sf::Text& Rules)
-{
-	cout << "欢迎来到兰顿蚂蚁游戏" << endl;
-	cout << "兰顿蚂蚁由黑（#）白（O）格子和一只蚂蚁构成，蚂蚁可在平面正方格上移动\n" <<
-		"若在白格，则右转90度，将该格改为黑格，并向前移动一步；\n" <<
-		"若在黑格，则左转90度，将该格该为白格，并向前移动一步；\n" <<
-		"若撞墙，则原地不动，自转180度调头但不改变脚下颜色。\n" <<
-		"玩家需要根据蚂蚁的最终蚁行图倒推初始图" << endl;
-}
 
 bool if_player_win(Map& player_map, Map*& tail_map)
 {
@@ -752,9 +743,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 				{
-					if (keyPressed->code == sf::Keyboard::Key::Space)
+					if (keyPressed->code == sf::Keyboard::Key::J)
 					{
-						cout << "按下了空格" << endl;
+						cout << "按下了J" << endl;
 						if (ant.num_rocket > 0)
 						{
 							rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
@@ -766,9 +757,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 							cout << "快去地图中拾取吧 >_<" << endl;
 						}
 					}
-					else if (keyPressed->code == sf::Keyboard::Key::LShift)
+					else if (keyPressed->code == sf::Keyboard::Key::K)
 					{
-						cout << "按下了LShift" << endl;
+						cout << "按下了K" << endl;
 						if (ant.num_big_rocket > 0)
 						{
 							big_rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
@@ -781,9 +772,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 						}
 
 					}
-					else if (keyPressed->code == sf::Keyboard::Key::V)
+					else if (keyPressed->code == sf::Keyboard::Key::U)
 					{
-						cout << "按下了V" << endl;
+						cout << "按下了U" << endl;
 						if (ant.num_LaserPointer > 0)
 						{
 							if_line += 3;
@@ -797,9 +788,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 							cout << "快去地图中拾取吧 >_<" << endl;
 						}
 					}
-					else if (keyPressed->code == sf::Keyboard::Key::C)
+					else if (keyPressed->code == sf::Keyboard::Key::L)
 					{
-						cout << "按下了C" << endl;
+						cout << "按下了L" << endl;
 						if (ant.num_falcula > 0)
 						{
 							falcula(ant, head_map, s_map, s_ant, prop_list, window, Position);

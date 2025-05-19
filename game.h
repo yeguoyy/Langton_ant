@@ -12,7 +12,6 @@ int GoldenFingerMode_player_try(const Ant&,Map*&, S_Map&, S_Ant&, int, int,int &
 int GoldenFinger_move(Ant&, Map*&, S_Map&, S_Ant&, std::vector<Prop>&, sf::RenderWindow&);
 void GoldenFinger_moveProcess(Ant&, Map*&, S_Map&, S_Ant&, std::vector<Prop>&, sf::RenderWindow&,int step,int & process, int& if_line);
 
-void introduction(sf::Text&);
 void Sports_process(int step, Map*&, Ant&);
 void Show_process(Map*, Ant&, S_Map&, S_Ant&, sf::RenderWindow&);
 

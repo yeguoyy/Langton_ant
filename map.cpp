@@ -18,7 +18,7 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 		return -1;
 	sf::Sprite Start_game_cover(StartChoose_texture);
 	sf::Vector2u original_Start_Size = StartChoose_texture.getSize();
-	sf::Vector2f scale_Start_Size = { 600.f / original_Start_Size.x, 900.f / original_Start_Size.y };
+	sf::Vector2f scale_Start_Size = { 800.f / original_Start_Size.x, 1200.f / original_Start_Size.y };
 	Start_game_cover.setScale(scale_Start_Size);
 
 	sf::Texture ordinary_button_texture;
@@ -31,23 +31,29 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 	sf::Sprite goldenFinger_button(goldenFinger_button_texture);
 	ordinary_button.setOrigin(sf::Vector2f(ordinary_button_texture.getSize().x / 2, ordinary_button_texture.getSize().y / 2));
 	goldenFinger_button.setOrigin(sf::Vector2f(goldenFinger_button_texture.getSize().x / 2, goldenFinger_button_texture.getSize().y / 2));
-	ordinary_button.setPosition(sf::Vector2f(300.f, 485.f));
-	goldenFinger_button.setPosition(sf::Vector2f(300.f, 705.f));
+	ordinary_button.setPosition(sf::Vector2f(400.f, 647.f));
+	goldenFinger_button.setPosition(sf::Vector2f(400.f, 940.f));
 
 	HCURSOR customCursor2 = LoadCursorFromFile(L"material/Vision Cursor White/link.cur");//从文件中加载光标
 
-	cout << "选择关卡模式请按1，随机生成关卡模式请按2,金手指模式请按3" << endl;
 	int choice_mode = 0;
 	int mapGeneration_mode = 0;
+	string filename;
 	while (true)//选择
 	{
 		while (const std::optional event = window.pollEvent())
 		{
+			if (event->is<sf::Event::Closed>())
+			{
+				window.close();
+				return 0;
+			}
+
 			if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
 			{
 				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
 				{
-					cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
+					/*cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;*/
 					if (mouseButtonPressed->position.x >= ordinary_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.x <= ordinary_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseButtonPressed->position.y >= ordinary_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseButtonPressed->position.y <= ordinary_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
 					{
 						if (choice_mode == 0)
@@ -75,6 +81,8 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 			}
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
 			{
+
+
 				//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
 				if (mouseMoved->position.x >= ordinary_button.getPosition().x - goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.x <= ordinary_button.getPosition().x + goldenFinger_button_texture.getSize().x / 2 && mouseMoved->position.y >= ordinary_button.getPosition().y - goldenFinger_button_texture.getSize().y / 2 && mouseMoved->position.y <= ordinary_button.getPosition().y + goldenFinger_button_texture.getSize().y / 2)
 				{
@@ -84,6 +92,7 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 				{
 					SetCursor(customCursor2);//暂时设置鼠标指针图标
 				}
+
 			}
 		}
 
@@ -111,50 +120,134 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 		}
 		else if (choice_mode == 2)
 		{
-			break;
+			sf::Image image;
+			if (!image.loadFromFile("context/goldenFinger_rule.png"))//金手指模式规则
+			{
+				system("pause");
+				return -1;
+			}
+			StartChoose_texture.update(image);
 		}
 		if (mapGeneration_mode == 1 || mapGeneration_mode == 2)
 		{
 			break;
 		}
+		if (choice_mode == 2)
+		{
+			break;
+		}
 	}
 
-	string filename;
+
 	if (choice_mode == 1)
 	{
-		switch (mapGeneration_mode)
+		if (mapGeneration_mode == 1)
 		{
-		case 1:
-			cout << "请输入关卡编号（1、2、3）" << endl;
+			
+			sf::Image image;
+			if (!image.loadFromFile("context/ordinary_rule.png"))//金手指模式
+			{
+				system("pause");
+				return -1;
+			}
+			StartChoose_texture.update(image);
+			wstring choice = L"n";//wstring长字符串
+			sf::Font font;
+			if (!font.openFromFile("TTC/msyh.ttc"))//微软雅黑
+			{
+				std::cout << "Failed to load font" << std::endl;
+				return -1;
+			}
+			sf::Text s_choice(font);
+			s_choice.setString(choice);
+			s_choice.setCharacterSize(40);
+			s_choice.setStyle(sf::Text::Bold);
+			s_choice.setPosition(sf::Vector2f(376.f, 980.f));
+			sf::Color c_choice(141, 207, 244);
+			s_choice.setFillColor(c_choice);
 			int num;
+			bool is_break = false;
 			while (true)
 			{
-				cin >> num;
-				if (cin.fail() || (num != 1 && num != 2 && num != 3))
+				while (const std::optional event = window.pollEvent())
 				{
-					cout << "输入错误,请重新输入" << endl;
-					cin.clear();
-					cin.ignore(numeric_limits<streamsize>::max(), '\n');
+					if (event->is<sf::Event::Closed>())
+					{
+						window.close();
+						return 0;
+					}
+					if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
+					{
+						if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+						{
+							cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
+						}
+					}
+					if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+					{
+
+						if (keyPressed->code == sf::Keyboard::Key::Enter)
+						{
+							if(choice[0] !='n')
+							is_break = true;
+						}
+					}
+					if (const auto* textEntered = event->getIf<sf::Event::TextEntered>())
+					{
+						if (textEntered->unicode >= 49 && textEntered->unicode <= 51)//1-3
+						{
+							choice[0] = static_cast<char>(textEntered->unicode);
+							s_choice.setString(choice);
+							//std::cout << "ASCII character typed: " << static_cast<char>(textEntered->unicode) << std::endl;
+							//cout << choice << endl;
+						}
+					}
 				}
-				else
-				{
+				window.draw(Start_game_cover);
+                window.draw(s_choice);
+				window.display();
+				if (is_break == true)
 					break;
-				}
 			}
+            num = (int)(choice[0] - '0');
 			filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
 			//cout << filename << endl;
 			if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
 			{
 				return -1;
 			}
-			break;
-		case 2:
+		}
+		else if (mapGeneration_mode == 2)
+		{
 			creatMap(head_map, ant, s_map, s_ant, window);
-			break;
+
 		}
 	}
 	else if (choice_mode == 2)
 	{
+		bool is_break = false;
+		while (true)
+		{
+			while (const std::optional event = window.pollEvent())
+			{
+				if (event->is<sf::Event::Closed>())
+				{
+					window.close();
+					return 0;
+				}
+				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+				{
+					if (keyPressed->code == sf::Keyboard::Key::Enter)
+					{
+						is_break = true;
+					}
+				}
+			}
+			window.draw(Start_game_cover);
+			window.display();
+			if (is_break == true)
+				break;
+		}
 		GoldenFingerMode_creatMap(head_map, ant, s_map, s_ant, window);
 		return 3;
 	}
@@ -249,6 +342,7 @@ void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWi
 		break;
 	}
 	head_map->m_degree = Way_to_Degree(ant.direction);
+
 	window.setSize(sf::Vector2u(static_cast<unsigned int>(x * 100), static_cast<unsigned int>(y * 100)));//改变窗口大小要注意改变视图中心点
 	sf::View view = window.getDefaultView();
 	view.setSize(sf::Vector2f(static_cast<float>(x * 100), static_cast<float>(y * 100)));
@@ -269,27 +363,8 @@ void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWi
 
 void GoldenFingerMode_creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWindow& window)
 {
-	cout << "请输入想要生成的题目的长度和宽度" << endl;
-	while (true)
-	{
-		cin >> x >> y;
-		if (cin.fail() || (x <= 0 || y <= 0))
-		{
-			cout << "输入错误,请重新输入" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else if (x > 15 || y > 15)
-		{
-			cout << "输入过大,请重新输入" << endl;
-			cin.clear();
-			cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		}
-		else
-		{
-			break;
-		}
-	}
+	int x = 13;
+	int y = 13;
 	head_map->Width = x;
 	head_map->Height = y;
 	ant.Ant_x = (int)(head_map->Width / 2) + 1;

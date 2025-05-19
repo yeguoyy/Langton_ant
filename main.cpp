@@ -20,22 +20,14 @@ int main()
 	Map* head_map = new Map;
 	Map* tail_map = new Map;
 	Map player_map;
-
-	sf::Font font;
-	if (!font.openFromFile("TTC/msyh.ttc"))
-	{
-		std::cout << "Failed to load font" << std::endl;
-		return -1;
-	}
-	sf::Text Rules(font);
-	introduction(Rules);
-	sf::RenderWindow window(sf::VideoMode({ 600, 900 }), L"兰顿蚂蚁", sf::Style::Default);
+	
+	sf::RenderWindow window(sf::VideoMode({ 800, 1200 }), L"兰顿蚂蚁", sf::Style::Default);
 	sf::Texture Start_texture;
 	if (!Start_texture.loadFromFile("context/Start_game_cover.png", false, sf::IntRect({ 0, 0 }, { 1024, 1536 })))//sf::IntRect 类是一个简单的实用类型，表示一个矩形。它的构造函数接受矩形的左上角坐标和大小。
 		return -1;
 	sf::Sprite Start_game_cover(Start_texture);
 	sf::Vector2u original_Start_Size = Start_texture.getSize();
-	sf::Vector2f scale_Start_Size = { 600.f / original_Start_Size.x, 900.f / original_Start_Size.y };
+	sf::Vector2f scale_Start_Size = { 800.f / original_Start_Size.x, 1200.f / original_Start_Size.y };
 	Start_game_cover.setScale(scale_Start_Size);
 
 	HCURSOR customCursor1 = LoadCursorFromFile(L"material/Vision Cursor White/pointer.cur");//从文件中加载光标
@@ -96,7 +88,7 @@ int main()
 					Show_process(tail_map, ant, s_map, s_ant, window);//展示运动
 					process++;
 				}
-				if (keyPressed->code == sf::Keyboard::Key::V && process <= -2)
+				if (keyPressed->code == sf::Keyboard::Key::U && process <= -2)
 				{
 					if (ant.num_LaserPointer > 0)
 					{
@@ -111,7 +103,7 @@ int main()
 						cout << "快去地图中拾取吧 >_<" <<endl;
 					}
 				}
-				if (keyPressed->code == sf::Keyboard::Key::C && process <= -2)
+				if (keyPressed->code == sf::Keyboard::Key::L && process <= -2)
 				{
 					if (ant.num_falcula > 0)
 					{
@@ -136,7 +128,7 @@ int main()
 				if (process == 0)
 				{
 					//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
-					if (mouseMoved->position.x >= 128 && mouseMoved->position.x <= 475 && mouseMoved->position.y >= 325 && mouseMoved->position.y <= 410)
+					if (mouseMoved->position.x >= 160 && mouseMoved->position.x <= 642 && mouseMoved->position.y >= 423 && mouseMoved->position.y <= 555)
 					{
 						SetCursor(customCursor2);//暂时设置鼠标指针图标
 					}
@@ -148,7 +140,7 @@ int main()
 				{
 					if (process == 0)
 					{
-						if (mouseButtonPressed->position.x >= 128 && mouseButtonPressed->position.x <= 475 && mouseButtonPressed->position.y >= 325 && mouseButtonPressed->position.y <= 410)
+						if (mouseButtonPressed->position.x >= 160 && mouseButtonPressed->position.x <= 642 && mouseButtonPressed->position.y >= 423 && mouseButtonPressed->position.y <= 555)
 							process++;
 					}
 					if (process == 2)
