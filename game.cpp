@@ -101,7 +101,6 @@ void Show_process(Map* Tail_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::Rende
 }
 int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
 {
-
 	cout << x << " " << y << endl;
 	cout << "蚂蚁脚下的颜色为：";
 	if (player_map.Ant_color == 0)

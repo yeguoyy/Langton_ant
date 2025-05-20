@@ -94,6 +94,13 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 				}
 
 			}
+			if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+			{
+				if (keyPressed->code == sf::Keyboard::Key::Escape)//退出游戏
+				{
+					return 4;
+				}
+			}
 		}
 
 		window.draw(Start_game_cover);
@@ -190,6 +197,11 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 							if (choice[0] != 'n')
 								is_break = true;
 						}
+						if (keyPressed->code == sf::Keyboard::Key::Escape)//退出游戏
+						{
+							return 4;
+						}
+
 					}
 					if (const auto* textEntered = event->getIf<sf::Event::TextEntered>())
 					{
@@ -294,6 +306,12 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 							}
 
 						}
+
+						if (keyPressed->code == sf::Keyboard::Key::Escape)//退出游戏
+						{
+							return 4;
+						}
+
 						if (keyPressed->code == sf::Keyboard::Key::Space)
 						{
 							if (change == 0)
@@ -384,6 +402,10 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 					{
 						is_break = true;
 					}
+						if (keyPressed->code == sf::Keyboard::Key::Escape)//退出游戏
+						{
+							return 4;
+						}
 				}
 			}
 			window.draw(Start_game_cover);
