@@ -953,6 +953,12 @@ int gameOver_GoldenFinger(sf::RenderWindow& window, const S_Map& s_map, const S_
 	{
 		best_source = ant.DestroyedStones * 20 + ant.Rounds * 10;
 		source.setFillColor(sf::Color::Red);//Ë¢ÐÂ¼ÇÂ¼
+		sf::Image image;
+		if (!image.loadFromFile("context/gameOver_GoldenFinger_cover_newrecord.png"))
+		{
+			return -1;
+		}
+		gameOver_texture.update(image);
 	}
 	sf::Text T_best_source(font, to_string(best_source), 40);
 	T_best_source.setFillColor(sf::Color::Red);
