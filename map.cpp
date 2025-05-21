@@ -245,12 +245,8 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 				std::cout << "Failed to load font" << std::endl;
 				return -1;
 			}
-			sf::Text s_choice_x(font);
-			sf::Text s_choice_y(font);
-			s_choice_x.setString(choice_x);
-			s_choice_y.setString(choice_y);
-			s_choice_x.setCharacterSize(40);
-			s_choice_y.setCharacterSize(40);
+			sf::Text s_choice_x(font, choice_x,40);
+			sf::Text s_choice_y(font, choice_y,40);
 			s_choice_x.setStyle(sf::Text::Bold);
 			s_choice_y.setStyle(sf::Text::Bold);
 			sf::Color c_choice(141, 207, 244);

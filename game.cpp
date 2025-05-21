@@ -596,7 +596,7 @@ void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>&
 					switch (ant.direction)
 					{
 					case Direction::UP:
-						if (falculaPosition.y >= line.getPosition().y+30)
+						if (falculaPosition.y >= line.getPosition().y + 30)
 						{
 							if_catch = true;
 						}
@@ -636,15 +636,15 @@ void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>&
 							break;
 						case 1:
 							ant.num_big_rocket++;
-                            cout << "你勾中了大火箭弹道具！！！" << endl;
+							cout << "你勾中了大火箭弹道具！！！" << endl;
 							break;
 						case 2:
 							ant.num_LaserPointer++;
-                            cout << "你勾中激光指示器道具！！！" << endl;
+							cout << "你勾中激光指示器道具！！！" << endl;
 							break;
 						case 3:
 							ant.num_falcula++;
-                            cout << "你勾中了钩爪道具！！！" << endl;
+							cout << "你勾中了钩爪道具！！！" << endl;
 							break;
 						}
 						window.display();
@@ -716,7 +716,7 @@ void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>&
 
 
 
-void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line)
+void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line,int& best_source, int& best_roundsNum, int& best_destroyNum)
 {
 	for (int j = 1; j <= step; j++)
 	{
@@ -747,7 +747,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 						cout << "按下了J" << endl;
 						if (ant.num_rocket > 0)
 						{
-							rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
+							rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
 							ant.num_rocket--;
 						}
 						else
@@ -761,7 +761,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 						cout << "按下了K" << endl;
 						if (ant.num_big_rocket > 0)
 						{
-							big_rocket(ant, head_map, s_map, s_ant, prop_list, window,Position);
+							big_rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
 							ant.num_big_rocket--;
 						}
 						else
@@ -832,11 +832,9 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);
 		if (temp == -1)//自带show和draw
 		{
-			process = -1;//-1 结束游戏
-			cout << "你的蚂蚁度过了"<<ant.Rounds << "回合" << endl;
-			cout << "摧毁了"<<ant.DestroyedStones << "块石头" << endl;
-			cout << "你的最终分数是："<< ant.DestroyedStones*20+ant.Rounds*10<< endl;
-			pause(window);
+			process = 4;//4 结束游戏
+			
+			gameOver_GoldenFinger(window, s_map, s_ant, prop_list, ant,best_source,best_roundsNum,best_destroyNum);//显示游戏结束界面
 			return;
 		}
 		else
@@ -849,11 +847,11 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 			{
 				cout << "你拾取了大火箭弹！！！" << endl;
 			}
-            else if (temp == 2)
+			else if (temp == 2)
 			{
 				cout << "你拾取了激光指示器！！！" << endl;
 			}
-            else if (temp == 3)
+			else if (temp == 3)
 			{
 				cout << "你拾取了钩爪！！！" << endl;
 			}
@@ -906,6 +904,95 @@ sf::Angle Way_to_Degree(Direction direction)
 		return sf::degrees(180.0f);
 	case LEFT:
 		return sf::degrees(270.0f);
+	}
+}
+
+int gameOver_GoldenFinger(sf::RenderWindow& window, const S_Map& s_map, const S_Ant& s_ant,const std::vector<Prop>& prop_list,const Ant &ant, int& best_source, int& best_roundsNum, int& best_destroyNum)
+{
+	
+	HCURSOR customCursor2 = LoadCursorFromFile(L"material/Vision Cursor White/link.cur");//从文件中加载光标
+	sf::Texture gameOver_texture;
+	if (!gameOver_texture.loadFromFile("context/gameOver_GoldenFinger_cover.png"))
+		return -1;
+	sf::Sprite gameOver_cover(gameOver_texture);
+	gameOver_cover.setOrigin(sf::Vector2f(gameOver_texture.getSize().x / 2, gameOver_texture.getSize().y / 2));
+	gameOver_cover.setPosition(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+	sf::Vector2u original_Size = gameOver_texture.getSize();
+	sf::Vector2f scale_Size = { 600.f / original_Size.x, 600.f / original_Size.y };
+	gameOver_cover.setScale(scale_Size);//设置缩放
+	sf::Font font;
+	if (!font.openFromFile("TTF/BRLNSDB.ttf"))//BSF半粗体
+	{
+		std::cout << "Failed to load font" << std::endl;
+		return -1;
+	}
+	sf::Color text_color(227, 182, 119);
+
+	sf::Text roundsNum(font, to_string(ant.Rounds), 40);
+	roundsNum.setFillColor(text_color);
+	sf::FloatRect roundsNum_size(roundsNum.getLocalBounds());
+	roundsNum.setOrigin(sf::Vector2f(roundsNum_size.getCenter().x*2,0));
+	roundsNum.setPosition(sf::Vector2f(870, 525));
+	if (best_roundsNum < ant.Rounds)//更新回合记录
+		best_roundsNum = ant.Rounds;
+
+	sf::Text destroyedStones(font, to_string(ant.DestroyedStones), 40);
+	destroyedStones.setFillColor(text_color);
+	sf::FloatRect destroyedStones_size(destroyedStones.getLocalBounds());
+	destroyedStones.setOrigin(sf::Vector2f(destroyedStones_size.getCenter().x*2, 0));
+	destroyedStones.setPosition(sf::Vector2f(870, 605));
+	if (best_destroyNum < ant.DestroyedStones)//更新石头记录
+		best_destroyNum = ant.DestroyedStones;
+
+	sf::Text source(font, to_string(ant.DestroyedStones * 20 + ant.Rounds * 10), 40);
+	source.setFillColor(text_color);
+	sf::FloatRect source_size(source.getLocalBounds());
+	source.setOrigin(sf::Vector2f(source_size.getCenter().x*2, 0));
+	source.setPosition(sf::Vector2f(870, 680));
+	if (best_source < ant.DestroyedStones * 20 + ant.Rounds * 10)//更新最高分
+	{
+		best_source = ant.DestroyedStones * 20 + ant.Rounds * 10;
+		source.setFillColor(sf::Color::Red);//刷新记录
+	}
+	sf::Text T_best_source(font, to_string(best_source), 40);
+	T_best_source.setFillColor(sf::Color::Red);
+	sf::FloatRect best_source_size(T_best_source.getLocalBounds());
+	T_best_source.setOrigin(sf::Vector2f(best_source_size.getCenter().x*2, 0));
+	T_best_source.setPosition(sf::Vector2f(870, 728));
+	while (window.isOpen())
+	{
+		while (const std::optional event = window.pollEvent())
+		{
+			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
+			{
+				cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
+				if (mouseMoved->position.x >= 462 && mouseMoved->position.x <= 840 && mouseMoved->position.y >= 821 && mouseMoved->position.y <= 912)
+				{
+					SetCursor(customCursor2);//暂时设置鼠标指针图标
+				}
+			}
+			if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
+			{
+				if (mouseButtonPressed->button == sf::Mouse::Button::Left)
+				{
+					if (mouseButtonPressed->position.x >= 462 && mouseButtonPressed->position.x <= 840 && mouseButtonPressed->position.y >= 821 && mouseButtonPressed->position.y <= 912)
+						return 0;
+				}
+			}
+		}
+		window.clear();
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.draw(gameOver_cover);
+		window.draw(roundsNum);
+        window.draw(destroyedStones);
+        window.draw(source);
+        window.draw(T_best_source);
+		window.display();
 	}
 }
 

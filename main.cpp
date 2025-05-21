@@ -5,6 +5,9 @@
 #include <chrono>
 
 #define goal_step 100
+int best_source = 0;
+int best_roundsNum= 0;
+int best_destroyNum = 0;
 using namespace std;
 
 //规则说明√ 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 误输入√ 传送门？障碍物！胜利动画 重新开始游戏（重置）
@@ -197,7 +200,12 @@ int main()
 		else if (process == -7)
 		{
 			
-			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process,if_line);//5 步
+			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process,if_line,best_source,best_roundsNum,best_destroyNum);//5 步
+			if (process == 4)
+			{
+				continue;
+			}
+				
 			if (if_line > 0)//每个回合扣一格电
 				if_line--;
 			ant.Rounds += 1;
@@ -212,10 +220,7 @@ int main()
 			head_map = new Map;
 			ant = Ant();
 			player_map = Map();
-			for  (int i = 0; i < prop_list.size(); i++)
-			{
-				prop_list.erase(prop_list.begin() + i);
-			}
+			prop_list.erase(prop_list.begin(), prop_list.end());
 			if_line = 0;
 			process = 0;
 			window.setSize(sf::Vector2u(800,1200));//改变窗口大小要注意改变视图中心点
