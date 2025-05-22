@@ -139,7 +139,7 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int 
 	s_ant.S_showAnt(&player_map);
 	if (if_player_win(player_map, tail_map) == true)
 	{
-		cout << "恭喜你，你赢了！" << endl;
+		cout << "恭喜你，你赢了！" << endl;//普通模式胜利
 		cout << "按Enter继续..." << endl;
 		return 1;
 	}
@@ -833,7 +833,7 @@ void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_a
 		if (temp == -1)//自带show和draw
 		{
 			process = 4;//4 结束游戏
-			
+			ant.Rounds++;
 			gameOver_GoldenFinger(window, s_map, s_ant, prop_list, ant,best_source,best_roundsNum,best_destroyNum);//显示游戏结束界面
 			return;
 		}
@@ -971,7 +971,7 @@ int gameOver_GoldenFinger(sf::RenderWindow& window, const S_Map& s_map, const S_
 		{
 			if (const auto* mouseMoved = event->getIf<sf::Event::MouseMoved>())//可用于判断鼠标是否移动到某点
 			{
-				cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
+				//cout << "鼠标坐标：" << mouseMoved->position.x << " " << mouseMoved->position.y << std::endl;
 				if (mouseMoved->position.x >= 462 && mouseMoved->position.x <= 840 && mouseMoved->position.y >= 821 && mouseMoved->position.y <= 912)
 				{
 					SetCursor(customCursor2);//暂时设置鼠标指针图标

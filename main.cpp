@@ -10,8 +10,8 @@ int best_roundsNum= 0;
 int best_destroyNum = 0;
 using namespace std;
 
-//规则说明√ 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 误输入√ 传送门？障碍物！胜利动画 重新开始游戏（重置）
-//金手指挑战赛（通过改变黑白，以最小的步数让蚂蚁到目标区域，消灭敌人掉落道具、得分）
+//规则说明√ 撞墙√ 随机生成地图√ 回放功能(延时播放)√  起始位√ 交互√ 误输入√ 传送门？障碍物！胜利动画 重新开始游戏（重置）√
+//金手指挑战赛（通过改变黑白，躲避障碍）
 //道具：（坦克大战）激光√，大小飞弹√，换位（抓取），磁铁，钩爪√
 //事件：（随机盒子）敌人生成，阔图，核弹（大范围洗牌），
 
@@ -65,6 +65,8 @@ int main()
 	S_Ant s_ant;
 	vector<Prop> prop_list;
 	sf::VertexArray line(sf::PrimitiveType::LineStrip, 6);
+	sf::Texture Victory_texture("context/Victory.png");
+	sf::Sprite Victory_sprite(Victory_texture);
 	//链表的头尾结点
 	int process = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
 	int if_line = 0;
@@ -150,7 +152,13 @@ int main()
 					{
 						if (mouseButtonPressed->position.x >= 0 && mouseButtonPressed->position.y >= 0 && mouseButtonPressed->position.y <= player_map.Height * 100 && mouseButtonPressed->position.x <= player_map.Width * 100)
 							process += player_try(player_map, tail_map, s_map, s_ant, (int)mouseButtonPressed->position.x / 100 + 1, (int)mouseButtonPressed->position.y / 100 + 1);//玩家尝试		
-						
+						if (process == 3)
+						{
+							
+							Victory_sprite.setOrigin(sf::Vector2f(Victory_texture.getSize().x / 2, Victory_texture.getSize().y / 2));
+							Victory_sprite.setPosition(sf::Vector2f(window.getSize().x / 2, window.getSize().y / 2));
+							Victory_sprite.setScale(sf::Vector2f( 600.f / Victory_texture.getSize().x, 600.f / Victory_texture.getSize().y ));//设置缩放
+						}
 					}
 					if (process <= -2)
 					{
@@ -260,6 +268,8 @@ int main()
 			}
 			if (if_line!=0)//剩余次数不为0就show线
 			window.draw(line);
+			if(process == 3)
+			window.draw(Victory_sprite);
 		}
 		window.display();
 	}
