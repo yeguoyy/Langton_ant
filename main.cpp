@@ -70,6 +70,7 @@ int main()
 	//链表的头尾结点
 	int process = 0;//0 开始游戏界面，1选择地图并预先运算结果，2展示运动
 	int if_line = 0;
+	
 	while (window.isOpen())
 	{
 		// handle events
@@ -124,7 +125,6 @@ int main()
 				}
 				if (keyPressed->code == sf::Keyboard::Key::Enter && process <= -2)
 				{
-					cout << "成功跳过操作..." << endl;
 					process = -7;
 				}
 			}
@@ -186,6 +186,7 @@ int main()
 			else if (choise == 3)
 			{
 				process = -2;//加入循环
+				std::cout << "\033[?25l";
 				cout << "黑左白右" << endl;
 				cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
 				tail_map = head_map;
@@ -202,12 +203,14 @@ int main()
 				process++;
 				tail_map = head_map;
 				Sports_process(goal_step, head_map, ant); //模拟运动
+				//更新地图
+				s_map.S_showMap(head_map,0);
+				s_ant.S_showAnt(head_map);
 				player_map.copyMap(*head_map);
 			}
 		}
 		else if (process == -7)
 		{
-			
 			GoldenFinger_moveProcess(ant, head_map, s_map, s_ant, prop_list, window,5,process,if_line,best_source,best_roundsNum,best_destroyNum);//5 步
 			if (process == 4)
 			{
@@ -217,13 +220,11 @@ int main()
 			if (if_line > 0)//每个回合扣一格电
 				if_line--;
 			ant.Rounds += 1;
-			cout << "激光指示器剩余电量:" << if_line << endl;
-			cout << "黑左白右"<<endl;
-			cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
 			Confirm_line(line, *head_map);
 		}
 		else if (process == 4)//游戏结束重新回到主界面
 		{
+			system("cls");
 			delete head_map;
 			head_map = new Map;
 			ant = Ant();
@@ -253,9 +254,6 @@ int main()
 		// draw the map
 		if (process == 0)
 		{
-			/*sf::Vector2i globalPosition = sf::Mouse::getPosition();
-			cout << "globalPosition.x: " << globalPosition.x << std::endl;
-			cout << "globalPosition.y: " << globalPosition.y << std::endl;*/
 			window.draw(Start_game_cover);
 		}
 		else

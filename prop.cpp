@@ -83,7 +83,7 @@ void creatProp(std::vector<Prop>& prop_list, const Map& map, int type)//创建道具
 			}
 			if (if_right == 1)
 				continue;
-			std::cout << "新道具位置" << rocket_x << " " << rocket_y << std::endl;
+			//std::cout << "新道具位置" << rocket_x << " " << rocket_y << std::endl;
 			prop_list.push_back(Prop(rocket_x, rocket_y, type));
 			prop_list[prop_list.size() - 1].loadmap("tileMap/Prop.png");
 			return;

@@ -182,13 +182,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 						window.close();
 						return -1;
 					}
-					if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
-					{
-						if (mouseButtonPressed->button == sf::Mouse::Button::Left)
-						{
-							cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
-						}
-					}
 					if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 					{
 
@@ -209,8 +202,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 						{
 							choice[0] = static_cast<char>(textEntered->unicode);
 							s_choice.setString(choice);
-							//std::cout << "ASCII character typed: " << static_cast<char>(textEntered->unicode) << std::endl;
-							//cout << choice << endl;
 						}
 					}
 				}
@@ -222,7 +213,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 			}
 			num = (int)(choice[0] - '0');
 			filename = "map/" + to_string(num) + ".txt";// 将数字转换为字符串
-			//cout << filename << endl;
 			if (!Read_map(filename, head_map, ant, s_map, s_ant, window))// 读取关卡地图
 			{
 				return -1;
@@ -267,13 +257,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 						window.close();
 						return -1;
 					}
-					//if (const auto* mouseButtonPressed = event->getIf<sf::Event::MouseButtonPressed>())//鼠标按下
-					//{
-					//	if (mouseButtonPressed->button == sf::Mouse::Button::Left)
-					//	{
-					//		//cout << mouseButtonPressed->position.x << " " << mouseButtonPressed->position.y << endl;
-					//	}
-					//}
 					if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
 					{
 
@@ -354,8 +337,6 @@ int chooseMode(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderW
 									bit++;
 								s_choice_y.setString(choice_y);
 							}
-							//std::cout << "ASCII character typed: " << static_cast<char>(textEntered->unicode) << std::endl;
-							//cout << choice << endl;
 						}
 					}
 				}
@@ -493,7 +474,6 @@ void creatMap(Map*& head_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::RenderWi
 		cout << "地图加载失败" << endl;
 		system("pause");
 	}
-
 	if (!s_ant.loadmap("tileMap/S_Ant.png", ant, head_map))
 	{
 		cout << "Ant加载失败" << endl;

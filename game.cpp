@@ -35,17 +35,17 @@ bool if_player_win(Map& player_map, Map*& tail_map)
 }
 void Sports_process(int goal_step, Map*& head_map, Ant& ant)
 {
-
-	head_map->showMap();
-	std::cout << "当前蚂蚁脚下颜色为:";
-	if (head_map->Ant_color == 0)
-	{
-		std::cout << "白色" << std::endl;
-	}
-	else if (head_map->Ant_color == 1)
-	{
-		std::cout << "黑色" << std::endl;
-	}
+	////显示答案地图
+	//head_map->showMap();
+	//std::cout << "当前蚂蚁脚下颜色为:";
+	//if (head_map->Ant_color == 0)
+	//{
+	//	std::cout << "白色" << std::endl;
+	//}
+	//else if (head_map->Ant_color == 1)
+	//{
+	//	std::cout << "黑色" << std::endl;
+	//}
 	//system("pause");
 	int step = 0;
 	while (true)
@@ -70,7 +70,7 @@ void Show_process(Map* Tail_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::Rende
 	std::cout << "\033[?25l";//隐藏光标
 	while (true)
 	{
-		std::cout << "\033[0;0H";//覆盖清屏
+		std::cout << "\033[0;0H";//将光标移动到（0，0）
 		std::cout << "回放功能：" << std::endl;
 		head_map->showMap();
 
@@ -101,17 +101,6 @@ void Show_process(Map* Tail_map, Ant& ant, S_Map& s_map, S_Ant& s_ant, sf::Rende
 }
 int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int x, int y)
 {
-	cout << x << " " << y << endl;
-	cout << "蚂蚁脚下的颜色为：";
-	if (player_map.Ant_color == 0)
-	{
-		std::cout << "白色" << std::endl;
-	}
-	else if (player_map.Ant_color == 1)
-	{
-		std::cout << "黑色" << std::endl;
-	}
-
 	if (x == Ant::Ant_x && y == Ant::Ant_y)
 	{
 		if (player_map.Ant_color == 0)
@@ -134,7 +123,6 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int 
 			player_map.m_map[x][y] = 0;
 		}
 	}
-	player_map.showMap();
 	s_map.S_showMap(&player_map, 0);
 	s_ant.S_showAnt(&player_map);
 	if (if_player_win(player_map, tail_map) == true)
@@ -147,16 +135,7 @@ int player_try(Map& player_map, Map*& tail_map, S_Map& s_map, S_Ant& s_ant, int 
 }
 int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, S_Ant& s_ant, int x, int y, int& if_line)
 {
-	cout << x << " " << y << endl;
-	cout << "蚂蚁脚下的颜色为：";
-	if (player_map->Ant_color == 0)
-	{
-		std::cout << "白色" << std::endl;
-	}
-	else if (player_map->Ant_color == 1)
-	{
-		std::cout << "黑色" << std::endl;
-	}
+	std::cout << "\033[0;0H";//移动光标到(0,0)
 	if (player_map->m_map[x][y] == 2)
 	{
 		std::cout << "熔岩，不可更改" << std::endl;
@@ -195,7 +174,8 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 			player_map->m_map[x][y] = 0;
 		}
 	}
-	player_map->showMap();
+	cout << "黑左白右" << endl;
+	cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
 	cout << "火箭道具数量：" << ant.num_rocket << endl;
 	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
 	cout << "钩爪道具数量：" << ant.num_falcula << endl;
@@ -208,7 +188,7 @@ int GoldenFingerMode_player_try(const Ant& ant, Map*& player_map, S_Map& s_map, 
 
 int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window)
 {
-	/*Sleep(500);*/
+	
 	if (ant.move(head_map) == -1)
 	{
 		std::cout << "撞到障碍物了！" << std::endl;
@@ -216,11 +196,6 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 	}
 
 	head_map = head_map->nextMap;
-	head_map->showMap();
-	cout << "火箭道具数量：" << ant.num_rocket << endl;
-	cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
-	cout << "钩爪道具数量：" << ant.num_falcula << endl;
-	cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
 	s_map.S_showMap(head_map, 0);
 	s_ant.S_showAnt(head_map);
 	window.clear();
@@ -262,6 +237,176 @@ int GoldenFinger_move(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vect
 	}
 	window.display();
 	return 8;
+}
+void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line, int& best_source, int& best_roundsNum, int& best_destroyNum)
+{
+	for (int j = 1; j <= step; j++)
+	{
+		//先输出一遍
+		s_map.S_showMap(head_map, 0);
+		s_ant.S_showAnt(head_map);
+		window.draw(s_map);
+		window.draw(s_ant);
+		for (int i = 0; i < prop_list.size(); i++)
+		{
+			window.draw(prop_list[i]);
+		}
+		window.display();
+		if (j == 1)system("cls");
+		//auto start = std::chrono::steady_clock::now(); // 获取起始时间
+		//auto end = start + std::chrono::milliseconds(500); // 设置目标时间（0.5秒后）
+		/*while (std::chrono::steady_clock::now() < end)*/
+
+		//等待操作
+		system("cls");
+		cout << "火箭道具数量：" << ant.num_rocket << endl;
+		cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+		cout << "钩爪道具数量：" << ant.num_falcula << endl;
+		cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
+		
+		for (int i = 0; i < 50; i++)
+		{
+			sf::Vector2f Position = s_ant.getPosition();
+			while (const std::optional event = window.pollEvent())
+			{
+				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
+				{
+					if (keyPressed->code == sf::Keyboard::Key::J)
+					{
+						cout << "小火箭发射！" << endl;
+						if (ant.num_rocket > 0)
+						{
+							rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
+							ant.num_rocket--;
+						}
+						else
+						{
+							cout << "小火箭用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+					}
+					else if (keyPressed->code == sf::Keyboard::Key::K)
+					{
+						cout << "大火箭发射！" << endl;
+						if (ant.num_big_rocket > 0)
+						{
+							big_rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
+							ant.num_big_rocket--;
+						}
+						else
+						{
+							cout << "大火箭用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+
+					}
+					else if (keyPressed->code == sf::Keyboard::Key::U)
+					{
+						//cout << "按下了U" << endl;
+						if (ant.num_LaserPointer > 0)
+						{
+							if_line += 3;
+							cout << "激光指示器充电成功！！！" << endl;
+							cout << "当前激光指示器电量：" << if_line << endl;
+							ant.num_LaserPointer--;
+						}
+						else
+						{
+							cout << "激光指示器用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+					}
+					else if (keyPressed->code == sf::Keyboard::Key::L)
+					{
+						if (ant.num_falcula > 0)
+						{
+							falcula(ant, head_map, s_map, s_ant, prop_list, window, Position);
+							ant.num_falcula--;
+						}
+						else
+						{
+							cout << "钩爪用完了！！！" << endl;
+							cout << "快去地图中拾取吧 >_<" << endl;
+						}
+					}
+				}
+			}
+			//std::cout << "Looping..." << std::endl;
+			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
+			switch (ant.direction)
+			{
+			case Direction::UP:
+				Position.y -= 2;
+				break;
+			case Direction::DOWN:
+				Position.y += 2;
+				break;
+			case Direction::LEFT:
+				Position.x -= 2;
+				break;
+			case Direction::RIGHT:
+				Position.x += 2;
+				break;
+			}
+			s_ant.setPosition(Position);
+			window.draw(s_map);
+			window.draw(s_ant);
+			for (int i = 0; i < prop_list.size(); i++)
+			{
+				window.draw(prop_list[i]);
+			}
+			window.display();
+		}
+		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);
+		if (j == step)
+		{
+			system("cls");
+			cout << "黑左白右" << endl;
+			cout << "请您点击黑白格子改变蚂蚁的运动轨迹不要让它撞上障碍物！！" << endl;
+			cout << "火箭道具数量：" << ant.num_rocket << endl;
+			cout << "大火箭道具数量：" << ant.num_big_rocket << endl;
+			cout << "钩爪道具数量：" << ant.num_falcula << endl;
+			cout << "激光指示器道具数量：" << ant.num_LaserPointer << endl;
+			cout << "激光指示器剩余电量:" << if_line << endl;
+			cout << "剩余操作次数：5次" << endl;
+			cout << "按Enter可跳过" << endl;
+		}
+		if (temp == -1)//自带show和draw
+		{
+			process = 4;//4 结束游戏
+			ant.Rounds++;
+			gameOver_GoldenFinger(window, s_map, s_ant, prop_list, ant, best_source, best_roundsNum, best_destroyNum);//显示游戏结束界面
+			return;
+		}
+		else
+		{
+			if (temp == 0)
+			{
+				cout << "你拾取了火箭弹！！！" << endl;
+			}
+			else if (temp == 1)
+			{
+				cout << "你拾取了大火箭弹！！！" << endl;
+			}
+			else if (temp == 2)
+			{
+				cout << "你拾取了激光指示器！！！" << endl;
+			}
+			else if (temp == 3)
+			{
+				cout << "你拾取了钩爪！！！" << endl;
+			}
+			if (j == step)
+			{
+				head_map->creatBarLava();
+				head_map->creatBarStone();
+				//创建道具
+				creatProp(prop_list, *head_map, rand() % 4);
+				s_map.S_showMap(head_map, 0);
+				process = -2;
+			}
+		}
+	}
 }
 
 void rocket(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, sf::Vector2f Position)//小火箭
@@ -415,22 +560,18 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 
 		if (head_map.m_degree == sf::degrees(0.f))
 		{
-			//cout << "0" << endl;
 			head_map.M_ant_y -= 1;
 		}
 		else if (head_map.m_degree == sf::degrees(90.f))
 		{
-			//cout << "90" << endl;
 			head_map.M_ant_x += 1;
 		}
 		else if (head_map.m_degree == sf::degrees(180.f))
 		{
-			//cout << "180" << endl;
 			head_map.M_ant_y += 1;
 		}
 		else if (head_map.m_degree == sf::degrees(270.f))
 		{
-			//cout << "270" << endl;
 			head_map.M_ant_x -= 1;
 		}
 		if (head_map.M_ant_x < 1 || head_map.M_ant_x > head_map.Width || head_map.M_ant_y < 1 || head_map.M_ant_y > head_map.Height)
@@ -441,7 +582,6 @@ void Confirm_line(sf::VertexArray& line, Map head_map)
 			}
 			break;
 		}
-		//cout << line[i].position.x << " " << line[i].position.y << endl;
 		line[i].color = sf::Color::Red;
 		line[i].position = sf::Vector2f(head_map.M_ant_x * 100 - 50, head_map.M_ant_y * 100 - 50);
 		if (head_map.m_map[head_map.M_ant_x][head_map.M_ant_y] == 0) {
@@ -714,159 +854,6 @@ void falcula(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>&
 	}
 }
 
-
-
-void GoldenFinger_moveProcess(Ant& ant, Map*& head_map, S_Map& s_map, S_Ant& s_ant, vector<Prop>& prop_list, sf::RenderWindow& window, int step, int& process, int& if_line,int& best_source, int& best_roundsNum, int& best_destroyNum)
-{
-	for (int j = 1; j <= step; j++)
-	{
-		//先输出一遍
-		s_map.S_showMap(head_map, 0);
-		s_ant.S_showAnt(head_map);
-		window.draw(s_map);
-		window.draw(s_ant);
-		for (int i = 0; i < prop_list.size(); i++)
-		{
-			window.draw(prop_list[i]);
-		}
-		window.display();
-		//auto start = std::chrono::steady_clock::now(); // 获取起始时间
-		//auto end = start + std::chrono::milliseconds(500); // 设置目标时间（0.5秒后）
-		/*while (std::chrono::steady_clock::now() < end)*/
-
-		//等待操作
-		for (int i = 0; i < 50; i++)
-		{
-			sf::Vector2f Position = s_ant.getPosition();
-			while (const std::optional event = window.pollEvent())
-			{
-				if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>())
-				{
-					if (keyPressed->code == sf::Keyboard::Key::J)
-					{
-						cout << "按下了J" << endl;
-						if (ant.num_rocket > 0)
-						{
-							rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
-							ant.num_rocket--;
-						}
-						else
-						{
-							cout << "小火箭用完了！！！" << endl;
-							cout << "快去地图中拾取吧 >_<" << endl;
-						}
-					}
-					else if (keyPressed->code == sf::Keyboard::Key::K)
-					{
-						cout << "按下了K" << endl;
-						if (ant.num_big_rocket > 0)
-						{
-							big_rocket(ant, head_map, s_map, s_ant, prop_list, window, Position);
-							ant.num_big_rocket--;
-						}
-						else
-						{
-							cout << "大火箭用完了！！！" << endl;
-							cout << "快去地图中拾取吧 >_<" << endl;
-						}
-
-					}
-					else if (keyPressed->code == sf::Keyboard::Key::U)
-					{
-						cout << "按下了U" << endl;
-						if (ant.num_LaserPointer > 0)
-						{
-							if_line += 3;
-							cout << "激光指示器充电成功！！！" << endl;
-							cout << "当前激光指示器电量：" << if_line << endl;
-							ant.num_LaserPointer--;
-						}
-						else
-						{
-							cout << "激光指示器用完了！！！" << endl;
-							cout << "快去地图中拾取吧 >_<" << endl;
-						}
-					}
-					else if (keyPressed->code == sf::Keyboard::Key::L)
-					{
-						cout << "按下了L" << endl;
-						if (ant.num_falcula > 0)
-						{
-							falcula(ant, head_map, s_map, s_ant, prop_list, window, Position);
-							ant.num_falcula--;
-						}
-						else
-						{
-							cout << "钩爪用完了！！！" << endl;
-							cout << "快去地图中拾取吧 >_<" << endl;
-						}
-					}
-				}
-			}
-			//std::cout << "Looping..." << std::endl;
-			std::this_thread::sleep_for(std::chrono::milliseconds(1)); // 暂停1毫秒，避免CPU占用过高
-			switch (ant.direction)
-			{
-			case Direction::UP:
-				Position.y -= 2;
-				break;
-			case Direction::DOWN:
-				Position.y += 2;
-				break;
-			case Direction::LEFT:
-				Position.x -= 2;
-				break;
-			case Direction::RIGHT:
-				Position.x += 2;
-				break;
-			}
-			s_ant.setPosition(Position);
-			window.draw(s_map);
-			window.draw(s_ant);
-			for (int i = 0; i < prop_list.size(); i++)
-			{
-				window.draw(prop_list[i]);
-			}
-			window.display();
-		}
-		int temp = GoldenFinger_move(ant, head_map, s_map, s_ant, prop_list, window);
-		if (temp == -1)//自带show和draw
-		{
-			process = 4;//4 结束游戏
-			ant.Rounds++;
-			gameOver_GoldenFinger(window, s_map, s_ant, prop_list, ant,best_source,best_roundsNum,best_destroyNum);//显示游戏结束界面
-			return;
-		}
-		else
-		{
-			if (temp == 0)
-			{
-				cout << "你拾取了火箭弹！！！" << endl;
-			}
-			else if (temp == 1)
-			{
-				cout << "你拾取了大火箭弹！！！" << endl;
-			}
-			else if (temp == 2)
-			{
-				cout << "你拾取了激光指示器！！！" << endl;
-			}
-			else if (temp == 3)
-			{
-				cout << "你拾取了钩爪！！！" << endl;
-			}
-			if (j == step)
-			{
-				head_map->creatBarLava();
-				head_map->creatBarStone();
-				//创建道具
-				creatProp(prop_list, *head_map, rand() % 4);
-				s_map.S_showMap(head_map, 0);
-				process = -2;
-			}
-		}
-	}
-}
 
 void pause(sf::RenderWindow& window)
 {

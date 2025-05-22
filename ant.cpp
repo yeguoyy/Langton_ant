@@ -177,18 +177,8 @@ bool S_Ant::loadmap(const std::filesystem::path& tileset, Ant& ant,const Map *he
 
 void S_Ant::S_showAnt(const Map* head_map)
 {
-		std::cout << "当前蚂蚁脚下为：";
 		int color = head_map->Ant_color;
-		if (color == 0)
-		{
-			std::cout << "白色" << std::endl;
-		}
-		else if (color == 1)
-		{
-			std::cout << "黑色" << std::endl;
-		}
 		sf::Vertex* triangles = &m_ant[0];
-		std::cout << "当前位置：" << head_map->M_ant_x << " " << head_map->M_ant_y << std::endl;
 		this->setPosition(sf::Vector2f((head_map->M_ant_x - 0.5) * tileSize.x, (head_map->M_ant_y - 0.5) * tileSize.y));
 
 		triangles[0].texCoords = sf::Vector2f(color * tileSize.x, 0 * tileSize.y);
